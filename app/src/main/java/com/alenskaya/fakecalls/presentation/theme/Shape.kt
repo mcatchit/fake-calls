@@ -1,4 +1,4 @@
-package com.alenskaya.fakecalls.ui.theme
+package com.alenskaya.fakecalls.presentation.theme
 
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Shapes

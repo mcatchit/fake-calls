@@ -1,4 +1,4 @@
-package com.alenskaya.fakecalls.ui.theme
+package com.alenskaya.fakecalls.presentation.theme
 
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material.MaterialTheme
