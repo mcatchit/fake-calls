@@ -1,8 +1,9 @@
 package com.alenskaya.fakecalls.data.remote.contacts
 
-import com.alenskaya.fakecalls.domain.BaseResponse
-import com.alenskaya.fakecalls.data.remote.toBaseResponse
+import com.alenskaya.fakecalls.data.remote.catchExceptions
+import com.alenskaya.fakecalls.data.remote.toSuccessResponse
 import com.alenskaya.fakecalls.data.remote.contacts.api.FakeContactApi
+import com.alenskaya.fakecalls.domain.BaseResponse
 import com.alenskaya.fakecalls.domain.contacts.FakeContactRepository
 import com.alenskaya.fakecalls.domain.contacts.model.FakeContactsResponse
 
@@ -14,8 +15,9 @@ internal class FakeContactRepositoryImpl(
 ) : FakeContactRepository {
 
     override suspend fun getFakeUsers(amount: Int): BaseResponse<FakeContactsResponse> {
-        val response = fakeContactApi.getFakeContacts(amount)
-
-        return response.toBaseResponse(FakeContactResponseDtoToDomainResponseConverter())
+        return catchExceptions {
+            fakeContactApi.getFakeContacts(amount)
+                .toSuccessResponse(FakeContactResponseDtoToDomainResponseConverter())
+        }
     }
 }

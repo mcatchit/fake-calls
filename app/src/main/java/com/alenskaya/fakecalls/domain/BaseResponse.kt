@@ -4,20 +4,32 @@ package com.alenskaya.fakecalls.domain
  * Base response from repository.
  * @param T - type of payload.
  */
-data class BaseResponse<T> (
+sealed class BaseResponse<T> {
 
     /**
-     * Http response code.
+     * Request was executed successfully
      */
-    val code: Int,
+    data class Success<T>(
+        /**
+         * Http response code.
+         */
+        val code: Int,
+
+        /**
+         * Http response message.
+         */
+        val message: String,
+
+        /**
+         * Response payload.
+         */
+        val payload: T? = null
+    ) : BaseResponse<T>()
 
     /**
-     * Http response message.
+     * Request was executed with exception
      */
-    val message : String,
-
-    /**
-     * Response payload.
-     */
-    val payload : T? = null
-)
+    data class Error<T>(
+        val cause: RemoteRequestErrorCause
+    ) : BaseResponse<T>()
+}
