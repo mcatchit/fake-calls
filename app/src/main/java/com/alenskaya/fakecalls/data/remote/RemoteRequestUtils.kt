@@ -2,6 +2,7 @@ package com.alenskaya.fakecalls.data.remote
 
 import com.alenskaya.fakecalls.utils.Converter
 import com.alenskaya.fakecalls.domain.BaseResponse
+import com.alenskaya.fakecalls.domain.RemoteRequestErrorCause
 import retrofit2.Response
 
 /**
@@ -17,19 +18,20 @@ internal suspend fun <T> catchExceptions(request: suspend () -> BaseResponse<T>)
 }
 
 /**
- * Converts retrofit [Response] to [BaseResponse.Success].
+ * Converts retrofit [Response] to [BaseResponse].
  *
  * @param dtoToPayloadConverter - converter from dto to response payload.
  *
  * @param Dto - type of Data Transfer Object.
  * @param Payload - type of returning payload.
  */
-internal fun <Dto, Payload> Response<Dto>.toSuccessResponse(
+internal fun <Dto, Payload> Response<Dto>.toBaseResponse(
     dtoToPayloadConverter: Converter<Dto, Payload>
-) = BaseResponse.Success(
-    code = code(),
-    message = message(),
-    payload = body()?.let { dto ->
-        dtoToPayloadConverter.convert(dto)
+): BaseResponse<Payload> {
+    val dto = body()
+    return if (dto != null) {
+        BaseResponse.Success(dtoToPayloadConverter.convert(dto))
+    } else {
+        BaseResponse.Error(RemoteRequestErrorCause.BadResponse(code()))
     }
-)
+}

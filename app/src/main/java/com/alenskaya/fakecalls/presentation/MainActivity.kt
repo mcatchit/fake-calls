@@ -13,6 +13,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.lifecycleScope
 import com.alenskaya.fakecalls.data.remote.contacts.FakeContactRepositoryImpl
 import com.alenskaya.fakecalls.data.remote.contacts.api.FakeContactApi
+import com.alenskaya.fakecalls.domain.contacts.usecase.GetFakeContactsListUseCase
 import com.alenskaya.fakecalls.presentation.theme.FakeCallsTheme
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
@@ -48,9 +49,11 @@ class MainActivity : ComponentActivity() {
 
         val repository = FakeContactRepositoryImpl(api)
 
+        val useCase = GetFakeContactsListUseCase(repository)
+
         lifecycleScope.launch {
             try {
-                val response = repository.getFakeUsers(5)
+                val response = useCase()
                 println(response)
             } catch (e: Exception) {
                 println(e)
