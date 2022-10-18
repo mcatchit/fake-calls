@@ -10,20 +10,7 @@ sealed class BaseResponse<T> {
      * Request was executed successfully
      */
     data class Success<T>(
-        /**
-         * Http response code.
-         */
-        val code: Int,
-
-        /**
-         * Http response message.
-         */
-        val message: String,
-
-        /**
-         * Response payload.
-         */
-        val payload: T? = null
+        val payload: T
     ) : BaseResponse<T>()
 
     /**

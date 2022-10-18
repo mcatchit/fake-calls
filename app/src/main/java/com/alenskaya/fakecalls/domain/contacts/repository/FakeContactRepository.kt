@@ -1,4 +1,4 @@
-package com.alenskaya.fakecalls.domain.contacts
+package com.alenskaya.fakecalls.domain.contacts.repository
 
 import com.alenskaya.fakecalls.domain.BaseResponse
 import com.alenskaya.fakecalls.domain.contacts.model.FakeContactsResponse
