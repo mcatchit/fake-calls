@@ -26,7 +26,8 @@ fun HoneyCombGrid(
     padding: Float,
     elements: List<@Composable BoxScope.() -> Unit>,
     modifier: Modifier = Modifier,
-    maxElementsInRow: Int = 3
+    maxElementsInRow: Int = 3,
+    startWithBig: Boolean = false
 ) {
     val availableCellWidth =
         (width - (padding * (maxElementsInRow + 1))) / maxElementsInRow.toFloat()
@@ -37,7 +38,7 @@ fun HoneyCombGrid(
         modifier = modifier
             .padding(horizontal = padding.dp)
     ) {
-        val rowProcessor = HoneycombRowProcessor(elements, maxElementsInRow)
+        val rowProcessor = HoneycombRowProcessor(elements, maxElementsInRow, startWithBig)
 
         while (rowProcessor.hasNext) {
             HoneyCombRow(
@@ -78,7 +79,7 @@ private fun EmptyCell() {
 
 private fun List<@Composable BoxScope.() -> Unit>.fulfill(gap: Int) =
     mutableListOf<@Composable (BoxScope.() -> Unit)>().apply {
-        addAll(this)
+        addAll(this@fulfill)
         repeat(gap) {
             add {
                 EmptyCell()

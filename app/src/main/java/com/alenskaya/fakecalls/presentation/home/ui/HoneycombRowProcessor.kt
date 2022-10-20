@@ -10,10 +10,11 @@ import androidx.compose.runtime.Composable
  */
 class HoneycombRowProcessor(
     private val elements: List<@Composable BoxScope.() -> Unit>,
-    private val maxElementsInRow: Int
+    private val maxElementsInRow: Int,
+    startWithBig: Boolean
 ) {
     private var processedElementsAmount = 0
-    private var isBigLine = false
+    private var isBigLine = startWithBig
 
     /**
      * Next row availability indicator.

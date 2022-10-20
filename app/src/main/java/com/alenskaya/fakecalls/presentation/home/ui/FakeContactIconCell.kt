@@ -5,6 +5,7 @@ import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -19,6 +20,7 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
@@ -28,7 +30,7 @@ import com.alenskaya.fakecalls.domain.contacts.model.FakeContact
  * Displays fake contact icon and shows hint on long click
  */
 @Composable
-fun FakeContactIcon(
+fun FakeContactIconCell(
     contact: FakeContact,
     onContactClick: (FakeContact) -> Unit
 ) {
@@ -106,6 +108,9 @@ fun HintText(text: String) {
         maxLines = 1,
         overflow = TextOverflow.Ellipsis,
         color = Color.White,
-        fontSize = 12.sp
+        fontSize = 12.sp,
+        modifier = Modifier.padding(
+            horizontal = 12.dp
+        )
     )
 }

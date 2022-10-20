@@ -17,6 +17,11 @@ val Typography = Typography(
         fontFamily = FontFamily.Default,
         fontWeight = FontWeight.W500,
         fontSize = 32.sp,
+    ),
+    subtitle1 = TextStyle(
+        fontFamily = FontFamily.Default,
+        fontWeight = FontWeight.W500,
+        fontSize = 16.sp
     )
     /* Other default text styles to override
     button = TextStyle(
