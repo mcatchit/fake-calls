@@ -1,4 +1,4 @@
-package com.alenskaya.fakecalls.presentation.home.ui
+package com.alenskaya.fakecalls.presentation.components
 
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.background

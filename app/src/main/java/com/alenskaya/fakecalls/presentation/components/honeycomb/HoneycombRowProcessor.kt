@@ -1,4 +1,4 @@
-package com.alenskaya.fakecalls.presentation.home.ui
+package com.alenskaya.fakecalls.presentation.components.honeycomb
 
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.runtime.Composable
@@ -11,10 +11,10 @@ import androidx.compose.runtime.Composable
 class HoneycombRowProcessor(
     private val elements: List<@Composable BoxScope.() -> Unit>,
     private val maxElementsInRow: Int,
-    startWithBig: Boolean
+    startWithBigLine: Boolean
 ) {
     private var processedElementsAmount = 0
-    private var isBigLine = startWithBig
+    private var isBigLine = startWithBigLine
 
     /**
      * Next row availability indicator.

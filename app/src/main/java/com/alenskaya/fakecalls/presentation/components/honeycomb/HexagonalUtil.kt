@@ -1,4 +1,4 @@
-package com.alenskaya.fakecalls.presentation.home.ui
+package com.alenskaya.fakecalls.presentation.components.honeycomb
 
 import androidx.compose.ui.geometry.Size
 import kotlin.math.pow

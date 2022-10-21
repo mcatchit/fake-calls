@@ -1,4 +1,4 @@
-package com.alenskaya.fakecalls.presentation.home.ui
+package com.alenskaya.fakecalls.presentation.components.honeycomb
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -13,12 +13,13 @@ import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.unit.dp
 
 /**
- * Displays passed [elements] as honeycomb
- * @param width - width of the grid
- * @param padding - padding between cells
- * @param elements - displayable elements
- * @param modifier - compose modifier
- * @param maxElementsInRow - amount of elements in the biggest row
+ * Displays passed [elements] as honeycomb.
+ * @param width - width of the grid.
+ * @param padding - padding between cells.
+ * @param elements - displayable elements.
+ * @param modifier - compose modifier.
+ * @param maxElementsInRow - amount of elements in the biggest row.
+ * @param startWithBigLine - whether to start grid with big line.
  */
 @Composable
 fun HoneyCombGrid(
@@ -27,7 +28,7 @@ fun HoneyCombGrid(
     elements: List<@Composable BoxScope.() -> Unit>,
     modifier: Modifier = Modifier,
     maxElementsInRow: Int = 3,
-    startWithBig: Boolean = false
+    startWithBigLine: Boolean = false
 ) {
     val availableCellWidth =
         (width - (padding * (maxElementsInRow + 1))) / maxElementsInRow.toFloat()
@@ -38,7 +39,7 @@ fun HoneyCombGrid(
         modifier = modifier
             .padding(horizontal = padding.dp)
     ) {
-        val rowProcessor = HoneycombRowProcessor(elements, maxElementsInRow, startWithBig)
+        val rowProcessor = HoneycombRowProcessor(elements, maxElementsInRow, startWithBigLine)
 
         while (rowProcessor.hasNext) {
             HoneyCombRow(

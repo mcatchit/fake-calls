@@ -11,4 +11,5 @@ sealed class HomeScreenEvent: UiEvent {
     class ContactsNotLoaded(val message: String): HomeScreenEvent()
     object ContactsLoading: HomeScreenEvent()
     object HideNotLoadedMessage: HomeScreenEvent()
+    class ContactHintVisibilityChanged(val contactId: Int, val isHinted: Boolean): HomeScreenEvent()
 }

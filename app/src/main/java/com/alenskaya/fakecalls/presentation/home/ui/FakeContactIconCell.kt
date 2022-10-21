@@ -9,10 +9,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -25,30 +21,28 @@ import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.alenskaya.fakecalls.domain.contacts.model.FakeContact
+import com.alenskaya.fakecalls.presentation.home.model.HomeScreenFakeContactModel
 
 /**
  * Displays fake contact icon and shows hint on long click
  */
 @Composable
 fun FakeContactIconCell(
-    contact: FakeContact,
-    onContactClick: (FakeContact) -> Unit
+    contactModel: HomeScreenFakeContactModel,
+    onContactClick: (FakeContact) -> Unit,
+    onChangeHint: (Int, Boolean) -> Unit
 ) {
-    var showHint by remember {
-        mutableStateOf(false)
-    }
-
     FakeContactImage(
-        contact = contact,
+        contact = contactModel.contact,
         onContactClick = onContactClick,
-        showHint = { showHint = true }
+        showHint = { onChangeHint(contactModel.id, true) }
     )
 
-    if (showHint) {
-        FakeIconHint(
-            contact = contact,
+    if (contactModel.isHintVisible) {
+        FakeContactHint(
+            contact = contactModel.contact,
             onContactClick = onContactClick,
-            hideHint = { showHint = false }
+            hideHint = { onChangeHint(contactModel.id, false) }
         )
     }
 }
@@ -78,7 +72,7 @@ private fun FakeContactImage(
 }
 
 @Composable
-private fun FakeIconHint(
+private fun FakeContactHint(
     contact: FakeContact,
     onContactClick: (FakeContact) -> Unit,
     hideHint: () -> Unit
@@ -86,7 +80,7 @@ private fun FakeIconHint(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(MaterialTheme.colors.onSecondary.copy(alpha = 0.7f))
+            .background(MaterialTheme.colors.onSecondary.copy(alpha = 0.8f))
             .pointerInput(Unit) {
                 detectTapGestures(
                     onLongPress = { hideHint() },

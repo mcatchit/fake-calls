@@ -25,6 +25,10 @@ class HomeScreenViewModel(
         loadFakeContacts()
     }
 
+    fun contactHintVisibilityChanged(contactId: Int, isHinted: Boolean) {
+        sendEvent(HomeScreenEvent.ContactHintVisibilityChanged(contactId, isHinted))
+    }
+
     private fun loadFakeContacts() {
         sendEvent(HomeScreenEvent.ContactsLoading)
 

@@ -1,4 +1,4 @@
-package com.alenskaya.fakecalls.presentation.home.ui
+package com.alenskaya.fakecalls.presentation.components.honeycomb
 
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
@@ -8,9 +8,7 @@ import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.LayoutDirection
-import androidx.compose.ui.unit.dp
 import kotlin.math.cos
-import kotlin.math.pow
 import kotlin.math.sin
 
 /**
