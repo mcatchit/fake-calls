@@ -24,7 +24,7 @@ import com.alenskaya.fakecalls.presentation.home.ui.MoreCell
 //TODO Refactoring!
 @Composable
 fun HomeScreen(viewModel: HomeScreenViewModel) {
-    val state by viewModel.state.collectAsState()
+    val state by viewModel.screenState.collectAsState()
 
     val screenWidth = LocalConfiguration.current.screenWidthDp.dp
 
