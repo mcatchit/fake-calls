@@ -12,6 +12,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import com.alenskaya.fakecalls.domain.contacts.model.FakeContact
 import com.alenskaya.fakecalls.presentation.home.model.HomeScreenFakeContactModel
@@ -21,6 +22,7 @@ import com.alenskaya.fakecalls.presentation.components.honeycomb.HoneyCombGrid
 import com.alenskaya.fakecalls.presentation.home.ui.CreateNewCallTitle
 import com.alenskaya.fakecalls.presentation.home.ui.LoadingProgress
 import com.alenskaya.fakecalls.presentation.home.ui.MoreCell
+import com.alenskaya.fakecalls.presentation.showToast
 
 /**
  * Home screen ui
@@ -28,6 +30,7 @@ import com.alenskaya.fakecalls.presentation.home.ui.MoreCell
 @Composable
 fun HomeScreen(viewModel: HomeScreenViewModel) {
     val state by viewModel.screenState.collectAsState()
+    val toastEvent by viewModel.oneTimeEffect.collectAsState(initial = null)
 
     val onSelectContactClick = { _: FakeContact ->
 
@@ -52,6 +55,10 @@ fun HomeScreen(viewModel: HomeScreenViewModel) {
         onCreateCustomClick = onCreateCustomClick,
         onMoreClick = onMoreClick
     )
+
+    toastEvent?.let { homeScreenOneTimeUiEffect ->
+        LocalContext.current.showToast(homeScreenOneTimeUiEffect.toastMessage)
+    }
 }
 
 @Composable

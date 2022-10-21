@@ -17,17 +17,11 @@ data class HomeScreenState(
      * List of displayable contacts
      */
     val contacts: List<HomeScreenFakeContactModel>,
-
-    /**
-     * Error toast text
-     */
-    val message: String? = null
 ) : UiState {
     companion object {
         fun initial() = HomeScreenState(
             isLoading = true,
-            contacts = listOf(),
-            message = null
+            contacts = listOf()
         )
     }
 }

@@ -1,6 +1,6 @@
 package com.alenskaya.fakecalls.data.remote
 
-import com.alenskaya.fakecalls.utils.Converter
+import com.alenskaya.fakecalls.util.Converter
 import com.alenskaya.fakecalls.domain.BaseResponse
 import com.alenskaya.fakecalls.domain.RemoteRequestErrorCause
 import retrofit2.Response

@@ -1,4 +1,4 @@
-package com.alenskaya.fakecalls.utils
+package com.alenskaya.fakecalls.util
 
 /**
  * Converts an object of one type to another.
