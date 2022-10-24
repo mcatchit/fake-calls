@@ -3,7 +3,7 @@ package com.alenskaya.fakecalls.presentation.home
 import com.alenskaya.fakecalls.domain.BaseResponse
 import com.alenskaya.fakecalls.domain.RemoteRequestErrorCause
 import com.alenskaya.fakecalls.domain.contacts.model.FakeContactsResponse
-import com.alenskaya.fakecalls.utils.Converter
+import com.alenskaya.fakecalls.util.Converter
 
 //TODO move messages to strings
 object FakeContactsResponseToHomeScreenEventConverter :

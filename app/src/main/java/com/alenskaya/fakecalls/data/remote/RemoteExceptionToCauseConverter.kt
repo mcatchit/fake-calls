@@ -1,6 +1,6 @@
 package com.alenskaya.fakecalls.data.remote
 
-import com.alenskaya.fakecalls.utils.Converter
+import com.alenskaya.fakecalls.util.Converter
 import com.alenskaya.fakecalls.domain.RemoteRequestErrorCause
 import com.squareup.moshi.JsonDataException
 import java.io.IOException

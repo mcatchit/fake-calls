@@ -1,7 +1,7 @@
 package com.alenskaya.fakecalls.presentation.home
 
-import com.alenskaya.fakecalls.domain.contacts.model.FakeContact
 import com.alenskaya.fakecalls.presentation.UiState
+import com.alenskaya.fakecalls.presentation.home.model.HomeScreenFakeContactModel
 
 /**
  * Ui state of HomeScreen
@@ -16,18 +16,12 @@ data class HomeScreenState(
     /**
      * List of displayable contacts
      */
-    val contacts: List<FakeContact>,
-
-    /**
-     * Error toast text
-     */
-    val message: String? = null
+    val contacts: List<HomeScreenFakeContactModel>,
 ) : UiState {
     companion object {
         fun initial() = HomeScreenState(
             isLoading = true,
-            contacts = listOf(),
-            message = null
+            contacts = listOf()
         )
     }
 }

@@ -19,6 +19,6 @@ class GetFakeContactsListUseCase(
     }
 
     companion object {
-        private const val FAKE_USERS_AMOUNT = 6
+        private const val FAKE_USERS_AMOUNT = 5
     }
 }

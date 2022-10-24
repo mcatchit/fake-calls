@@ -2,13 +2,10 @@ package com.alenskaya.fakecalls.presentation.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.alenskaya.fakecalls.domain.BaseResponse
-import com.alenskaya.fakecalls.domain.UseCase
-import com.alenskaya.fakecalls.domain.contacts.model.FakeContactsResponse
 import com.alenskaya.fakecalls.domain.contacts.usecase.GetFakeContactsListUseCase
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 
@@ -20,13 +17,20 @@ class HomeScreenViewModel(
     private val getContactsUseCase: GetFakeContactsListUseCase
 ) : ViewModel() {
 
-    private val reducer = HomeScreenStateReducer(HomeScreenState.initial())
+    private val reducer = HomeScreenStateReducer(viewModelScope, HomeScreenState.initial())
 
-    val state: StateFlow<HomeScreenState>
+    val screenState: StateFlow<HomeScreenState>
         get() = reducer.state
+
+    val oneTimeEffect: SharedFlow<HomeScreenOneTimeUiEffect>
+        get() = reducer.oneTimeEffect
 
     init {
         loadFakeContacts()
+    }
+
+    fun contactHintVisibilityChanged(contactId: Int, isHinted: Boolean) {
+        sendEvent(HomeScreenEvent.ContactHintVisibilityChanged(contactId, isHinted))
     }
 
     private fun loadFakeContacts() {
