@@ -11,6 +11,7 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.alenskaya.fakecalls.domain.contacts.model.FakeContact
 import com.alenskaya.fakecalls.presentation.home.model.HomeScreenFakeContactModel
 import com.alenskaya.fakecalls.presentation.home.ui.CreateCustomContactCell
@@ -25,7 +26,9 @@ import com.alenskaya.fakecalls.presentation.showToast
  * Home screen ui
  */
 @Composable
-fun HomeScreen(viewModel: HomeScreenViewModel) {
+fun HomeScreen(
+    viewModel: HomeScreenViewModel = hiltViewModel()
+) {
     val state by viewModel.screenState.collectAsState()
     val toastEvent by viewModel.oneTimeEffect.collectAsState(initial = null)
 

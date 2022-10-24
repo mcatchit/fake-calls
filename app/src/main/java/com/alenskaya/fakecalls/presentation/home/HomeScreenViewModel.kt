@@ -3,17 +3,20 @@ package com.alenskaya.fakecalls.presentation.home
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.alenskaya.fakecalls.domain.contacts.usecase.GetFakeContactsListUseCase
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 /**
  * ViewModel of HomeScreen
  * @property getContactsUseCase - useCase for loading list of fake contacts
  */
-class HomeScreenViewModel(
+@HiltViewModel
+class HomeScreenViewModel @Inject constructor(
     private val getContactsUseCase: GetFakeContactsListUseCase
 ) : ViewModel() {
 
