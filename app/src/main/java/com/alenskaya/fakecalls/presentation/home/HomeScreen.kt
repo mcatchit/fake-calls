@@ -1,19 +1,16 @@
 package com.alenskaya.fakecalls.presentation.home
 
 import androidx.compose.foundation.layout.BoxScope
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import androidx.constraintlayout.compose.ConstraintLayout
 import com.alenskaya.fakecalls.domain.contacts.model.FakeContact
 import com.alenskaya.fakecalls.presentation.home.model.HomeScreenFakeContactModel
 import com.alenskaya.fakecalls.presentation.home.ui.CreateCustomContactCell
@@ -76,39 +73,49 @@ private fun HomeScreen(
         onMoreClick = onMoreClick
     )
 
+    val hasContacts = state.contacts.isNotEmpty()
+
+    val gridElements = if (!hasContacts) staticCells else staticCells.addContactsCells(
+        contacts = state.contacts,
+        onSelectContactClick = onSelectContactClick,
+        onChangeHint = onContactHintVisibilityChanged
+    )
+
     Scaffold(backgroundColor = MaterialTheme.colors.primary) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-        ) {
+
+        ConstraintLayout {
+            val (title, progress, grid) = createRefs()
+
             CreateNewCallTitle(
                 modifier = Modifier
-                    .align(Alignment.CenterHorizontally)
-                    .padding(top = 116.dp)
+                    .constrainAs(title) {
+                        top.linkTo(parent.top, margin = 116.dp)
+                        start.linkTo(parent.start)
+                        end.linkTo(parent.end)
+                    }
             )
 
             if (state.isLoading) {
                 LoadingProgress(
                     modifier = Modifier
-                        .align(Alignment.CenterHorizontally)
-                        .padding(top = 16.dp)
+                        .constrainAs(progress) {
+                            top.linkTo(title.bottom, margin = 16.dp)
+                            start.linkTo(parent.start)
+                            end.linkTo(parent.end)
+                        }
                 )
             }
-
-            val hasContacts = state.contacts.isNotEmpty()
-
-            val gridElements = if (!hasContacts) staticCells else staticCells.addContactsCells(
-                contacts = state.contacts,
-                onSelectContactClick = onSelectContactClick,
-                onChangeHint = onContactHintVisibilityChanged
-            )
 
             HoneyCombGrid(
                 width = screenWidth.value,
                 padding = 30f,
                 elements = gridElements,
                 modifier = Modifier
-                    .padding(top = 70.dp),
+                    .constrainAs(grid) {
+                        top.linkTo(title.bottom, margin = 70.dp)
+                        start.linkTo(parent.start)
+                        end.linkTo(parent.end)
+                    },
                 maxElementsInRow = if (hasContacts) 3 else 2,
                 startWithBigLine = !hasContacts
             )
