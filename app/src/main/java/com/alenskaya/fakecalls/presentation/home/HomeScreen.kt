@@ -1,8 +1,9 @@
 package com.alenskaya.fakecalls.presentation.home
 
 import androidx.compose.foundation.layout.BoxScope
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Scaffold
+import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -84,8 +85,11 @@ private fun HomeScreen(
         onChangeHint = onContactHintVisibilityChanged
     )
 
-    Scaffold(backgroundColor = MaterialTheme.colors.primary) {
-
+    Surface(
+        modifier = Modifier
+            .fillMaxSize(),
+        color = MaterialTheme.colors.primary,
+    ) {
         ConstraintLayout {
             val (title, progress, grid) = createRefs()
 
