@@ -7,12 +7,12 @@ plugins {
 
 android {
     namespace 'com.alenskaya.fakecalls'
-    compileSdk 33
+    compileSdk projectCompileSdk
 
     defaultConfig {
         applicationId "com.alenskaya.fakecalls"
-        minSdk 21
-        targetSdk 33
+        minSdk projectMinSdk
+        targetSdk projectTargetSdk
         versionCode 1
         versionName "1.0"
 
@@ -52,42 +52,32 @@ android {
 }
 
 dependencies {
+    api project(":data")
+    api project(":domain")
 
-    implementation 'androidx.core:core-ktx:1.7.0'
-    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.3.1'
-    implementation 'androidx.activity:activity-compose:1.3.1'
-    implementation "androidx.compose.ui:ui:$compose_ui_version"
-    implementation "androidx.compose.ui:ui-tooling-preview:$compose_ui_version"
-    implementation 'androidx.compose.material:material:1.1.1'
+    implementation core.ktx
 
-    implementation "androidx.lifecycle:lifecycle-viewmodel:$lifecycle_version"
-    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
+    implementation lifecycle.runtimeKtx
+    implementation lifecycle.viewModel
+    implementation lifecycle.viewModelKtx
 
-    //CONSTRAINT LAYOUT
-    implementation "androidx.constraintlayout:constraintlayout-compose:1.0.1"
+    implementation compose.activity
+    implementation compose.ui
+    implementation compose.toolingPreview
+    implementation compose.constraintLayout
+    implementation compose.material
 
-    //RETROFIT
-    implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
-    implementation "com.squareup.retrofit2:converter-moshi:$retrofit_version"
+    implementation coil.coil
+    implementation coil.compose
 
-    //MOSHI
-    implementation "com.squareup.moshi:moshi-kotlin:$moshi_version"
+    implementation daggerHilt.android
+    kapt daggerHilt.compiler
+    implementation daggerHilt.navigationCompose
 
-    //COIL
-    implementation "io.coil-kt:coil:$coil_version"
-    implementation "io.coil-kt:coil-compose:$coil_version"
-
-    //HILT
-    implementation "com.google.dagger:hilt-android:$hilt_version"
-    kapt "com.google.dagger:hilt-compiler:$hilt_version"
-    implementation "androidx.hilt:hilt-navigation-compose:$hilt_navigation_compose_version"
-
-    testImplementation 'junit:junit:4.13.2'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.3'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
-    androidTestImplementation "androidx.compose.ui:ui-test-junit4:$compose_ui_version"
-    debugImplementation "androidx.compose.ui:ui-tooling:$compose_ui_version"
-    debugImplementation "androidx.compose.ui:ui-test-manifest:$compose_ui_version"
+    testImplementation test.junit
+    androidTestImplementation test.uiTestJUnit4
+    debugImplementation test.uiTooling
+    debugImplementation test.uiTestManifest
 }
 
 kapt {

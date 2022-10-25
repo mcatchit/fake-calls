@@ -1,0 +1,72 @@
+ext {
+    projectCompileSdk = 33
+    projectMinSdk = 21
+    projectTargetSdk = 33
+
+    versions = [
+            android_library_version          : '7.3.0',
+            kotlin_version                   : '1.6.10',
+            core_ktx_version                 : '1.9.0',
+            lifecycle_version                : '2.5.1',
+            compose_ui_version               : '1.2.1',
+            compose_material_version         : '1.3.0',
+            compose_activity_version         : '1.6.0',
+            compose_constraint_layout_version: '1.0.1',
+            retrofit_version                 : '2.9.0',
+            coil_version                     : '2.2.2',
+            moshi_version                    : '1.14.0',
+            hilt_version                     : '2.44',
+            hilt_navigation_compose_version  : '1.0.0',
+            junit_version                    : '4.13.2'
+    ]
+
+    kotlinCore = [
+            coroutines: "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4",
+            inject    : "javax.inject:javax.inject:1"
+    ]
+
+    core = [
+            ktx: "androidx.core:core-ktx:$versions.core_ktx_version"
+    ]
+
+    lifecycle = [
+            runtimeKtx  : "androidx.lifecycle:lifecycle-runtime-ktx:$versions.lifecycle_version",
+            viewModel   : "androidx.lifecycle:lifecycle-viewmodel:$versions.lifecycle_version",
+            viewModelKtx: "androidx.lifecycle:lifecycle-viewmodel-ktx:$versions.lifecycle_version"
+    ]
+
+    compose = [
+            activity        : "androidx.activity:activity-compose:$versions.compose_activity_version",
+            ui              : "androidx.compose.ui:ui:$versions.compose_ui_version",
+            toolingPreview  : "androidx.compose.ui:ui-tooling-preview:$versions.compose_ui_version",
+            material        : "androidx.compose.material:material:$versions.compose_material_version",
+            constraintLayout: "androidx.constraintlayout:constraintlayout-compose:$versions.compose_constraint_layout_version"
+    ]
+
+    coil = [
+            coil   : "io.coil-kt:coil:$versions.coil_version",
+            compose: "io.coil-kt:coil-compose:$versions.coil_version"
+    ]
+
+    daggerHilt = [
+            android          : "com.google.dagger:hilt-android:$versions.hilt_version",
+            compiler         : "com.google.dagger:hilt-compiler:$versions.hilt_version",
+            navigationCompose: "androidx.hilt:hilt-navigation-compose:$versions.hilt_navigation_compose_version"
+    ]
+
+    test = [
+            junit         : "junit:junit:$versions.junit_version",
+            uiTestJUnit4  : "androidx.compose.ui:ui-test-junit4:$versions.compose_ui_version",
+            uiTooling     : "androidx.compose.ui:ui-tooling:$versions.compose_ui_version",
+            uiTestManifest: "androidx.compose.ui:ui-test-manifest:$versions.compose_ui_version"
+    ]
+
+    retrofit = [
+            retrofit: "com.squareup.retrofit2:retrofit:$versions.retrofit_version",
+            moshi   : "com.squareup.retrofit2:converter-moshi:$versions.retrofit_version"
+    ]
+
+    moshi = [
+            kotlin: "com.squareup.moshi:moshi-kotlin:$versions.moshi_version"
+    ]
+}
