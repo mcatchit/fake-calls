@@ -1,16 +1,26 @@
+import org.gradle.api.initialization.resolve.RepositoriesMode
+
 pluginManagement {
     repositories {
         gradlePluginPortal()
         google()
         mavenCentral()
     }
+
+    plugins {
+        apply from: file('constants.gradle')
+    }
 }
 dependencyResolutionManagement {
-    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositoriesMode.set(RepositoriesMode.PREFER_SETTINGS)
     repositories {
         google()
         mavenCentral()
     }
 }
 rootProject.name = "Fake Calls"
+
 include ':app'
+include ':data'
+include ':domain'
+include ':util'
