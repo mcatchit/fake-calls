@@ -2,6 +2,7 @@ package com.alenskaya.fakecalls.presentation.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import coil.ImageLoader
 import com.alenskaya.fakecalls.domain.contacts.usecase.GetFakeContactsListUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -13,10 +14,12 @@ import javax.inject.Inject
 
 /**
  * ViewModel of HomeScreen
+ * @property imageLoader - application image loader
  * @property getContactsUseCase - useCase for loading list of fake contacts
  */
 @HiltViewModel
 class HomeScreenViewModel @Inject constructor(
+    val imageLoader: ImageLoader,
     private val getContactsUseCase: GetFakeContactsListUseCase
 ) : ViewModel() {
 
