@@ -13,6 +13,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.hilt.navigation.compose.hiltViewModel
+import coil.ImageLoader
 import com.alenskaya.fakecalls.domain.contacts.model.FakeContact
 import com.alenskaya.fakecalls.presentation.home.model.HomeScreenFakeContactModel
 import com.alenskaya.fakecalls.presentation.home.ui.CreateCustomContactCell
@@ -22,16 +23,19 @@ import com.alenskaya.fakecalls.presentation.home.ui.CreateNewCallTitle
 import com.alenskaya.fakecalls.presentation.home.ui.LoadingProgress
 import com.alenskaya.fakecalls.presentation.home.ui.MoreCell
 import com.alenskaya.fakecalls.presentation.showToast
+import dagger.hilt.android.migration.CustomInjection.inject
 
 /**
  * Home screen ui
  */
 @Composable
 fun HomeScreen(
-    viewModel: HomeScreenViewModel = hiltViewModel()
+    viewModel: HomeScreenViewModel = hiltViewModel(),
 ) {
     val state by viewModel.screenState.collectAsState()
     val toastEvent by viewModel.oneTimeEffect.collectAsState(initial = null)
+
+    val imageLoader = viewModel.imageLoader
 
     val onSelectContactClick = { _: FakeContact ->
 
@@ -50,6 +54,7 @@ fun HomeScreen(
     }
 
     HomeScreen(
+        imageLoader = imageLoader,
         state = state,
         onSelectContactClick = onSelectContactClick,
         onContactHintVisibilityChanged = onContactHintVisibilityChanged,
@@ -64,6 +69,7 @@ fun HomeScreen(
 
 @Composable
 private fun HomeScreen(
+    imageLoader: ImageLoader,
     state: HomeScreenState,
     onSelectContactClick: (FakeContact) -> Unit,
     onContactHintVisibilityChanged: (Int, Boolean) -> Unit,
@@ -80,6 +86,7 @@ private fun HomeScreen(
     val hasContacts = state.contacts.isNotEmpty()
 
     val gridElements = if (!hasContacts) staticCells else staticCells.addContactsCells(
+        imageLoader = imageLoader,
         contacts = state.contacts,
         onSelectContactClick = onSelectContactClick,
         onChangeHint = onContactHintVisibilityChanged
@@ -143,23 +150,26 @@ private fun getStaticCells(
 }
 
 private fun List<@Composable BoxScope.() -> Unit>.addContactsCells(
+    imageLoader: ImageLoader,
     contacts: List<HomeScreenFakeContactModel>,
     onSelectContactClick: (FakeContact) -> Unit,
     onChangeHint: (Int, Boolean) -> Unit
 ) =
     mutableListOf<@Composable (BoxScope.() -> Unit)>().apply {
         add(this@addContactsCells.first())
-        addAll(contacts.convertToFakeContactsCells(onSelectContactClick, onChangeHint))
+        addAll(contacts.convertToFakeContactsCells(imageLoader, onSelectContactClick, onChangeHint))
         add(this@addContactsCells.last())
     }
 
 private fun List<HomeScreenFakeContactModel>.convertToFakeContactsCells(
+    imageLoader: ImageLoader,
     onSelectContactClick: (FakeContact) -> Unit,
     onChangeHint: (Int, Boolean) -> Unit
 ): List<@Composable BoxScope.() -> Unit> =
     map {
         {
             FakeContactIconCell(
+                imageLoader = imageLoader,
                 contactModel = it,
                 onContactClick = onSelectContactClick,
                 onChangeHint = onChangeHint

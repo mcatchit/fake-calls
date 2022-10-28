@@ -18,6 +18,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.ImageLoader
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.alenskaya.fakecalls.domain.contacts.model.FakeContact
@@ -25,14 +26,20 @@ import com.alenskaya.fakecalls.presentation.home.model.HomeScreenFakeContactMode
 
 /**
  * Displays fake contact icon and shows hint on long click
+ * @param imageLoader - application image loader
+ * @param contactModel - contact information
+ * @param onContactClick - action called by contact click
+ * @param onChangeHint - action called when hint visibility changes
  */
 @Composable
 fun FakeContactIconCell(
+    imageLoader: ImageLoader,
     contactModel: HomeScreenFakeContactModel,
     onContactClick: (FakeContact) -> Unit,
     onChangeHint: (Int, Boolean) -> Unit
 ) {
     FakeContactImage(
+        imageLoader = imageLoader,
         contact = contactModel.contact,
         onContactClick = onContactClick,
         showHint = { onChangeHint(contactModel.id, true) }
@@ -49,11 +56,13 @@ fun FakeContactIconCell(
 
 @Composable
 private fun FakeContactImage(
+    imageLoader: ImageLoader,
     contact: FakeContact,
     onContactClick: (FakeContact) -> Unit,
     showHint: () -> Unit
 ) {
     AsyncImage(
+        imageLoader = imageLoader,
         model = ImageRequest.Builder(LocalContext.current)
             .data(contact.photoUrl)
             .crossfade(true)
