@@ -30,5 +30,10 @@ data class SavedCall(
     /**
      * Date when the call will be executed
      */
-    val date: Date
+    val date: Date,
+
+    /**
+     * Status of the call
+     */
+    val callStatus: CallStatus,
 )

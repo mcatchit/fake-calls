@@ -2,7 +2,7 @@ package com.alenskaya.fakecalls.data
 
 import com.alenskaya.fakecalls.data.remote.FakeContactApiRepository
 import com.alenskaya.fakecalls.data.remote.contacts.api.FakeContactApi
-import com.alenskaya.fakecalls.domain.contacts.repository.FakeContactRepository
+import com.alenskaya.fakecalls.domain.contacts.FakeContactRepository
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import dagger.Binds

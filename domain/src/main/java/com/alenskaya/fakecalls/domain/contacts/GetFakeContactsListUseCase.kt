@@ -1,9 +1,8 @@
-package com.alenskaya.fakecalls.domain.contacts.usecase
+package com.alenskaya.fakecalls.domain.contacts
 
 import com.alenskaya.fakecalls.domain.BaseResponse
 import com.alenskaya.fakecalls.domain.RemoteRequestErrorCause
 import com.alenskaya.fakecalls.domain.contacts.model.FakeContactsResponse
-import com.alenskaya.fakecalls.domain.contacts.repository.FakeContactRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
