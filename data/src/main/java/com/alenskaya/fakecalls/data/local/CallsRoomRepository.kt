@@ -7,7 +7,7 @@ import com.alenskaya.fakecalls.domain.DatabaseError
 import com.alenskaya.fakecalls.domain.calls.model.CallStatus
 import com.alenskaya.fakecalls.domain.calls.model.CreateNewCallRequest
 import com.alenskaya.fakecalls.domain.calls.model.SavedCall
-import com.alenskaya.fakecalls.domain.calls.repository.CallsRepository
+import com.alenskaya.fakecalls.domain.calls.CallsRepository
 import java.util.Date
 import javax.inject.Inject
 
@@ -34,28 +34,18 @@ internal class CallsRoomRepository @Inject constructor(
         }
     }
 
-
-    override suspend fun getPlannedCalls(): BaseResponse<List<SavedCall>, DatabaseError> {
+    override suspend fun getSavedCalls(): BaseResponse<List<SavedCall>, DatabaseError> {
         return catchExceptions {
-            BaseResponse.Success(getCallsWithStatus(CallStatus.SCHEDULED))
-        }
-    }
-
-    override suspend fun getCompletedCalls(): BaseResponse<List<SavedCall>, DatabaseError> {
-        return catchExceptions {
-            BaseResponse.Success(getCallsWithStatus(CallStatus.COMPLETED))
-        }
-    }
-
-    private suspend fun getCallsWithStatus(callStatus: CallStatus): List<SavedCall> {
-        return callDao.getCallsWithStatus(statusConverter.convert(callStatus)).map { call ->
-            SavedCall(
-                id = call.id,
-                name = call.contactName,
-                phone = call.contactPhone,
-                photoUrl = call.photoUrl,
-                date = Date(call.date)
-            )
+            BaseResponse.Success(callDao.getAllCalls().map { callEntity ->
+                SavedCall(
+                    id = callEntity.id,
+                    name = callEntity.contactName,
+                    phone = callEntity.contactPhone,
+                    photoUrl = callEntity.photoUrl,
+                    date = Date(callEntity.date),
+                    callStatus = statusConverter.convertBack(callEntity.status)
+                )
+            })
         }
     }
 

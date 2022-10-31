@@ -1,4 +1,4 @@
-package com.alenskaya.fakecalls.domain.contacts.repository
+package com.alenskaya.fakecalls.domain.contacts
 
 import com.alenskaya.fakecalls.domain.BaseResponse
 import com.alenskaya.fakecalls.domain.RemoteRequestErrorCause

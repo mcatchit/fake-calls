@@ -3,7 +3,7 @@ package com.alenskaya.fakecalls.presentation.home
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import coil.ImageLoader
-import com.alenskaya.fakecalls.domain.contacts.usecase.GetFakeContactsListUseCase
+import com.alenskaya.fakecalls.domain.contacts.GetFakeContactsListUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.SharedFlow

@@ -18,13 +18,6 @@ internal interface CallDao {
     suspend fun getAllCalls(): List<CallEntity>
 
     /**
-     * Requests calls with specific [status]
-     * @return list of calls with status = [status]
-     */
-    @Query("SELECT * FROM calls WHERE status = :status")
-    suspend fun getCallsWithStatus(status: String): List<CallEntity>
-
-    /**
      * Adds a new [callEntity] to calls table
      */
     @Insert

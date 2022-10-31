@@ -5,7 +5,7 @@ import androidx.room.Room
 import com.alenskaya.fakecalls.data.local.CallsRoomRepository
 import com.alenskaya.fakecalls.data.local.db.CallDao
 import com.alenskaya.fakecalls.data.local.db.FakeCallsDatabase
-import com.alenskaya.fakecalls.domain.calls.repository.CallsRepository
+import com.alenskaya.fakecalls.domain.calls.CallsRepository
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
