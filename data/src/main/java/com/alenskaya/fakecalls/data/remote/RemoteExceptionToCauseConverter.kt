@@ -8,7 +8,7 @@ import java.io.IOException
 /**
  * Converts an exception thrown while executing a remote request to [RemoteRequestErrorCause]
  */
-class RemoteExceptionToCauseConverter : Converter<Exception, RemoteRequestErrorCause> {
+internal class RemoteExceptionToCauseConverter : Converter<Exception, RemoteRequestErrorCause> {
     override fun convert(input: Exception): RemoteRequestErrorCause {
         return when (input) {
             is IOException -> RemoteRequestErrorCause.NoInternetConnection

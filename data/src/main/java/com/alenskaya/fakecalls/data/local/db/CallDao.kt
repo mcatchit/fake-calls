@@ -8,7 +8,7 @@ import androidx.room.Query
  * Makes requests to calls table
  */
 @Dao
-interface CallDao {
+internal interface CallDao {
 
     /**
      * Requests list of all calls

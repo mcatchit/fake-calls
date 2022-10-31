@@ -1,6 +1,7 @@
 package com.alenskaya.fakecalls.domain.contacts.repository
 
 import com.alenskaya.fakecalls.domain.BaseResponse
+import com.alenskaya.fakecalls.domain.RemoteRequestErrorCause
 import com.alenskaya.fakecalls.domain.contacts.model.FakeContactsResponse
 
 /**
@@ -9,8 +10,8 @@ import com.alenskaya.fakecalls.domain.contacts.model.FakeContactsResponse
 interface FakeContactRepository {
 
     /**
-     * Requests [amount] number of fake contacts from api
+     * Requests [number] number of fake contacts from api
      * @return response with contacts list as payload
      */
-    suspend fun getFakeUsers(amount: Int): BaseResponse<FakeContactsResponse>
+    suspend fun getFakeUsers(number: Int): BaseResponse<FakeContactsResponse, RemoteRequestErrorCause>
 }
