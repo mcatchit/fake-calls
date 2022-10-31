@@ -75,6 +75,10 @@ dependencies {
     kapt daggerHilt.compiler
     implementation daggerHilt.navigationCompose
 
+    implementation room.runtime
+    annotationProcessor room.compiler
+    kapt room.compiler
+
     testImplementation test.junit
     androidTestImplementation test.uiTestJUnit4
     debugImplementation test.uiTooling

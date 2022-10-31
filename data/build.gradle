@@ -37,7 +37,6 @@ dependencies {
     api project(":util")
 
     implementation core.ktx
-    //implementation 'androidx.appcompat:appcompat:1.5.1'
 
     implementation retrofit.retrofit
     implementation retrofit.moshi
@@ -47,6 +46,11 @@ dependencies {
     implementation daggerHilt.android
     kapt daggerHilt.compiler
     implementation daggerHilt.navigationCompose
+
+    implementation room.runtime
+    implementation room.coroutines
+    annotationProcessor room.compiler
+    kapt room.compiler
 
     testImplementation test.junit
 }
