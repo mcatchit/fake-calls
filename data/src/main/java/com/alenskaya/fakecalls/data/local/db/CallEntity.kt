@@ -8,7 +8,7 @@ import androidx.room.PrimaryKey
  * Describes how calls are stored in the calls table
  */
 @Entity(tableName = "calls")
-data class CallEntity(
+internal data class CallEntity(
 
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id")

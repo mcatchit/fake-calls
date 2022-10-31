@@ -7,9 +7,9 @@ import com.alenskaya.fakecalls.util.Converter
 
 //TODO move messages to strings
 object FakeContactsResponseToHomeScreenEventConverter :
-    Converter<BaseResponse<FakeContactsResponse>, HomeScreenEvent> {
+    Converter<BaseResponse<FakeContactsResponse, RemoteRequestErrorCause>, HomeScreenEvent> {
 
-    override fun convert(input: BaseResponse<FakeContactsResponse>): HomeScreenEvent {
+    override fun convert(input: BaseResponse<FakeContactsResponse, RemoteRequestErrorCause>): HomeScreenEvent {
         return when (input) {
             is BaseResponse.Success -> HomeScreenEvent.ContactsLoaded(input.payload.contacts)
             is BaseResponse.Error -> HomeScreenEvent.ContactsNotLoaded(getErrorMessage(input.cause))

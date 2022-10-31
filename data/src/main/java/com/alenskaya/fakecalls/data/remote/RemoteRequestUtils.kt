@@ -9,7 +9,9 @@ import retrofit2.Response
  * Catches exceptions in remote [request] and converts them to the cause.
  * @return result of [request] or [BaseResponse.Error] if an exception was thrown.
  */
-internal suspend fun <T> catchExceptions(request: suspend () -> BaseResponse<T>): BaseResponse<T> {
+internal suspend fun <T> catchExceptions(
+    request: suspend () -> BaseResponse<T, RemoteRequestErrorCause>
+): BaseResponse<T, RemoteRequestErrorCause> {
     return try {
         request.invoke()
     } catch (e: Exception) {
@@ -27,7 +29,7 @@ internal suspend fun <T> catchExceptions(request: suspend () -> BaseResponse<T>)
  */
 internal fun <Dto, Payload> Response<Dto>.toBaseResponse(
     dtoToPayloadConverter: Converter<Dto, Payload>
-): BaseResponse<Payload> {
+): BaseResponse<Payload, RemoteRequestErrorCause> {
     val dto = body()
     return if (dto != null) {
         BaseResponse.Success(dtoToPayloadConverter.convert(dto))

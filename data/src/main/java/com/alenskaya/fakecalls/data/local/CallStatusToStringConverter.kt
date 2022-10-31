@@ -7,7 +7,7 @@ import com.alenskaya.fakecalls.util.TwoWayConverter
  * Converts call status to string in order to store it in DB.
  * Supports reverse conversion.
  */
-class CallStatusToStringConverter : TwoWayConverter<CallStatus, String> {
+internal class CallStatusToStringConverter : TwoWayConverter<CallStatus, String> {
 
     override fun convert(input: CallStatus): String {
         return input.name

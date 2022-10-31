@@ -1,6 +1,6 @@
 package com.alenskaya.fakecalls.data
 
-import com.alenskaya.fakecalls.data.remote.contacts.FakeContactRepositoryImpl
+import com.alenskaya.fakecalls.data.remote.FakeContactApiRepository
 import com.alenskaya.fakecalls.data.remote.contacts.api.FakeContactApi
 import com.alenskaya.fakecalls.domain.contacts.repository.FakeContactRepository
 import com.squareup.moshi.Moshi
@@ -21,15 +21,18 @@ import javax.inject.Singleton
 @Qualifier
 private annotation class BaseUrl
 
+/**
+ * DI for remote data sources
+ */
 @Module
 @InstallIn(SingletonComponent::class)
-internal abstract class DataModule {
+internal abstract class RemoteDataModule {
 
     @Binds
     @Singleton
-    abstract fun fakeContactsRepository(impl: FakeContactRepositoryImpl): FakeContactRepository
+    abstract fun fakeContactsRepository(impl: FakeContactApiRepository): FakeContactRepository
 
-    internal companion object {
+    companion object {
         @Provides
         @Singleton
         fun provideApi(retrofit: Retrofit): FakeContactApi =

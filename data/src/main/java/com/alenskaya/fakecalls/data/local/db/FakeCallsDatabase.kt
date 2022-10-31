@@ -10,7 +10,7 @@ import androidx.room.RoomDatabase
     entities = [CallEntity::class],
     version = 1
 )
-abstract class FakeCallsDatabase : RoomDatabase() {
+internal abstract class FakeCallsDatabase : RoomDatabase() {
 
     abstract fun callDao(): CallDao
 }
