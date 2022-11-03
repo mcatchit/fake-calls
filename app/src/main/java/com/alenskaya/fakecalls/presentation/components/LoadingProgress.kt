@@ -1,4 +1,4 @@
-package com.alenskaya.fakecalls.presentation.home.ui
+package com.alenskaya.fakecalls.presentation.components
 
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
@@ -14,12 +14,15 @@ import com.alenskaya.fakecalls.presentation.components.LoadingDots
  * Loading suggestions progress on home screen
  */
 @Composable
-fun LoadingProgress(modifier: Modifier = Modifier) {
+fun LoadingProgress(
+    text: String,
+    modifier: Modifier = Modifier
+) {
     Row(
         modifier = modifier
     ) {
         Text(
-            text = "Loading suggestions",
+            text = text,
             style = MaterialTheme.typography.subtitle1,
             color = MaterialTheme.colors.onSecondary,
             modifier = Modifier.align(Alignment.Bottom)

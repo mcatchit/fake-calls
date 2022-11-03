@@ -16,10 +16,11 @@ import androidx.compose.ui.unit.dp
 fun HoneyCombCell(
     height: Float,
     width: Float,
-    content: @Composable BoxScope.() -> Unit
+    modifier: Modifier = Modifier,
+    content: @Composable BoxScope.() -> Unit,
 ) {
     Box(
-        modifier = Modifier
+        modifier = modifier
             .clip(HexagonalShape(20))
             .size(height = height.dp, width = width.dp)
     ) {

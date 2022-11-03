@@ -20,7 +20,7 @@ interface CallsRepository {
 
     /**
      * Requests list of saved calls.
-     * @return [BaseResponse.Success] with list of calls as a payload in case of success,
+     * @return [BaseResponse.Success] with sorted by date list of calls as a payload in case of success,
      * [BaseResponse.Error] otherwise
      */
     suspend fun getSavedCalls(): BaseResponse<List<SavedCall>, DatabaseError>
