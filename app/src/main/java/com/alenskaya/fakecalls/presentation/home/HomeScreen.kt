@@ -20,7 +20,7 @@ import com.alenskaya.fakecalls.presentation.home.ui.CreateCustomContactCell
 import com.alenskaya.fakecalls.presentation.home.ui.FakeContactIconCell
 import com.alenskaya.fakecalls.presentation.components.honeycomb.HoneyCombGrid
 import com.alenskaya.fakecalls.presentation.components.MainTitle
-import com.alenskaya.fakecalls.presentation.home.ui.LoadingProgress
+import com.alenskaya.fakecalls.presentation.components.LoadingProgress
 import com.alenskaya.fakecalls.presentation.home.ui.MoreCell
 import com.alenskaya.fakecalls.presentation.showToast
 
@@ -111,6 +111,7 @@ private fun HomeScreen(
 
             if (state.isLoading) {
                 LoadingProgress(
+                    text = "Loading suggestions", //FIXME
                     modifier = Modifier
                         .constrainAs(progress) {
                             top.linkTo(title.bottom, margin = 16.dp)
