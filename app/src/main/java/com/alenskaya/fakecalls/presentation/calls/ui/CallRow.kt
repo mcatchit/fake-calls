@@ -21,6 +21,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
+import coil.ImageLoader
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.alenskaya.fakecalls.R
@@ -39,6 +40,7 @@ import com.alenskaya.fakecalls.presentation.components.honeycomb.hexagonalSize
 fun CallRow(
     call: CallsScreenCallModel,
     actions: List<CallRowAction>,
+    imageLoader: ImageLoader,
     modifier: Modifier = Modifier
 ) {
     ConstraintLayout(
@@ -49,6 +51,7 @@ fun CallRow(
         FakeContactIcon(
             url = call.photoUrl,
             description = call.name,
+            imageLoader = imageLoader,
             modifier = Modifier
                 .constrainAs(icon) {
                     top.linkTo(parent.top, margin = 2.dp)
@@ -112,6 +115,7 @@ fun CallRow(
 private fun FakeContactIcon(
     url: String?,
     description: String,
+    imageLoader: ImageLoader,
     modifier: Modifier = Modifier
 ) {
     val iconSize = hexagonalSize(with(LocalDensity.current) { 24.dp.toPx() })
@@ -125,6 +129,7 @@ private fun FakeContactIcon(
             UrlContactIcon(
                 url = url,
                 description = description,
+                imageLoader = imageLoader
             )
         } else {
             DefaultContactIcon()
@@ -167,10 +172,11 @@ private fun CallDivider(modifier: Modifier = Modifier) {
 private fun UrlContactIcon(
     url: String,
     description: String,
+    imageLoader: ImageLoader,
     modifier: Modifier = Modifier
 ) {
     AsyncImage(
-        //imageLoader = imageLoader,
+        imageLoader = imageLoader,
         model = ImageRequest.Builder(LocalContext.current)
             .data(url)
             .crossfade(true)

@@ -1,10 +1,11 @@
-package com.alenskaya.fakecalls.presentation.calls
+package com.alenskaya.fakecalls.presentation.calls.ui
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.alenskaya.fakecalls.presentation.calls.model.CallsScreenCallModel
+import com.alenskaya.fakecalls.presentation.components.ExpandableSection
 
 /**
  * Base expandable calls list.

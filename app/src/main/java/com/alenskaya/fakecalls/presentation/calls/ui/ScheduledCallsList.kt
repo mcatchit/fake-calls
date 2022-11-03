@@ -1,34 +1,36 @@
-package com.alenskaya.fakecalls.presentation.calls
+package com.alenskaya.fakecalls.presentation.calls.ui
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import coil.ImageLoader
 import com.alenskaya.fakecalls.presentation.calls.model.CallsScreenCallModel
-import com.alenskaya.fakecalls.presentation.calls.ui.CompletedCallRow
 
 /**
- * Titled expandable ist of completed calls.
+ * Titled expandable ist of scheduled calls.
  * @param calls - displayed calls.
- * @param repeatCallAction - action of repeating a call.
+ * @param editCallAction - action of editing a call.
  * @param deleteCallAction - action of deleting a call.
  * @param modifier - modifier.
  */
 @Composable
-fun CompletedCallsList(
+fun ScheduledCallsList(
     calls: List<CallsScreenCallModel>,
-    repeatCallAction: (CallsScreenCallModel) -> Unit,
+    editCallAction: (CallsScreenCallModel) -> Unit,
     deleteCallAction: (CallsScreenCallModel) -> Unit,
+    imageLoader: ImageLoader,
     modifier: Modifier = Modifier
 ) {
     ExpandableCallsList(
-        title = "Completed", //FIXME
+        title = "Scheduled", //FIXME
         calls = calls,
         callToRowAction = { call ->
             {
-                CompletedCallRow(
+                ScheduledCallRow(
                     call = call,
-                    repeatCallAction = repeatCallAction,
+                    editCallAction = editCallAction,
                     deleteCallAction = deleteCallAction,
+                    imageLoader = imageLoader,
                     modifier = Modifier.fillMaxWidth()
                 )
             }

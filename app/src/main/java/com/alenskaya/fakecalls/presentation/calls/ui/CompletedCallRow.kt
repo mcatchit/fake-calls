@@ -2,6 +2,7 @@ package com.alenskaya.fakecalls.presentation.calls.ui
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import coil.ImageLoader
 import com.alenskaya.fakecalls.R
 import com.alenskaya.fakecalls.presentation.calls.model.CallsScreenCallModel
 
@@ -16,6 +17,7 @@ fun CompletedCallRow(
     call: CallsScreenCallModel,
     repeatCallAction: (CallsScreenCallModel) -> Unit,
     deleteCallAction: (CallsScreenCallModel) -> Unit,
+    imageLoader: ImageLoader,
     modifier: Modifier = Modifier
 ) {
     CallRow(
@@ -36,6 +38,7 @@ fun CompletedCallRow(
                 }
             )
         ),
+        imageLoader = imageLoader,
         modifier = modifier
     )
 }

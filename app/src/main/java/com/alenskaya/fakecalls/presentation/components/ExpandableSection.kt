@@ -1,4 +1,4 @@
-package com.alenskaya.fakecalls.presentation.calls
+package com.alenskaya.fakecalls.presentation.components
 
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.LinearOutSlowInEasing
@@ -31,7 +31,6 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.alenskaya.fakecalls.R
 
 /**

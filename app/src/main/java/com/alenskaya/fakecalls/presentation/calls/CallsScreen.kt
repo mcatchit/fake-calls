@@ -11,11 +11,19 @@ import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.alenskaya.fakecalls.presentation.calls.model.CallsScreenCallModel
+import com.alenskaya.fakecalls.presentation.calls.ui.CompletedCallsList
+import com.alenskaya.fakecalls.presentation.calls.ui.ScheduledCallsList
 import com.alenskaya.fakecalls.presentation.components.MainTitle
+import com.alenskaya.fakecalls.presentation.home.HomeScreenViewModel
 
 @Composable
-fun CallsScreen() {
+fun CallsScreen(
+    viewModel: CallsScreenViewModel = hiltViewModel()
+) {
+    val imageLoader = viewModel.imageLoader
+
     Surface(
         modifier = Modifier
             .fillMaxSize(),
@@ -35,12 +43,14 @@ fun CallsScreen() {
                 ScheduledCallsList(
                     calls = scheduledCalls,
                     modifier = Modifier.fillMaxWidth(),
+                    imageLoader = imageLoader,
                     editCallAction = { /*TODO*/ },
                     deleteCallAction = { /*TODO*/ }
                 )
                 CompletedCallsList(
                     calls = scheduledCalls,
                     modifier = Modifier.fillMaxWidth(),
+                    imageLoader = imageLoader,
                     repeatCallAction = { /*TODO*/ },
                     deleteCallAction = { /*TODO*/ }
                 )

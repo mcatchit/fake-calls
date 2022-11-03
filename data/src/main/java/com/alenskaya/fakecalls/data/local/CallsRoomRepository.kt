@@ -45,6 +45,8 @@ internal class CallsRoomRepository @Inject constructor(
                     date = Date(callEntity.date),
                     callStatus = statusConverter.convertBack(callEntity.status)
                 )
+            }.sortedBy { savedCall ->
+                savedCall.date
             })
         }
     }
