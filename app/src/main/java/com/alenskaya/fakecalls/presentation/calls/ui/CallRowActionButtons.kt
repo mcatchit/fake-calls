@@ -1,5 +1,6 @@
 package com.alenskaya.fakecalls.presentation.calls.ui
 
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.size
@@ -37,7 +38,8 @@ private fun CallRowActionButton(
 ) {
     IconButton(
         onClick = action.onClickAction,
-        modifier = Modifier.size(24.dp)
+        modifier = Modifier.size(24.dp),
+        interactionSource = MutableInteractionSource()
     ) {
         Icon(
             imageVector = ImageVector.vectorResource(id = action.iconId),

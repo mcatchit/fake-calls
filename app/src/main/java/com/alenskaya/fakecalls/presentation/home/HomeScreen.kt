@@ -19,11 +19,10 @@ import com.alenskaya.fakecalls.presentation.home.model.HomeScreenFakeContactMode
 import com.alenskaya.fakecalls.presentation.home.ui.CreateCustomContactCell
 import com.alenskaya.fakecalls.presentation.home.ui.FakeContactIconCell
 import com.alenskaya.fakecalls.presentation.components.honeycomb.HoneyCombGrid
-import com.alenskaya.fakecalls.presentation.home.ui.CreateNewCallTitle
+import com.alenskaya.fakecalls.presentation.components.MainTitle
 import com.alenskaya.fakecalls.presentation.home.ui.LoadingProgress
 import com.alenskaya.fakecalls.presentation.home.ui.MoreCell
 import com.alenskaya.fakecalls.presentation.showToast
-import dagger.hilt.android.migration.CustomInjection.inject
 
 /**
  * Home screen ui
@@ -100,7 +99,8 @@ private fun HomeScreen(
         ConstraintLayout {
             val (title, progress, grid) = createRefs()
 
-            CreateNewCallTitle(
+            MainTitle(
+                text = "Create new call", //FIXME
                 modifier = Modifier
                     .constrainAs(title) {
                         top.linkTo(parent.top, margin = 116.dp)

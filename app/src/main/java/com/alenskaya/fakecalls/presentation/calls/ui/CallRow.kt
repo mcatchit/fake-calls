@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -16,6 +17,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
@@ -40,7 +42,7 @@ fun CallRow(
     modifier: Modifier = Modifier
 ) {
     ConstraintLayout(
-        modifier = modifier.fillMaxWidth()
+        modifier = modifier
     ) {
         val (icon, contactInfo, dateInfo, buttons, divider) = createRefs()
 
@@ -60,7 +62,7 @@ fun CallRow(
             phone = call.phone,
             modifier = Modifier
                 .constrainAs(contactInfo) {
-                    top.linkTo(parent.top, margin = 12.dp)
+                    top.linkTo(parent.top, margin = 16.dp)
                     linkTo(icon.end, dateInfo.start, startMargin = 10.dp, bias = 0f)
                     width = Dimension.fillToConstraints
                     horizontalChainWeight = 0.7f
@@ -72,7 +74,7 @@ fun CallRow(
             time = call.time,
             modifier = Modifier
                 .constrainAs(dateInfo) {
-                    top.linkTo(parent.top, margin = 12.dp)
+                    top.linkTo(parent.top, margin = 16.dp)
                     linkTo(
                         contactInfo.end,
                         buttons.start,
@@ -154,7 +156,10 @@ private fun CallDivider(modifier: Modifier = Modifier) {
         modifier = modifier
             .fillMaxWidth()
             .height(2.dp)
-            .background(shape = DashedShape(12.dp), color = MaterialTheme.colors.primaryVariant)
+            .background(
+                shape = DashedShape(12.dp),
+                color = MaterialTheme.colors.primaryVariant
+            )
     )
 }
 
@@ -192,7 +197,9 @@ private fun DefaultContactIcon(modifier: Modifier = Modifier) {
 private fun BigText(text: String) {
     Text(
         text = text,
-        style = MaterialTheme.typography.subtitle1.copy(color = MaterialTheme.colors.onSecondary)
+        style = MaterialTheme.typography.subtitle1.copy(color = MaterialTheme.colors.onSecondary),
+        maxLines = 1,
+        overflow = TextOverflow.Ellipsis
     )
 }
 
@@ -200,6 +207,8 @@ private fun BigText(text: String) {
 private fun SmallText(text: String) {
     Text(
         text = text,
-        style = MaterialTheme.typography.subtitle2.copy(color = MaterialTheme.colors.secondary)
+        style = MaterialTheme.typography.subtitle2.copy(color = MaterialTheme.colors.secondary),
+        maxLines = 1,
+        overflow = TextOverflow.Ellipsis
     )
 }
