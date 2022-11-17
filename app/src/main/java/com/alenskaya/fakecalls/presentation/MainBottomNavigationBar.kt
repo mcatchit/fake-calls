@@ -18,15 +18,16 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
+import com.alenskaya.fakecalls.presentation.navigation.MainScreenNavigationDestination
 
 /**
  * Bottom navigation bar of main screen
  */
 @Composable
-fun BottomNavigationBar(
-    destinations: List<Destination>,
-    currentScreen: Destination,
-    onDestinationChanged: (Destination) -> Unit
+fun MainBottomNavigationBar(
+    destinations: List<MainScreenNavigationDestination>,
+    currentScreen: MainScreenNavigationDestination,
+    onDestinationChanged: (MainScreenNavigationDestination) -> Unit
 ) {
     Row(
         modifier = Modifier
@@ -36,8 +37,8 @@ fun BottomNavigationBar(
     ) {
         for (destination in destinations) {
             MenuIcon(
-                icon = destination.iconPath,
-                description = destination.route,
+                icon = destination.iconResourceId,
+                description = destination.destination,
                 isSelected = destination == currentScreen,
                 onSelected = { onDestinationChanged(destination) },
                 modifier = Modifier

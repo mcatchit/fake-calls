@@ -4,11 +4,15 @@ import android.content.Context
 import coil.ImageLoader
 import coil.disk.DiskCache
 import coil.memory.MemoryCache
+import com.alenskaya.fakecalls.presentation.navigation.ApplicationRouter
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
 import javax.inject.Singleton
 
 @Module
@@ -37,5 +41,22 @@ internal abstract class PresentationModule {
                 }
                 .build()
         }
+
+        /**
+         * Provides coroutine scope for Application router
+         */
+        @Singleton
+        @Provides
+        fun providesCoroutineScope(): CoroutineScope {
+            return CoroutineScope(SupervisorJob() + Dispatchers.Default)
+        }
+
+        /**
+         * Provides application router
+         */
+        @Singleton
+        @Provides
+        fun providesApplicationRouter(coroutineScope: CoroutineScope) =
+            ApplicationRouter(coroutineScope)
     }
 }
