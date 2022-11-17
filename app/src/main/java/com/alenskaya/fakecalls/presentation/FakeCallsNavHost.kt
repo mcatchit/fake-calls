@@ -2,12 +2,15 @@ package com.alenskaya.fakecalls.presentation
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.alenskaya.fakecalls.presentation.calls.CallsScreen
+import com.alenskaya.fakecalls.presentation.create.CreateCallScreen
 import com.alenskaya.fakecalls.presentation.home.HomeScreen
+import com.alenskaya.fakecalls.presentation.navigation.CallsNavigationDestination
+import com.alenskaya.fakecalls.presentation.navigation.HomeNavigationDestination
+import com.alenskaya.fakecalls.presentation.navigation.create.CreateRoutes
 
 /**
  * Application navigation host
@@ -15,35 +18,28 @@ import com.alenskaya.fakecalls.presentation.home.HomeScreen
 @Composable
 fun FakeCallsNavHost(
     navController: NavHostController,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     NavHost(
         navController = navController,
-        startDestination = Home.route,
+        startDestination = HomeNavigationDestination.destination,
         modifier = modifier
     ) {
-        composable(route = Home.route) {
+        
+        composable(route = HomeNavigationDestination.destination) {
             HomeScreen()
         }
-        composable(route = Calls.route) {
+        composable(route = CallsNavigationDestination.destination) {
             CallsScreen()
+        }
+
+        for (createRoute in CreateRoutes.allRoutes){
+            composable(
+                route = createRoute.route,
+                arguments = createRoute.args
+            ) { backStackEntry ->
+                CreateCallScreen(mode = createRoute.getMode(backStackEntry))
+            }
         }
     }
 }
-
-fun NavHostController.navigateSingleTopTo(route: String) =
-    this.navigate(route) {
-        // Pop up to the start destination of the graph to
-        // avoid building up a large stack of destinations
-        // on the back stack as users select items
-        popUpTo(
-            this@navigateSingleTopTo.graph.findStartDestination().id
-        ) {
-            saveState = true
-        }
-        // Avoid multiple copies of the same destination when
-        // reselecting the same item
-        launchSingleTop = true
-        // Restore state when reselecting a previously selected item
-        restoreState = true
-    }

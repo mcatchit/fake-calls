@@ -4,6 +4,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import coil.ImageLoader
 import com.alenskaya.fakecalls.domain.contacts.GetFakeContactsListUseCase
+import com.alenskaya.fakecalls.presentation.navigation.ApplicationRouter
+import com.alenskaya.fakecalls.presentation.navigation.create.CreateRoutes
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.SharedFlow
@@ -20,7 +22,8 @@ import javax.inject.Inject
 @HiltViewModel
 class HomeScreenViewModel @Inject constructor(
     val imageLoader: ImageLoader,
-    private val getContactsUseCase: GetFakeContactsListUseCase
+    private val getContactsUseCase: GetFakeContactsListUseCase,
+    private val applicationRouter: ApplicationRouter
 ) : ViewModel() {
 
     private val reducer = HomeScreenStateReducer(viewModelScope, HomeScreenState.initial())
@@ -37,6 +40,14 @@ class HomeScreenViewModel @Inject constructor(
 
     fun contactHintVisibilityChanged(contactId: Int, isHinted: Boolean) {
         sendEvent(HomeScreenEvent.ContactHintVisibilityChanged(contactId, isHinted))
+    }
+
+    fun createFakeCall(contactId: Int){
+        applicationRouter.navigate(CreateRoutes.CreateCallFromFakeContactRoute.createDestination(contactId))
+    }
+
+    fun createCustomCall(){
+        applicationRouter.navigate(CreateRoutes.CreateCallFromCustomContactRoute.createDestination())
     }
 
     private fun loadFakeContacts() {

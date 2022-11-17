@@ -45,7 +45,8 @@ fun HomeScreen(
     }
 
     val onCreateCustomClick = {
-
+        //FIXME
+        viewModel.createFakeCall(12)
     }
 
     val onMoreClick = {
