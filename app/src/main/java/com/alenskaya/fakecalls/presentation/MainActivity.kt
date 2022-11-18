@@ -45,7 +45,7 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun FakeCallsApp(applicationRouter: ApplicationRouter) {
+private fun FakeCallsApp(applicationRouter: ApplicationRouter) {
     val navController = rememberNavController().apply {
         BindRouter(applicationRouter = applicationRouter)
     }

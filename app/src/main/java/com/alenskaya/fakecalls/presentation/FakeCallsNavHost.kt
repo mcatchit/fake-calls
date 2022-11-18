@@ -5,9 +5,9 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.alenskaya.fakecalls.presentation.calls.CallsScreen
-import com.alenskaya.fakecalls.presentation.create.CreateCallScreen
-import com.alenskaya.fakecalls.presentation.home.HomeScreen
+import com.alenskaya.fakecalls.presentation.feature.calls.CallsScreen
+import com.alenskaya.fakecalls.presentation.feature.create.CreateCallScreen
+import com.alenskaya.fakecalls.presentation.feature.home.HomeScreen
 import com.alenskaya.fakecalls.presentation.navigation.CallsNavigationDestination
 import com.alenskaya.fakecalls.presentation.navigation.HomeNavigationDestination
 import com.alenskaya.fakecalls.presentation.navigation.create.CreateRoutes

@@ -4,7 +4,7 @@ import androidx.navigation.NamedNavArgument
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavType
 import androidx.navigation.navArgument
-import com.alenskaya.fakecalls.presentation.create.CreateCallScreenMode
+import com.alenskaya.fakecalls.presentation.feature.create.CreateCallScreenMode
 import com.alenskaya.fakecalls.presentation.navigation.NavigationDestination
 
 /**
