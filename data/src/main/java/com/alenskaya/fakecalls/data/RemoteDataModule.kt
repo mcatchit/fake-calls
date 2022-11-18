@@ -1,8 +1,10 @@
 package com.alenskaya.fakecalls.data
 
-import com.alenskaya.fakecalls.data.remote.FakeContactApiRepository
+import com.alenskaya.fakecalls.data.local.db.FakeContactsRoomRepository
+import com.alenskaya.fakecalls.data.remote.FakeContactApiRemoteRepository
 import com.alenskaya.fakecalls.data.remote.contacts.api.FakeContactApi
-import com.alenskaya.fakecalls.domain.contacts.FakeContactRepository
+import com.alenskaya.fakecalls.domain.contacts.FakeContactLocalRepository
+import com.alenskaya.fakecalls.domain.contacts.FakeContactRemoteRepository
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import dagger.Binds
@@ -30,7 +32,7 @@ internal abstract class RemoteDataModule {
 
     @Binds
     @Singleton
-    abstract fun fakeContactsRepository(impl: FakeContactApiRepository): FakeContactRepository
+    abstract fun fakeContactsRemoteRepository(impl: FakeContactApiRemoteRepository): FakeContactRemoteRepository
 
     companion object {
         @Provides
