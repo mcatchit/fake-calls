@@ -114,19 +114,23 @@ private fun CallsLists(
             .padding(horizontal = 24.dp)
             .verticalScroll(rememberScrollState())
     ) {
-        ScheduledCallsList(
-            calls = scheduledCalls,
-            modifier = Modifier.fillMaxWidth(),
-            imageLoader = imageLoader,
-            editCallAction = editCallAction,
-            deleteCallAction = deleteCallAction
-        )
-        CompletedCallsList(
-            calls = completedCalls,
-            modifier = Modifier.fillMaxWidth(),
-            imageLoader = imageLoader,
-            repeatCallAction = repeatCallAction,
-            deleteCallAction = deleteCallAction
-        )
+        if (scheduledCalls.isNotEmpty()) {
+            ScheduledCallsList(
+                calls = scheduledCalls,
+                modifier = Modifier.fillMaxWidth(),
+                imageLoader = imageLoader,
+                editCallAction = editCallAction,
+                deleteCallAction = deleteCallAction
+            )
+        }
+        if (completedCalls.isNotEmpty()) {
+            CompletedCallsList(
+                calls = completedCalls,
+                modifier = Modifier.fillMaxWidth(),
+                imageLoader = imageLoader,
+                repeatCallAction = repeatCallAction,
+                deleteCallAction = deleteCallAction
+            )
+        }
     }
 }
