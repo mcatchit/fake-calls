@@ -1,4 +1,4 @@
-package com.alenskaya.fakecalls.presentation.features.create
+package com.alenskaya.fakecalls.presentation.features.create.ui
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -25,7 +25,10 @@ import androidx.compose.ui.unit.dp
 import coil.ImageLoader
 import com.alenskaya.fakecalls.R
 import com.alenskaya.fakecalls.presentation.components.FakeContactIcon
+import com.alenskaya.fakecalls.presentation.components.LoadingDots
 import com.alenskaya.fakecalls.presentation.components.MainTitle
+import com.alenskaya.fakecalls.presentation.features.create.CreateCallScreenState
+import com.alenskaya.fakecalls.presentation.gesturesDisabled
 
 /**
  * Displays main content of Create call screen.
@@ -48,7 +51,9 @@ fun CreateCallForm(
     modifier: Modifier = Modifier,
 ) {
     Column(
-        modifier = modifier.fillMaxWidth(),
+        modifier = modifier
+            .fillMaxWidth()
+            .gesturesDisabled(createCallScreenState.isInitialDataLoading || createCallScreenState.isSubmitProcessing),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         with(createCallScreenState) {
@@ -65,7 +70,11 @@ fun CreateCallForm(
                 calendarClicked = calendarClicked
             )
             Spacer(modifier = Modifier.height(36.dp))
-            SubmitButton(text = buttonText, doOnClick = submitClicked)
+            SubmitButton(
+                text = buttonText,
+                doOnClick = submitClicked,
+                isLoading = createCallScreenState.isSubmitProcessing
+            )
         }
     }
 }
@@ -162,14 +171,18 @@ private fun DateField(
 }
 
 @Composable
-private fun SubmitButton(text: String, doOnClick: () -> Unit) {
+private fun SubmitButton(text: String, doOnClick: () -> Unit, isLoading: Boolean) {
     Button(
         onClick = doOnClick,
         colors = ButtonDefaults.buttonColors(backgroundColor = MaterialTheme.colors.onSecondary)
     ) {
-        Text(
-            text = text,
-            style = MaterialTheme.typography.subtitle2.copy(color = MaterialTheme.colors.onPrimary)
-        )
+        if (!isLoading) {
+            Text(
+                text = text,
+                style = MaterialTheme.typography.subtitle2.copy(color = MaterialTheme.colors.onPrimary)
+            )
+        } else {
+            LoadingDots(dotSize = 8.dp, color = MaterialTheme.colors.onPrimary)
+        }
     }
 }

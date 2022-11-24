@@ -1,7 +1,5 @@
 package com.alenskaya.fakecalls.presentation.features.calls
 
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -24,8 +22,9 @@ import coil.ImageLoader
 import com.alenskaya.fakecalls.presentation.features.calls.model.CallsScreenCallModel
 import com.alenskaya.fakecalls.presentation.features.calls.ui.CompletedCallsList
 import com.alenskaya.fakecalls.presentation.features.calls.ui.ScheduledCallsList
-import com.alenskaya.fakecalls.presentation.components.LoadingProgress
+import com.alenskaya.fakecalls.presentation.components.FullScreenLoadingMessage
 import com.alenskaya.fakecalls.presentation.components.MainTitle
+import com.alenskaya.fakecalls.presentation.components.PlaceInCenter
 
 /**
  * Calls screen ui
@@ -72,7 +71,7 @@ private fun CallsScreen(
                 modifier = Modifier.padding(24.dp)
             )
             when {
-                state.isLoading -> LoadingText()
+                state.isLoading -> FullScreenLoadingMessage("Wait a second. Loading calls") //FIXME
                 state.message != null -> Message(text = state.message)
                 else -> CallsLists(
                     scheduledCalls = state.scheduledCalls,
@@ -84,17 +83,6 @@ private fun CallsScreen(
                 )
             }
         }
-    }
-}
-
-@Composable
-private fun LoadingText() {
-    PlaceInCenter {
-        LoadingProgress(
-            text = "Wait a second. Loading calls",
-            modifier = Modifier
-                .align(Alignment.Center)
-        )
     }
 }
 
@@ -140,16 +128,5 @@ private fun CallsLists(
             repeatCallAction = repeatCallAction,
             deleteCallAction = deleteCallAction
         )
-    }
-}
-
-@Composable
-private fun PlaceInCenter(content: @Composable BoxScope.() -> Unit) {
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(bottom = 100.dp)
-    ) {
-        content.invoke(this)
     }
 }

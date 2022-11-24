@@ -26,7 +26,7 @@ data class CreateCallScreenState(
     /**
      * Is screen loaded
      */
-    val isInitialDataLoading: Boolean = true,
+    val isInitialDataLoading: Boolean = false,
 
     /**
      * Is submit is in process

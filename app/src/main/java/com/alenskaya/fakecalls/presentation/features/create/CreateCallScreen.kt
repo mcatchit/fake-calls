@@ -24,10 +24,15 @@ import coil.ImageLoader
 import com.alenskaya.fakecalls.R
 import com.alenskaya.fakecalls.presentation.DialogsDisplayer
 import com.alenskaya.fakecalls.presentation.features.create.model.DateTimePickerData
+import com.alenskaya.fakecalls.presentation.features.create.ui.CreateCallForm
+import com.alenskaya.fakecalls.presentation.features.create.ui.DateTimePickerDialog
 import com.alenskaya.fakecalls.presentation.showToast
 import kotlinx.coroutines.flow.SharedFlow
 import java.util.Date
 
+/**
+ * Screen for creating a new call
+ */
 @Composable
 fun CreateCallScreen(
     mode: CreateCallScreenMode,

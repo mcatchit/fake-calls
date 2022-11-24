@@ -1,4 +1,4 @@
-package com.alenskaya.fakecalls.presentation.features.create
+package com.alenskaya.fakecalls.presentation.features.create.ui
 
 import android.os.Parcel
 import androidx.fragment.app.DialogFragment
