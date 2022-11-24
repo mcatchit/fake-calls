@@ -14,6 +14,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
@@ -58,7 +59,7 @@ class CreateCallScreenViewModel @Inject constructor(
         sendEvent(CreateCallScreenEvent.ProcessingSubmit)
 
         viewModelScope.launch(Dispatchers.IO) {
-            createCallUseCase(form.toCreateNewCallRequest())
+            createCallUseCase(form.toCreateNewCallRequest()).collect()
 
             withContext(Dispatchers.Main) {
                 navigateBack() //TODO finish with result

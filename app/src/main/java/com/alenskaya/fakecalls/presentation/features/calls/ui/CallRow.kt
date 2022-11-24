@@ -39,7 +39,7 @@ fun CallRow(
 
         FakeContactIcon(
             url = call.photoUrl,
-            size = 24.dp,
+            size = 18.dp,
             description = call.name,
             imageLoader = imageLoader,
             modifier = Modifier
