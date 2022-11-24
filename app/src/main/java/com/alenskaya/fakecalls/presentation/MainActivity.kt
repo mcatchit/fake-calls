@@ -1,8 +1,8 @@
 package com.alenskaya.fakecalls.presentation
 
 import android.os.Bundle
-import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
@@ -11,6 +11,9 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.fragment.app.FragmentManager
+import androidx.lifecycle.LifecycleCoroutineScope
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
@@ -28,10 +31,13 @@ import javax.inject.Inject
  * Root app activity
  */
 @AndroidEntryPoint
-class MainActivity : ComponentActivity() {
+class MainActivity : AppCompatActivity() {
 
     @Inject
     lateinit var applicationRouter: ApplicationRouter
+
+    @Inject
+    lateinit var dialogsDisplayer: DialogsDisplayer
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,6 +46,20 @@ class MainActivity : ComponentActivity() {
             FakeCallsTheme {
                 FakeCallsApp(applicationRouter)
             }
+        }
+
+        supportFragmentManager
+            .subscribeOnDialogsRequests(dialogsDisplayer, lifecycleScope)
+    }
+}
+
+private fun FragmentManager.subscribeOnDialogsRequests(
+    dialogsDisplayer: DialogsDisplayer,
+    lifecycleCoroutineScope: LifecycleCoroutineScope
+) {
+    lifecycleCoroutineScope.launchWhenResumed {
+        dialogsDisplayer.dialogs.collect { dialog ->
+            dialog.show(this@subscribeOnDialogsRequests, "Dialog")
         }
     }
 }

@@ -1,5 +1,6 @@
 package com.alenskaya.fakecalls.presentation.features.create
 
+import android.content.Context
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -10,6 +11,7 @@ import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -20,7 +22,10 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.ImageLoader
 import com.alenskaya.fakecalls.R
+import com.alenskaya.fakecalls.presentation.DialogsDisplayer
+import com.alenskaya.fakecalls.presentation.features.create.model.DateTimePickerData
 import com.alenskaya.fakecalls.presentation.showToast
+import kotlinx.coroutines.flow.SharedFlow
 import java.util.Date
 
 @Composable
@@ -29,43 +34,38 @@ fun CreateCallScreen(
     viewModel: CreateCallScreenViewModel = hiltViewModel()
 ) {
     val createCallScreenState by viewModel.screenState.collectAsState()
-    val oneTimeUiEvent by viewModel.oneTimeEffect.collectAsState(initial = null)
-
-    val navigateBackAction = {
-        viewModel.sendEvent(CreateCallScreenEvent.ClickBack)
-    }
-    val nameChangedAction = { newName: String ->
-        viewModel.sendEvent(CreateCallScreenEvent.NameChanged(newName))
-    }
-
-    val phoneChangedAction = { newPhone: String ->
-        viewModel.sendEvent(CreateCallScreenEvent.PhoneChanged(newPhone))
-    }
-
-    val calendarClickedAction = {
-        viewModel.sendEvent(CreateCallScreenEvent.ShowDatePicker)
-    }
-
-    val submitFormAction = {
-        viewModel.sendEvent(CreateCallScreenEvent.SubmitForm)
-    }
-
-    val updateDateCallBack = { date: Date ->
-        viewModel.sendEvent(CreateCallScreenEvent.DateChanged(date))
-    }
 
     CreateCallScreen(
         createCallScreenState = createCallScreenState,
         imageLoader = viewModel.imageLoader,
-        navigateBackAction = navigateBackAction,
-        nameChanged = nameChangedAction,
-        phoneChanged = phoneChangedAction,
-        calendarClicked = calendarClickedAction,
-        submitClicked = submitFormAction
+        navigateBackAction = {
+            viewModel.sendEvent(CreateCallScreenEvent.ClickBack)
+        },
+        nameChanged = { newName ->
+            viewModel.sendEvent(CreateCallScreenEvent.NameChanged(newName))
+        },
+        phoneChanged = { newPhone ->
+            viewModel.sendEvent(CreateCallScreenEvent.PhoneChanged(newPhone))
+        },
+        calendarClicked = {
+            viewModel.sendEvent(CreateCallScreenEvent.ShowDatePicker)
+        },
+        submitClicked = {
+            viewModel.sendEvent(CreateCallScreenEvent.SubmitForm)
+        }
     )
 
-    oneTimeUiEvent?.let {
-        ProcessOneTimeUiEffect(oneTimeUiEffect = it, updateDateCallBack = updateDateCallBack)
+    val context = LocalContext.current
+
+    viewModel.oneTimeEffect.Subscribe { oneTimeUiEffect ->
+        processOneTimeUiEffect(
+            oneTimeUiEffect = oneTimeUiEffect,
+            context = context,
+            dialogsDisplayer = viewModel.dialogsDisplayer,
+            updateDateCallBack = { newDate ->
+                viewModel.sendEvent(CreateCallScreenEvent.DateChanged(newDate))
+            }
+        )
     }
 }
 
@@ -101,17 +101,30 @@ private fun CreateCallScreen(
 }
 
 @Composable
-private fun ProcessOneTimeUiEffect(
+private fun SharedFlow<CreateCallScreenOneTimeUiEffect>.Subscribe(
+    doWhenReceive: (CreateCallScreenOneTimeUiEffect) -> Unit
+) {
+    LaunchedEffect(true) {
+        collect { oneTimeUiEffect ->
+            doWhenReceive(oneTimeUiEffect)
+        }
+    }
+}
+
+private fun processOneTimeUiEffect(
     oneTimeUiEffect: CreateCallScreenOneTimeUiEffect,
+    context: Context,
+    dialogsDisplayer: DialogsDisplayer,
     updateDateCallBack: (Date) -> Unit
 ) {
     when (oneTimeUiEffect) {
-        is CreateCallScreenOneTimeUiEffect.ShowDatePicker -> ShowDatePicker(
-            oneTimeUiEffect.datePickerData,
+        is CreateCallScreenOneTimeUiEffect.ShowDatePicker -> showDatePicker(
+            dialogsDisplayer,
+            oneTimeUiEffect.dateTimePickerData,
             updateDateCallBack
         )
         is CreateCallScreenOneTimeUiEffect.ShowToast -> {
-            LocalContext.current.showToast(oneTimeUiEffect.message)
+            context.showToast(oneTimeUiEffect.message)
         }
     }
 }
@@ -133,7 +146,11 @@ private fun NavigationBackIcon(doOnBackClick: () -> Unit) {
     }
 }
 
-@Composable
-private fun ShowDatePicker(datePickerData: DatePickerData, updateDateCallBack: (Date) -> Unit) {
-
+private fun showDatePicker(
+    dialogsDisplayer: DialogsDisplayer,
+    dateTimePickerData: DateTimePickerData,
+    updateDateCallBack: (Date) -> Unit
+) {
+    DateTimePickerDialog(dialogsDisplayer)
+        .pickDate(dateTimePickerData, updateDateCallBack)
 }

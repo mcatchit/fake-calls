@@ -2,6 +2,8 @@ package com.alenskaya.fakecalls.presentation.features.calls
 
 import com.alenskaya.fakecalls.domain.calls.model.SavedCall
 import com.alenskaya.fakecalls.presentation.features.calls.model.CallsScreenCallModel
+import com.alenskaya.fakecalls.presentation.features.extractDayWithMonth
+import com.alenskaya.fakecalls.presentation.features.extractTime
 import com.alenskaya.fakecalls.util.Converter
 
 /**
@@ -14,7 +16,7 @@ object SavedCallToCallModelConverter : Converter<SavedCall, CallsScreenCallModel
             id = id,
             name = name,
             phone = phone,
-            day = date.extractDay(),
+            day = date.extractDayWithMonth(),
             time = date.extractTime(),
             photoUrl = photoUrl
         )

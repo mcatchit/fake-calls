@@ -5,6 +5,8 @@ import androidx.lifecycle.viewModelScope
 import coil.ImageLoader
 import com.alenskaya.fakecalls.domain.calls.CreateCallUseCase
 import com.alenskaya.fakecalls.domain.calls.model.CreateNewCallRequest
+import com.alenskaya.fakecalls.presentation.DialogsDisplayer
+import com.alenskaya.fakecalls.presentation.features.create.model.CreateCallScreenFormModel
 import com.alenskaya.fakecalls.presentation.navigation.ApplicationRouter
 import com.alenskaya.fakecalls.presentation.navigation.NavigateBack
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -25,6 +27,7 @@ import javax.inject.Inject
 class CreateCallScreenViewModel @Inject constructor(
     val imageLoader: ImageLoader,
     val applicationRouter: ApplicationRouter,
+    val dialogsDisplayer: DialogsDisplayer,
     val createCallUseCase: CreateCallUseCase
 ) : ViewModel() {
 
@@ -50,7 +53,7 @@ class CreateCallScreenViewModel @Inject constructor(
         applicationRouter.navigate(NavigateBack)
     }
 
-    private fun submitForm(form: CreateCallScreenFormInput) {
+    private fun submitForm(form: CreateCallScreenFormModel) {
         sendEvent(CreateCallScreenEvent.ProcessingSubmit)
 
         viewModelScope.launch(Dispatchers.IO) {
@@ -62,7 +65,7 @@ class CreateCallScreenViewModel @Inject constructor(
         }
     }
 
-    private fun CreateCallScreenFormInput.toCreateNewCallRequest() = CreateNewCallRequest(
+    private fun CreateCallScreenFormModel.toCreateNewCallRequest() = CreateNewCallRequest(
         name = name ?: error("Cannot be null. Should be called after validation"),
         phone = phone ?: error("Cannot be null. Should be called after validation"),
         date = date ?: error("Cannot be null. Should be called after validation"),

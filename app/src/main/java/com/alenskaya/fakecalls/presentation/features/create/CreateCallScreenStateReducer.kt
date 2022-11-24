@@ -1,6 +1,12 @@
 package com.alenskaya.fakecalls.presentation.features.create
 
 import com.alenskaya.fakecalls.presentation.Reducer
+import com.alenskaya.fakecalls.presentation.features.create.model.CreateCallScreenFormModel
+import com.alenskaya.fakecalls.presentation.features.create.model.DateTimePickerData
+import com.alenskaya.fakecalls.presentation.features.create.model.TimePickerData
+import com.alenskaya.fakecalls.presentation.features.create.model.isFilled
+import com.alenskaya.fakecalls.presentation.features.extractHour
+import com.alenskaya.fakecalls.presentation.features.extractMinute
 import kotlinx.coroutines.CoroutineScope
 import java.util.Date
 
@@ -13,7 +19,7 @@ class CreateCallScreenStateReducer(
     viewModelScope: CoroutineScope,
     initialState: CreateCallScreenState,
     private val navigateBackCallback: () -> Unit,
-    private val submitFormCallBack: (CreateCallScreenFormInput) -> Unit
+    private val submitFormCallBack: (CreateCallScreenFormModel) -> Unit
 ) : Reducer<CreateCallScreenState, CreateCallScreenEvent, CreateCallScreenOneTimeUiEffect>(
     viewModelScope,
     initialState
@@ -42,13 +48,20 @@ class CreateCallScreenStateReducer(
         setState(newState)
     }
 
-    private fun showDatePicker(formInput: CreateCallScreenFormInput) {
+    private fun showDatePicker(formInput: CreateCallScreenFormModel) {
         val selectedDate = formInput.date ?: Date()
-        val datePickerData = DatePickerData(Date(), selectedDate)
-        sendOneTimeEffect(CreateCallScreenOneTimeUiEffect.ShowDatePicker(datePickerData))
+        val dateTimePickerData = DateTimePickerData(
+            minDate = Date().time,
+            selectedDate = selectedDate.time,
+            timePickerData = TimePickerData(
+                selectedHour = selectedDate.extractHour(),
+                selectedMinute = selectedDate.extractMinute()
+            )
+        )
+        sendOneTimeEffect(CreateCallScreenOneTimeUiEffect.ShowDatePicker(dateTimePickerData))
     }
 
-    private fun submitForm(formInput: CreateCallScreenFormInput) {
+    private fun submitForm(formInput: CreateCallScreenFormModel) {
         if (formInput.isFilled()) {
             submitFormCallBack(formInput)
         } else {

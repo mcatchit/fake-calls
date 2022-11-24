@@ -1,7 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="Theme.FakeCalls" parent="android:Theme.Material.Light.NoActionBar">
+    <style name="Theme.FakeCalls" parent="Theme.MaterialComponents.Light.NoActionBar.Bridge">
         <item name="android:statusBarColor">@color/darkGreen</item>
+        <item name="materialCalendarTheme">@style/Calendar</item>
+        <item name="materialTimePickerTheme">@style/TimePicker</item>
     </style>
+
+    <style name="Calendar" parent="ThemeOverlay.MaterialComponents.MaterialCalendar">
+        <item name="colorOnPrimary">@color/black</item>
+        <item name="colorPrimary">@color/lightGreen</item>
+    </style>
+
+    <style name="TimePicker" parent="ThemeOverlay.MaterialComponents.TimePicker">
+        <item name="colorPrimary">@color/lightGreen</item>
+    </style>
+
 </resources>

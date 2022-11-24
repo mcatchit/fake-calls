@@ -59,7 +59,7 @@ fun CreateCallForm(
             InputForm(
                 name = formInput.name,
                 phone = formInput.phone,
-                date = formInput.date.toString(), //TODO convert to string
+                date = formInput.displayableDate,
                 nameChanged = nameChanged,
                 phoneChanged = phoneChanged,
                 calendarClicked = calendarClicked
@@ -113,11 +113,11 @@ private fun InputForm(
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp, vertical = 16.dp)
             ) {
-                InputField(label = "Name", value = name, onValueChanged = nameChanged)
+                InputField(label = "Name", value = name ?: "", onValueChanged = nameChanged)
                 Spacer(modifier = Modifier.height(12.dp))
-                InputField(label = "Phone", value = phone, onValueChanged = phoneChanged)
+                InputField(label = "Phone", value = phone ?: "", onValueChanged = phoneChanged)
                 Spacer(modifier = Modifier.height(12.dp))
-                DateField(date = date, calendarClicked)
+                DateField(date = date ?: "", calendarClicked)
             }
         }
     }
@@ -126,11 +126,11 @@ private fun InputForm(
 @Composable
 private fun InputField(
     label: String,
-    value: String?,
+    value: String,
     onValueChanged: (String) -> Unit
 ) {
     OutlinedTextField(
-        value = value ?: "",
+        value = value,
         onValueChange = onValueChanged,
         label = { Text(label) },
         modifier = Modifier.fillMaxWidth()
@@ -139,11 +139,11 @@ private fun InputField(
 
 @Composable
 private fun DateField(
-    date: String?,
+    date: String,
     onClick: () -> Unit
 ) {
     OutlinedTextField(
-        value = date ?: "",
+        value = date,
         readOnly = true,
         onValueChange = {},
         label = { Text("Date") }, //FIXME
