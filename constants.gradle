@@ -19,7 +19,9 @@ ext {
             hilt_version                     : '2.44',
             hilt_navigation_compose_version  : '1.0.0',
             room_version                     : '2.4.3',
-            junit_version                    : '4.13.2'
+            junit_version                    : '4.13.2',
+            material_design_version          : '1.8.0-alpha03',
+            appcompat_version                : '0.27.1'
     ]
 
     kotlinCore = [
@@ -44,6 +46,11 @@ ext {
             material        : "androidx.compose.material:material:$versions.compose_material_version",
             constraintLayout: "androidx.constraintlayout:constraintlayout-compose:$versions.compose_constraint_layout_version",
             navigation      : "androidx.navigation:navigation-compose:$versions.compose_navigation_version"
+    ]
+
+    material = [
+            design   : "com.google.android.material:material:$versions.material_design_version",
+            appcompat: "com.google.accompanist:accompanist-appcompat-theme:$versions.appcompat_version"
     ]
 
     coil = [

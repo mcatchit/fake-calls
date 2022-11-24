@@ -58,5 +58,13 @@ internal abstract class PresentationModule {
         @Provides
         fun providesApplicationRouter(coroutineScope: CoroutineScope) =
             ApplicationRouter(coroutineScope)
+
+        /**
+         * Provides dialogs displayer
+         */
+        @Singleton
+        @Provides
+        fun providesDialogsDisplayer(coroutineScope: CoroutineScope) =
+            DialogsDisplayer(coroutineScope)
     }
 }

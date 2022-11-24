@@ -1,33 +1,23 @@
 package com.alenskaya.fakecalls.presentation.features.calls.ui
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import coil.ImageLoader
-import coil.compose.AsyncImage
-import coil.request.ImageRequest
-import com.alenskaya.fakecalls.R
 import com.alenskaya.fakecalls.presentation.features.calls.model.CallsScreenCallModel
 import com.alenskaya.fakecalls.presentation.components.DashedShape
-import com.alenskaya.fakecalls.presentation.components.honeycomb.HoneyCombCell
-import com.alenskaya.fakecalls.presentation.components.honeycomb.hexagonalSize
+import com.alenskaya.fakecalls.presentation.components.FakeContactIcon
 
 /**
  * Base call information row.
@@ -49,6 +39,7 @@ fun CallRow(
 
         FakeContactIcon(
             url = call.photoUrl,
+            size = 24.dp,
             description = call.name,
             imageLoader = imageLoader,
             modifier = Modifier
@@ -111,32 +102,6 @@ fun CallRow(
 }
 
 @Composable
-private fun FakeContactIcon(
-    url: String?,
-    description: String,
-    imageLoader: ImageLoader,
-    modifier: Modifier = Modifier
-) {
-    val iconSize = hexagonalSize(with(LocalDensity.current) { 24.dp.toPx() })
-
-    HoneyCombCell(
-        height = iconSize.height,
-        width = iconSize.width,
-        modifier = modifier
-    ) {
-        if (url != null) {
-            UrlContactIcon(
-                url = url,
-                description = description,
-                imageLoader = imageLoader
-            )
-        } else {
-            DefaultContactIcon()
-        }
-    }
-}
-
-@Composable
 private fun ContactInfo(name: String, phone: String, modifier: Modifier = Modifier) {
     Column(modifier = modifier) {
         BigText(text = name)
@@ -164,37 +129,6 @@ private fun CallDivider(modifier: Modifier = Modifier) {
                 shape = DashedShape(12.dp),
                 color = MaterialTheme.colors.primaryVariant
             )
-    )
-}
-
-@Composable
-private fun UrlContactIcon(
-    url: String,
-    description: String,
-    imageLoader: ImageLoader,
-    modifier: Modifier = Modifier
-) {
-    AsyncImage(
-        imageLoader = imageLoader,
-        model = ImageRequest.Builder(LocalContext.current)
-            .data(url)
-            .crossfade(true)
-            .build(),
-        contentDescription = description,
-        contentScale = ContentScale.Crop,
-        modifier = modifier
-            .fillMaxSize()
-    )
-}
-
-@Composable
-private fun DefaultContactIcon(modifier: Modifier = Modifier) {
-    Image(
-        painter = painterResource(id = R.drawable.default_avatar),
-        contentScale = ContentScale.Crop,
-        contentDescription = "Avatar icon is absent", //FIXME
-        modifier = modifier
-            .fillMaxSize()
     )
 }
 

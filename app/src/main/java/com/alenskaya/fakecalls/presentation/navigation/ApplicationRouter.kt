@@ -12,7 +12,7 @@ class ApplicationRouter(
     private val externalScope: CoroutineScope
 ) {
 
-    var commands = MutableSharedFlow<NavigationCommand>()
+    val commands = MutableSharedFlow<NavigationCommand>()
 
     /**
      * Emits [navigationCommand]
