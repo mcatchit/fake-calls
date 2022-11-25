@@ -57,7 +57,7 @@ fun CreateCallForm(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         with(createCallScreenState) {
-            MainTitle(text = title)
+            MainTitle(text = formLabels.title)
             Spacer(modifier = Modifier.height(24.dp))
             Photo(url = formInput.photo, imageLoader = imageLoader)
             Spacer(modifier = Modifier.height(24.dp))
@@ -71,7 +71,7 @@ fun CreateCallForm(
             )
             Spacer(modifier = Modifier.height(36.dp))
             SubmitButton(
-                text = buttonText,
+                text = formLabels.buttonText,
                 doOnClick = submitClicked,
                 isLoading = createCallScreenState.isSubmitProcessing
             )

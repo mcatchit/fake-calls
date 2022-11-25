@@ -2,6 +2,7 @@ package com.alenskaya.fakecalls.presentation.features.create
 
 import com.alenskaya.fakecalls.presentation.UiState
 import com.alenskaya.fakecalls.presentation.features.create.model.CreateCallScreenFormModel
+import com.alenskaya.fakecalls.presentation.features.create.model.CreateCallScreenFormLabels
 
 /**
  * Ui state of Create call screen
@@ -9,14 +10,9 @@ import com.alenskaya.fakecalls.presentation.features.create.model.CreateCallScre
 data class CreateCallScreenState(
 
     /**
-     * Screen title
+     * Screen labels
      */
-    val title: String,
-
-    /**
-     * Save button text
-     */
-    val buttonText: String,
+    val formLabels: CreateCallScreenFormLabels,
 
     /**
      * Data of input fields
@@ -36,7 +32,10 @@ data class CreateCallScreenState(
 
     companion object {
         fun initial(): CreateCallScreenState {
-            return CreateCallScreenState("Create new call", "Create", CreateCallScreenFormModel())
+            return CreateCallScreenState(
+                CreateCallScreenFormLabels.initial(),
+                CreateCallScreenFormModel.initial()
+            )
         }
     }
 }

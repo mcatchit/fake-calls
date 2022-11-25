@@ -27,6 +27,14 @@ class CreateCallScreenStateReducer(
 
     override fun processEvent(oldState: CreateCallScreenState, event: CreateCallScreenEvent) {
         when (event) {
+            is CreateCallScreenEvent.ModeLoaded -> setState(oldState.copy(formLabels = event.labels))
+            is CreateCallScreenEvent.FormLoading -> setState(oldState.copy(isInitialDataLoading = true))
+            is CreateCallScreenEvent.FormLoaded -> setState(
+                oldState.copy(
+                    isInitialDataLoading = false,
+                    formInput = event.formModel
+                )
+            )
             is CreateCallScreenEvent.InputChanged<*> -> processInputChangedEvent(oldState, event)
             is CreateCallScreenEvent.ShowDatePicker -> showDatePicker(oldState.formInput)
             is CreateCallScreenEvent.SubmitForm -> submitForm(oldState.formInput)

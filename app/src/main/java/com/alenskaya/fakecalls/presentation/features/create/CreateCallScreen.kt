@@ -38,6 +38,10 @@ fun CreateCallScreen(
     mode: CreateCallScreenMode,
     viewModel: CreateCallScreenViewModel = hiltViewModel()
 ) {
+    LaunchedEffect(true) {
+        viewModel.setMode(mode)
+    }
+
     val createCallScreenState by viewModel.screenState.collectAsState()
 
     CreateCallScreen(
