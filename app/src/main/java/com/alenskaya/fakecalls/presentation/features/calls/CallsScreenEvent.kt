@@ -7,7 +7,7 @@ import com.alenskaya.fakecalls.presentation.features.calls.model.CallsScreenCall
  * Possible events on CallsScreen
  */
 sealed class CallsScreenEvent : UiEvent {
-    object CallsLoading : CallsScreenEvent()
+    object LoadCalls : CallsScreenEvent()
 
     class CallsLoaded(
         val scheduledCalls: List<CallsScreenCallModel>,

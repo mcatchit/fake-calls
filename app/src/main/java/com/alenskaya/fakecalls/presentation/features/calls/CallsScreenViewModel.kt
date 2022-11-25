@@ -4,6 +4,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import coil.ImageLoader
 import com.alenskaya.fakecalls.domain.calls.LoadSavedCallsUseCase
+import com.alenskaya.fakecalls.presentation.CallsDataChangedListener
+import com.alenskaya.fakecalls.presentation.CallsDataChangedNotifier
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.StateFlow
@@ -19,21 +21,35 @@ import javax.inject.Inject
 @HiltViewModel
 class CallsScreenViewModel @Inject constructor(
     val imageLoader: ImageLoader,
-    val loadSavedCallsUseCase: LoadSavedCallsUseCase
+    private val loadSavedCallsUseCase: LoadSavedCallsUseCase,
+    private val callsDataChangedNotifier: CallsDataChangedNotifier
 ) : ViewModel() {
-
-    private val reducer = CallsScreenStateReducer(viewModelScope, CallsScreenState.initial())
 
     val screenState: StateFlow<CallsScreenState>
         get() = reducer.state
 
+    private val reducer = CallsScreenStateReducer(
+        viewModelScope,
+        CallsScreenState.initial(),
+        ::loadCalls
+    )
+
+    private val callsDataChangedListener = object : CallsDataChangedListener {
+        override fun callsDataChanged() {
+            refresh()
+        }
+    }
+
     init {
-        loadCalls()
+        callsDataChangedNotifier.addListener(callsDataChangedListener)
+        refresh()
+    }
+
+    private fun refresh() {
+        sendEvent(CallsScreenEvent.LoadCalls)
     }
 
     private fun loadCalls() {
-        sendEvent(CallsScreenEvent.CallsLoading)
-
         viewModelScope.launch(Dispatchers.IO) {
             loadSavedCallsUseCase().map { savedCallsResponse ->
                 SavedCallsRequestResultToCallsScreenEventConverter.convert(savedCallsResponse)
@@ -45,5 +61,10 @@ class CallsScreenViewModel @Inject constructor(
 
     private fun sendEvent(event: CallsScreenEvent) {
         reducer.sendEvent(event)
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        callsDataChangedNotifier.removeListener(callsDataChangedListener)
     }
 }
