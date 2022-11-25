@@ -6,12 +6,12 @@ import coil.ImageLoader
 import com.alenskaya.fakecalls.domain.calls.CreateCallUseCase
 import com.alenskaya.fakecalls.domain.calls.model.CreateNewCallRequest
 import com.alenskaya.fakecalls.presentation.DialogsDisplayer
+import com.alenskaya.fakecalls.presentation.CallsDataChangedNotifier
 import com.alenskaya.fakecalls.presentation.features.create.model.CreateCallScreenFormModel
 import com.alenskaya.fakecalls.presentation.navigation.ApplicationRouter
 import com.alenskaya.fakecalls.presentation.navigation.NavigateBack
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collect
@@ -28,9 +28,10 @@ import javax.inject.Inject
 @HiltViewModel
 class CreateCallScreenViewModel @Inject constructor(
     val imageLoader: ImageLoader,
-    val applicationRouter: ApplicationRouter,
     val dialogsDisplayer: DialogsDisplayer,
-    val createCallUseCase: CreateCallUseCase
+    private val applicationRouter: ApplicationRouter,
+    private val createCallUseCase: CreateCallUseCase,
+    private val callsDataChangedNotifier: CallsDataChangedNotifier,
 ) : ViewModel() {
 
     private val reducer =
@@ -62,7 +63,8 @@ class CreateCallScreenViewModel @Inject constructor(
             createCallUseCase(form.toCreateNewCallRequest()).collect()
 
             withContext(Dispatchers.Main) {
-                navigateBack() //TODO finish with result
+                callsDataChangedNotifier.callsDataChanged()
+                navigateBack()
             }
         }
     }

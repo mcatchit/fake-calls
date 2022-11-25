@@ -22,7 +22,7 @@ internal abstract class PresentationModule {
     internal companion object {
 
         /**
-         * Provides application coil image loader, which caches images
+         * Provides application coil image loader, which caches images.
          */
         @Provides
         @Singleton
@@ -43,7 +43,7 @@ internal abstract class PresentationModule {
         }
 
         /**
-         * Provides coroutine scope for Application router
+         * Provides coroutine scope for Application router.
          */
         @Singleton
         @Provides
@@ -52,7 +52,7 @@ internal abstract class PresentationModule {
         }
 
         /**
-         * Provides application router
+         * Provides application router.
          */
         @Singleton
         @Provides
@@ -60,11 +60,18 @@ internal abstract class PresentationModule {
             ApplicationRouter(coroutineScope)
 
         /**
-         * Provides dialogs displayer
+         * Provides dialogs displayer.
          */
         @Singleton
         @Provides
         fun providesDialogsDisplayer(coroutineScope: CoroutineScope) =
             DialogsDisplayer(coroutineScope)
+
+        /**
+         * Provides notifier about changes in calls data.
+         */
+        @Singleton
+        @Provides
+        fun providesListOfCallsUpdatedNotifier() = CallsDataChangedNotifier()
     }
 }
