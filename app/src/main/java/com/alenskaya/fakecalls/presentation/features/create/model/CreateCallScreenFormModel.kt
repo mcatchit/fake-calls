@@ -13,6 +13,10 @@ data class CreateCallScreenFormModel(
     val date: Date? = null
 ) {
     val displayableDate: String? = date?.convertToString()
+
+    companion object {
+        fun initial() = CreateCallScreenFormModel()
+    }
 }
 
 /**

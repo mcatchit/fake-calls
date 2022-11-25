@@ -1,12 +1,31 @@
 package com.alenskaya.fakecalls.presentation.features.create
 
 import com.alenskaya.fakecalls.presentation.UiEvent
+import com.alenskaya.fakecalls.presentation.features.create.model.CreateCallScreenFormLabels
+import com.alenskaya.fakecalls.presentation.features.create.model.CreateCallScreenFormModel
 import java.util.Date
 
 /**
  * All possible create call screen events.
  */
 sealed interface CreateCallScreenEvent : UiEvent {
+
+    /**
+     * Screen mode is loaded.
+     * @property labels - screen labels values.
+     */
+    class ModeLoaded(val labels: CreateCallScreenFormLabels) : CreateCallScreenEvent
+
+    /**
+     * Screen form is loading.
+     */
+    object FormLoading : CreateCallScreenEvent
+
+    /**
+     * Screen form is loaded.
+     * @property formModel - data of screen form.
+     */
+    data class FormLoaded(val formModel: CreateCallScreenFormModel) : CreateCallScreenEvent
 
     /**
      * Basic implementation of events which cause input changes.
@@ -26,28 +45,27 @@ sealed interface CreateCallScreenEvent : UiEvent {
     class PhoneChanged(newPhone: String) : InputChanged<String>(newPhone)
 
     /**
-     * New date was selected
+     * New date was selected.
      */
     class DateChanged(newDate: Date) : InputChanged<Date>(newDate)
 
-
     /**
-     * Request to display date picker dialog
+     * Request to display date picker dialog.
      */
     object ShowDatePicker : CreateCallScreenEvent
 
     /**
-     * Intent to submit form
+     * Intent to submit form.
      */
     object SubmitForm : CreateCallScreenEvent
 
     /**
-     * Submit is processing
+     * Submit is processing.
      */
     object ProcessingSubmit : CreateCallScreenEvent
 
     /**
-     * Request to navigate back
+     * Request to navigate back.
      */
     object ClickBack : CreateCallScreenEvent
 }
