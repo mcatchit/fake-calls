@@ -17,6 +17,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.alenskaya.fakecalls.presentation.features.execution.AlarmExecutor
 import com.alenskaya.fakecalls.presentation.navigation.ApplicationRouter
 import com.alenskaya.fakecalls.presentation.navigation.NavigationDestination
 import com.alenskaya.fakecalls.presentation.navigation.HomeNavigationDestination
@@ -32,6 +33,9 @@ import javax.inject.Inject
  */
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
+
+    @Inject
+    lateinit var alarmExecutor: AlarmExecutor
 
     @Inject
     lateinit var applicationRouter: ApplicationRouter
@@ -50,6 +54,8 @@ class MainActivity : AppCompatActivity() {
 
         supportFragmentManager
             .subscribeOnDialogsRequests(dialogsDisplayer, lifecycleScope)
+
+        alarmExecutor.setExactAlarmSetExactAndAllowWhileIdle()
     }
 }
 
