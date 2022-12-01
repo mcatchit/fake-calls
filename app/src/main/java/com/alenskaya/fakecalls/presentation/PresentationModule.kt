@@ -1,17 +1,13 @@
 package com.alenskaya.fakecalls.presentation
 
 import android.app.AlarmManager
-import android.app.Notification
-import android.app.NotificationChannel
-import android.app.NotificationManager
 import android.content.Context
-import android.os.Build
 import androidx.core.app.NotificationManagerCompat
 import coil.ImageLoader
 import coil.disk.DiskCache
 import coil.memory.MemoryCache
-import com.alenskaya.fakecalls.presentation.features.execution.AlarmExecutor
-import com.alenskaya.fakecalls.presentation.features.execution.ApplicationNotificationManagerBuilder
+import com.alenskaya.fakecalls.presentation.features.execution.CallsScheduler
+import com.alenskaya.fakecalls.presentation.features.execution.CallsNotificationManagerBuilder
 import com.alenskaya.fakecalls.presentation.navigation.ApplicationRouter
 import dagger.Module
 import dagger.Provides
@@ -32,7 +28,7 @@ internal abstract class PresentationModule {
         @Provides
         @Singleton
         fun provideNotificationManager(@ApplicationContext context: Context): NotificationManagerCompat {
-            return ApplicationNotificationManagerBuilder.build(context)
+            return CallsNotificationManagerBuilder.build(context)
         }
 
         @Provides
@@ -46,8 +42,8 @@ internal abstract class PresentationModule {
         fun provideAlarmExecutor(
             @ApplicationContext context: Context,
             alarmManager: AlarmManager
-        ): AlarmExecutor {
-            return AlarmExecutor(context, alarmManager)
+        ): CallsScheduler {
+            return CallsScheduler(context, alarmManager)
         }
 
         /**

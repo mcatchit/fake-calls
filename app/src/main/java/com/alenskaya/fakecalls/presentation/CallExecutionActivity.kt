@@ -6,8 +6,8 @@ import android.view.WindowManager
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
 import com.alenskaya.fakecalls.presentation.features.execution.CallExecutionScreen
+import com.alenskaya.fakecalls.presentation.features.execution.extractCallExecutionParams
 import com.alenskaya.fakecalls.presentation.theme.FakeCallsTheme
-
 
 class CallExecutionActivity : AppCompatActivity() {
 
@@ -15,9 +15,11 @@ class CallExecutionActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         showOnLockScreenAndTurnScreenOn()
 
+        val bundle = intent.extras ?: error("Call execution screen bundle cannot be null")
+
         setContent {
             FakeCallsTheme {
-                CallExecutionScreen()
+                CallExecutionScreen(bundle.extractCallExecutionParams())
             }
         }
     }

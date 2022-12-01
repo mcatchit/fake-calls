@@ -25,7 +25,9 @@
         <activity
             android:name=".presentation.CallExecutionActivity"
             android:exported="false"
-            android:showOnLockScreen="true">
+            android:showOnLockScreen="true"
+            android:theme="@style/Theme.FakeCalls">
+
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />

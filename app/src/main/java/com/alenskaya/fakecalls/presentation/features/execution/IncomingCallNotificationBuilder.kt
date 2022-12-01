@@ -10,19 +10,35 @@ import com.alenskaya.fakecalls.R
 import com.alenskaya.fakecalls.presentation.CallExecutionActivity
 import java.util.Date
 
+/**
+ * Creates fullscreen notification about incoming call.
+ * Clicking on notification opens call execution screen.
+ */
 object IncomingCallNotificationBuilder {
 
-    fun build(context: Context, callExecutionParams: CallExecutionParams? = null): Notification {
+    /**
+     * Builds notification for call.
+     * @param context - application context.
+     * @param callExecutionParams - parameters of the call.
+     */
+    fun build(context: Context, callExecutionParams: CallExecutionParams): Notification {
         val fullScreenIntent = createIntent(context, callExecutionParams)
 
-        return NotificationCompat.Builder(context, ApplicationNotificationManagerBuilder.CHANNEL_ID)
+        return NotificationCompat.Builder(context, CallsNotificationManagerBuilder.CHANNEL_ID)
             .setSmallIcon(R.drawable.incoming_call_icon)
             .setContentTitle(context.getString(R.string.incoming_call_notification_title))
             .setAutoCancel(false)
-            .setStyle(NotificationCompat.MessagingStyle("")
-                .setConversationTitle("Incoming call")
-                .addMessage(NotificationCompat.MessagingStyle
-                    .Message("+3452342343234", Date().time, Person.Builder().setName("Peter").build()))
+            .setStyle(
+                NotificationCompat.MessagingStyle("")
+                    .setConversationTitle("Incoming call")
+                    .addMessage(
+                        NotificationCompat.MessagingStyle
+                            .Message(
+                                callExecutionParams.phone,
+                                Date().time,
+                                Person.Builder().setName(callExecutionParams.name).build()
+                            )
+                    )
             )
             .setDefaults(NotificationCompat.DEFAULT_ALL)
             .setContentIntent(fullScreenIntent)
@@ -35,9 +51,17 @@ object IncomingCallNotificationBuilder {
 
     private fun createIntent(
         context: Context,
-        callExecutionParams: CallExecutionParams?
+        callExecutionParams: CallExecutionParams
     ): PendingIntent {
-        val fullScreenIntent = Intent(context, CallExecutionActivity::class.java)
-        return PendingIntent.getActivity(context, 0, fullScreenIntent, PendingIntent.FLAG_IMMUTABLE)
+        val fullScreenIntent = Intent(context, CallExecutionActivity::class.java).apply {
+            putExtras(callExecutionParams.convertToBundle())
+        }
+
+        return PendingIntent.getActivity(
+            context,
+            0,
+            fullScreenIntent,
+            PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+        )
     }
 }

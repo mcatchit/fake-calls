@@ -12,6 +12,8 @@ import com.alenskaya.fakecalls.presentation.CallsDataChangedNotifier
 import com.alenskaya.fakecalls.presentation.features.create.converter.CreateCallScreenModeToLabelsConverter
 import com.alenskaya.fakecalls.presentation.features.create.converter.SavedFakeContactToFormConverter
 import com.alenskaya.fakecalls.presentation.features.create.model.CreateCallScreenFormModel
+import com.alenskaya.fakecalls.presentation.features.execution.CallExecutionParams
+import com.alenskaya.fakecalls.presentation.features.execution.CallsScheduler
 import com.alenskaya.fakecalls.presentation.navigation.ApplicationRouter
 import com.alenskaya.fakecalls.presentation.navigation.NavigateBack
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -34,6 +36,7 @@ import javax.inject.Inject
 class CreateCallScreenViewModel @Inject constructor(
     val imageLoader: ImageLoader,
     val dialogsDisplayer: DialogsDisplayer,
+    private val callsScheduler: CallsScheduler,
     private val applicationRouter: ApplicationRouter,
     private val callsDataChangedNotifier: CallsDataChangedNotifier,
     private val createCallUseCase: CreateCallUseCase,
@@ -110,6 +113,11 @@ class CreateCallScreenViewModel @Inject constructor(
             createCallUseCase(form.toCreateNewCallRequest()).collect()
 
             withContext(Dispatchers.Main) {
+                callsScheduler.scheduleCall(
+                    callExecutionParams = form.toCallExecutionParams(),
+                    whenExecute = form.date ?: error("Date cannot be null.")
+                )
+
                 callsDataChangedNotifier.callsDataChanged()
                 navigateBack()
             }
@@ -120,6 +128,12 @@ class CreateCallScreenViewModel @Inject constructor(
         name = name ?: error("Cannot be null. Should be called after validation"),
         phone = phone ?: error("Cannot be null. Should be called after validation"),
         date = date ?: error("Cannot be null. Should be called after validation"),
+        photoUrl = photo
+    )
+
+    private fun CreateCallScreenFormModel.toCallExecutionParams() = CallExecutionParams(
+        name = name ?: error("Cannot be null. Should be called after validation"),
+        phone = phone ?: error("Cannot be null. Should be called after validation"),
         photoUrl = photo
     )
 }

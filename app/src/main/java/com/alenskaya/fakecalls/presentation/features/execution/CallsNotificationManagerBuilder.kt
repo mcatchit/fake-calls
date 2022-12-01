@@ -8,10 +8,14 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationManagerCompat
 
-object ApplicationNotificationManagerBuilder {
+/**
+ * Builds application calls notification manager and a notification channel for it.
+ */
+object CallsNotificationManagerBuilder {
 
     const val CHANNEL_ID = "calls_notification_channel"
-    const val CHANNEL_NAME = "Calls Notifications"
+
+    private const val CHANNEL_NAME = "Calls Notifications"
 
     fun build(context: Context): NotificationManagerCompat {
         return NotificationManagerCompat.from(context).apply {
