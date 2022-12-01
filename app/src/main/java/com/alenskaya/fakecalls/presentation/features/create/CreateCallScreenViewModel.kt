@@ -24,6 +24,7 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.util.Date
 import javax.inject.Inject
 
 /**
@@ -109,17 +110,19 @@ class CreateCallScreenViewModel @Inject constructor(
     private fun submitForm(form: CreateCallScreenFormModel) {
         sendEvent(CreateCallScreenEvent.ProcessingSubmit)
 
+        //todo refactoring
         viewModelScope.launch(Dispatchers.IO) {
-            createCallUseCase(form.toCreateNewCallRequest()).collect()
-
-            withContext(Dispatchers.Main) {
-                callsScheduler.scheduleCall(
-                    callExecutionParams = form.toCallExecutionParams(),
-                    whenExecute = form.date ?: error("Date cannot be null.")
-                )
-
-                callsDataChangedNotifier.callsDataChanged()
-                navigateBack()
+            createCallUseCase(form.toCreateNewCallRequest()).collect { response ->
+                withContext(Dispatchers.Main) {
+                    if (response is BaseResponse.Success) {
+                        scheduleCall(
+                            form.toCallExecutionParams(response.payload),
+                            form.date ?: error("Date cannot be null after validation")
+                        )
+                    } else {
+                        sendEvent(CreateCallScreenEvent.UnsuccessfulSubmit)
+                    }
+                }
             }
         }
     }
@@ -131,7 +134,15 @@ class CreateCallScreenViewModel @Inject constructor(
         photoUrl = photo
     )
 
-    private fun CreateCallScreenFormModel.toCallExecutionParams() = CallExecutionParams(
+    private fun scheduleCall(callExecutionParams: CallExecutionParams, whenExecute: Date) {
+        callsScheduler.scheduleCall(callExecutionParams, whenExecute)
+
+        callsDataChangedNotifier.callsDataChanged()
+        navigateBack()
+    }
+
+    private fun CreateCallScreenFormModel.toCallExecutionParams(callId: Int) = CallExecutionParams(
+        callId = callId,
         name = name ?: error("Cannot be null. Should be called after validation"),
         phone = phone ?: error("Cannot be null. Should be called after validation"),
         photoUrl = photo

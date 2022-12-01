@@ -39,6 +39,7 @@ class CreateCallScreenStateReducer(
             is CreateCallScreenEvent.ShowDatePicker -> showDatePicker(oldState.formInput)
             is CreateCallScreenEvent.SubmitForm -> submitForm(oldState.formInput)
             is CreateCallScreenEvent.ProcessingSubmit -> setState(oldState.copy(isSubmitProcessing = true))
+            is CreateCallScreenEvent.UnsuccessfulSubmit -> processUnsuccessfulSubmit(oldState)
             is CreateCallScreenEvent.ClickBack -> navigateBackCallback()
         }
     }
@@ -75,5 +76,10 @@ class CreateCallScreenStateReducer(
         } else {
             sendOneTimeEffect(CreateCallScreenOneTimeUiEffect.ShowToast("Please, fill in all fields")) //FIXME
         }
+    }
+
+    private fun processUnsuccessfulSubmit(oldState: CreateCallScreenState) {
+        setState(oldState.copy(isSubmitProcessing = false))
+        sendOneTimeEffect(CreateCallScreenOneTimeUiEffect.ShowToast("Oooops.. Please, try again")) //FIXME
     }
 }

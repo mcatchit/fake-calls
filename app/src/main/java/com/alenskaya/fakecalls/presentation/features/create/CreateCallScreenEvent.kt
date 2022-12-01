@@ -65,6 +65,11 @@ sealed interface CreateCallScreenEvent : UiEvent {
     object ProcessingSubmit : CreateCallScreenEvent
 
     /**
+     * Submit was unsuccessful
+     */
+    object UnsuccessfulSubmit: CreateCallScreenEvent
+
+    /**
      * Request to navigate back.
      */
     object ClickBack : CreateCallScreenEvent
