@@ -71,15 +71,35 @@ class CreateCallScreenStateReducer(
     }
 
     private fun submitForm(formInput: CreateCallScreenFormModel) {
-        if (formInput.isFilled()) {
-            submitFormCallBack(formInput)
-        } else {
-            sendOneTimeEffect(CreateCallScreenOneTimeUiEffect.ShowToast("Please, fill in all fields")) //FIXME
+        checkFormInput(formInput) {
+            validateDate(formInput.date ?: error("Valid date cannot be null")) {
+                submitFormCallBack(formInput)
+            }
         }
     }
 
     private fun processUnsuccessfulSubmit(oldState: CreateCallScreenState) {
         setState(oldState.copy(isSubmitProcessing = false))
-        sendOneTimeEffect(CreateCallScreenOneTimeUiEffect.ShowToast("Oooops.. Please, try again")) //FIXME
+        showToast("Oooops.. Please, try again") //FIXME
+    }
+
+    private fun checkFormInput(formInput: CreateCallScreenFormModel, doIfValid: () -> Unit) {
+        if (formInput.isFilled()) {
+            doIfValid()
+        } else {
+            showToast("Please, fill in all fields") //FIXME
+        }
+    }
+
+    private fun validateDate(userInputDate: Date, doIfValid: () -> Unit) {
+        if (userInputDate > Date()) {
+            doIfValid()
+        } else {
+            showToast("Date is not valid") //FIXME
+        }
+    }
+
+    private fun showToast(message: String) {
+        sendOneTimeEffect(CreateCallScreenOneTimeUiEffect.ShowToast(message))
     }
 }
