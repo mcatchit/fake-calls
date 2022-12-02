@@ -12,6 +12,8 @@ import com.alenskaya.fakecalls.presentation.CallsDataChangedNotifier
 import com.alenskaya.fakecalls.presentation.features.create.converter.CreateCallScreenModeToLabelsConverter
 import com.alenskaya.fakecalls.presentation.features.create.converter.SavedFakeContactToFormConverter
 import com.alenskaya.fakecalls.presentation.features.create.model.CreateCallScreenFormModel
+import com.alenskaya.fakecalls.presentation.features.execution.CallExecutionParams
+import com.alenskaya.fakecalls.presentation.features.execution.CallsScheduler
 import com.alenskaya.fakecalls.presentation.navigation.ApplicationRouter
 import com.alenskaya.fakecalls.presentation.navigation.NavigateBack
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -22,6 +24,7 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.util.Date
 import javax.inject.Inject
 
 /**
@@ -34,6 +37,7 @@ import javax.inject.Inject
 class CreateCallScreenViewModel @Inject constructor(
     val imageLoader: ImageLoader,
     val dialogsDisplayer: DialogsDisplayer,
+    private val callsScheduler: CallsScheduler,
     private val applicationRouter: ApplicationRouter,
     private val callsDataChangedNotifier: CallsDataChangedNotifier,
     private val createCallUseCase: CreateCallUseCase,
@@ -106,12 +110,19 @@ class CreateCallScreenViewModel @Inject constructor(
     private fun submitForm(form: CreateCallScreenFormModel) {
         sendEvent(CreateCallScreenEvent.ProcessingSubmit)
 
+        //todo refactoring
         viewModelScope.launch(Dispatchers.IO) {
-            createCallUseCase(form.toCreateNewCallRequest()).collect()
-
-            withContext(Dispatchers.Main) {
-                callsDataChangedNotifier.callsDataChanged()
-                navigateBack()
+            createCallUseCase(form.toCreateNewCallRequest()).collect { response ->
+                withContext(Dispatchers.Main) {
+                    if (response is BaseResponse.Success) {
+                        scheduleCall(
+                            form.toCallExecutionParams(response.payload),
+                            form.date ?: error("Date cannot be null after validation")
+                        )
+                    } else {
+                        sendEvent(CreateCallScreenEvent.UnsuccessfulSubmit)
+                    }
+                }
             }
         }
     }
@@ -120,6 +131,20 @@ class CreateCallScreenViewModel @Inject constructor(
         name = name ?: error("Cannot be null. Should be called after validation"),
         phone = phone ?: error("Cannot be null. Should be called after validation"),
         date = date ?: error("Cannot be null. Should be called after validation"),
+        photoUrl = photo
+    )
+
+    private fun scheduleCall(callExecutionParams: CallExecutionParams, whenExecute: Date) {
+        callsScheduler.scheduleCall(callExecutionParams, whenExecute)
+
+        callsDataChangedNotifier.callsDataChanged()
+        navigateBack()
+    }
+
+    private fun CreateCallScreenFormModel.toCallExecutionParams(callId: Int) = CallExecutionParams(
+        callId = callId,
+        name = name ?: error("Cannot be null. Should be called after validation"),
+        phone = phone ?: error("Cannot be null. Should be called after validation"),
         photoUrl = photo
     )
 }

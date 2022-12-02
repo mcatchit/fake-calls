@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Fake Calls</string>
+
+    <string name="incoming_call_notification_title">Incoming call</string>
 </resources>

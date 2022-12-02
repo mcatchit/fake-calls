@@ -1,9 +1,13 @@
 package com.alenskaya.fakecalls.presentation
 
+import android.app.AlarmManager
 import android.content.Context
+import androidx.core.app.NotificationManagerCompat
 import coil.ImageLoader
 import coil.disk.DiskCache
 import coil.memory.MemoryCache
+import com.alenskaya.fakecalls.presentation.features.execution.CallsScheduler
+import com.alenskaya.fakecalls.presentation.features.execution.CallsNotificationManagerBuilder
 import com.alenskaya.fakecalls.presentation.navigation.ApplicationRouter
 import dagger.Module
 import dagger.Provides
@@ -20,6 +24,27 @@ import javax.inject.Singleton
 internal abstract class PresentationModule {
 
     internal companion object {
+
+        @Provides
+        @Singleton
+        fun provideNotificationManager(@ApplicationContext context: Context): NotificationManagerCompat {
+            return CallsNotificationManagerBuilder.build(context)
+        }
+
+        @Provides
+        @Singleton
+        fun provideAlarmManager(@ApplicationContext context: Context): AlarmManager {
+            return context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        }
+
+        @Provides
+        @Singleton
+        fun provideAlarmExecutor(
+            @ApplicationContext context: Context,
+            alarmManager: AlarmManager
+        ): CallsScheduler {
+            return CallsScheduler(context, alarmManager)
+        }
 
         /**
          * Provides application coil image loader, which caches images.

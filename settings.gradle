@@ -8,6 +8,8 @@ pluginManagement {
     }
 
     plugins {
+
+        id 'org.jetbrains.kotlin.android' version '1.7.10'
         apply from: file('constants.gradle')
     }
 }

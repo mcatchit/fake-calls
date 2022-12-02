@@ -1,6 +1,6 @@
 ext {
     projectCompileSdk = 33
-    projectMinSdk = 21
+    projectMinSdk = 23
     projectTargetSdk = 33
 
     versions = [
