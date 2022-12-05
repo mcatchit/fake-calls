@@ -33,7 +33,7 @@ class CallsDataChangedNotifier {
 
 /**
  * Listener of call data updates.
- * In order to receive notifications from [CallsDataChangedNotifier], should be subscribed on it.
+ * In order to receive notifications from [CallsDataChangedNotifier], should be subscribed to it.
  * In the end of its lifecycle should be unsubscribed.
  */
 interface CallsDataChangedListener {

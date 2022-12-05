@@ -23,7 +23,7 @@
         android:theme="@style/Theme.FakeCalls"
         tools:targetApi="31">
         <activity
-            android:name=".presentation.CallExecutionActivity"
+            android:name=".presentation.execution.CallExecutionActivity"
             android:exported="false"
             android:showOnLockScreen="true"
             android:theme="@style/Theme.FakeCalls">
@@ -47,7 +47,7 @@
                 android:value="" />
         </activity>
 
-        <receiver android:name=".presentation.features.execution.ScheduledCallBroadcastReceiver" />
+        <receiver android:name=".presentation.execution.ScheduledCallBroadcastReceiver" />
 
     </application>
 
