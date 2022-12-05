@@ -23,10 +23,5 @@ data class SavedFakeContact(
     /**
      * Contact photo.
      */
-    val photoUrl: String?,
-
-    /**
-     * Contact country.
-     */
-    val country: String
+    val photoUrl: String?
 )

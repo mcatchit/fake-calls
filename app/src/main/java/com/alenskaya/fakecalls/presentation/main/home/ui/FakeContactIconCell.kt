@@ -100,7 +100,6 @@ private fun FakeContactHint(
     ) {
         HintText(text = contact.name)
         HintText(text = contact.phone)
-        HintText(text = contact.country)
     }
 }
 

@@ -13,8 +13,7 @@ internal object RemoteFakeContactToEntityConverter :
         FakeContactEntity(
             name = name,
             phone = phone,
-            photoUrl = photoUrl,
-            country = country
+            photoUrl = photoUrl
         )
     }
 }

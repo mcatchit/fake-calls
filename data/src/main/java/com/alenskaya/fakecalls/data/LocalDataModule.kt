@@ -49,8 +49,6 @@ internal abstract class LocalDataModule {
             Room.databaseBuilder(
                 context,
                 FakeCallsDatabase::class.java, "fake-calls-database"
-            )
-                .addMigrations(FakeCallsDatabase.MIGRATION_1_2)
-                .build()
+            ).build()
     }
 }

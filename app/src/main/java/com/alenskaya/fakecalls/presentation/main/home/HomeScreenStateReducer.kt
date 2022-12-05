@@ -49,7 +49,6 @@ class HomeScreenStateReducer(
             name = fakeContact.name,
             phone = fakeContact.phone,
             photoUrl = fakeContact.photoUrl,
-            country = fakeContact.country,
             isHintVisible = false
         )
     }

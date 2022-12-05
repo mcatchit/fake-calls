@@ -13,8 +13,7 @@ object FakeContactDtoToDomainModelConverter : Converter<FakeContactDto, RemoteFa
         RemoteFakeContact(
             name = "${name.firstName} ${name.lastName}",
             phone = phone,
-            photoUrl = picture.large,
-            country = location.country
+            photoUrl = picture.large
         )
     }
 }

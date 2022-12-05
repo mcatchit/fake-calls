@@ -6,6 +6,5 @@ package com.alenskaya.fakecalls.domain.contacts.model
 data class RemoteFakeContact(
     val name: String,
     val phone: String,
-    val photoUrl: String,
-    val country: String
+    val photoUrl: String
 )
