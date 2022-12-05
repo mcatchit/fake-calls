@@ -1,4 +1,4 @@
-package com.alenskaya.fakecalls.presentation.features.execution
+package com.alenskaya.fakecalls.presentation.execution
 
 import android.app.Notification
 import android.app.PendingIntent
@@ -7,7 +7,6 @@ import android.content.Intent
 import androidx.core.app.NotificationCompat
 import androidx.core.app.Person
 import com.alenskaya.fakecalls.R
-import com.alenskaya.fakecalls.presentation.CallExecutionActivity
 import java.util.Date
 
 /**

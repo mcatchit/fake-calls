@@ -17,7 +17,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.alenskaya.fakecalls.presentation.features.execution.CallsScheduler
+import com.alenskaya.fakecalls.presentation.execution.CallsScheduler
 import com.alenskaya.fakecalls.presentation.navigation.ApplicationRouter
 import com.alenskaya.fakecalls.presentation.navigation.NavigationDestination
 import com.alenskaya.fakecalls.presentation.navigation.HomeNavigationDestination

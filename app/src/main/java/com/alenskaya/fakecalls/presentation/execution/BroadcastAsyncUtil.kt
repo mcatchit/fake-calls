@@ -1,4 +1,4 @@
-package com.alenskaya.fakecalls.presentation.features.execution
+package com.alenskaya.fakecalls.presentation.execution
 
 import android.content.BroadcastReceiver
 import kotlinx.coroutines.CoroutineScope

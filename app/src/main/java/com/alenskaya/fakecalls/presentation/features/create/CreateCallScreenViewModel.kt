@@ -12,8 +12,8 @@ import com.alenskaya.fakecalls.presentation.CallsDataChangedNotifier
 import com.alenskaya.fakecalls.presentation.features.create.converter.CreateCallScreenModeToLabelsConverter
 import com.alenskaya.fakecalls.presentation.features.create.converter.SavedFakeContactToFormConverter
 import com.alenskaya.fakecalls.presentation.features.create.model.CreateCallScreenFormModel
-import com.alenskaya.fakecalls.presentation.features.execution.CallExecutionParams
-import com.alenskaya.fakecalls.presentation.features.execution.CallsScheduler
+import com.alenskaya.fakecalls.presentation.execution.CallExecutionParams
+import com.alenskaya.fakecalls.presentation.execution.CallsScheduler
 import com.alenskaya.fakecalls.presentation.navigation.ApplicationRouter
 import com.alenskaya.fakecalls.presentation.navigation.NavigateBack
 import dagger.hilt.android.lifecycle.HiltViewModel
