@@ -14,6 +14,7 @@ internal object FakeContactEntityToSavedContactConverter :
             id = id,
             name = name,
             phone = phone,
+            country = country,
             photoUrl = photoUrl
         )
     }

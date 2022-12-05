@@ -21,5 +21,8 @@ internal data class FakeContactEntity(
     val phone: String,
 
     @ColumnInfo(name = "photo_url")
-    val photoUrl: String?
+    val photoUrl: String?,
+
+    @ColumnInfo(name = "country")
+    val country: String
 )
