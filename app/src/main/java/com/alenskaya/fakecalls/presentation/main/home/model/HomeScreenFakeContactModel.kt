@@ -2,7 +2,7 @@ package com.alenskaya.fakecalls.presentation.main.home.model
 
 /**
  * Ui model of fake contact.
- * Has two additional properties - [id] and [isHintVisible].
+ * Has additional property - [isHintVisible].
  */
 data class HomeScreenFakeContactModel(
 
@@ -12,19 +12,24 @@ data class HomeScreenFakeContactModel(
     val id: Int,
 
     /**
-     * Contact name
+     * Contact name.
      */
     val name: String,
 
     /**
-     * Contact phone
+     * Contact phone.
      */
     val phone: String,
 
     /**
-     * Link to contact photo
+     * Link to contact photo.
      */
     val photoUrl: String?,
+
+    /**
+     * Contact country.
+     */
+    val country: String,
 
     /**
      * Visibility of hint.
