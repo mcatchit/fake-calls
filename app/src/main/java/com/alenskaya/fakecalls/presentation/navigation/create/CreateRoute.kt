@@ -1,7 +1,7 @@
 package com.alenskaya.fakecalls.presentation.navigation.create
 
 import androidx.navigation.NavBackStackEntry
-import com.alenskaya.fakecalls.presentation.features.create.CreateCallScreenMode
+import com.alenskaya.fakecalls.presentation.main.create.CreateCallScreenMode
 import com.alenskaya.fakecalls.presentation.navigation.Route
 
 /**

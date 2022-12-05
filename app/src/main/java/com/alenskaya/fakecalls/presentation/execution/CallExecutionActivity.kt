@@ -9,7 +9,11 @@ import com.alenskaya.fakecalls.presentation.theme.FakeCallsTheme
 import dagger.hilt.android.AndroidEntryPoint
 
 /**
- * Activity for executing call.
+ * Activity for executing a call.
+ *
+ * Calls are not executed in main activity in order to separate this process from main flow
+ * and make all return operations close app instead of returning to main flow.
+ * Also separate activity simplifies processing bundles, enabling displaying on locked screen, etc.
  */
 @AndroidEntryPoint
 class CallExecutionActivity : AppCompatActivity() {

@@ -18,6 +18,8 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.alenskaya.fakecalls.presentation.execution.CallsScheduler
+import com.alenskaya.fakecalls.presentation.main.FakeCallsNavHost
+import com.alenskaya.fakecalls.presentation.main.MainBottomNavigationBar
 import com.alenskaya.fakecalls.presentation.navigation.ApplicationRouter
 import com.alenskaya.fakecalls.presentation.navigation.NavigationDestination
 import com.alenskaya.fakecalls.presentation.navigation.HomeNavigationDestination
