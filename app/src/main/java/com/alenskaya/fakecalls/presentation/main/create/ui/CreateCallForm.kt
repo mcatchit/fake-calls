@@ -73,6 +73,7 @@ fun CreateCallForm(
             SubmitButton(
                 text = formLabels.buttonText,
                 doOnClick = submitClicked,
+                isGreen = createCallScreenState.isCreateButtonGreen,
                 isLoading = createCallScreenState.isSubmitProcessing
             )
         }
@@ -171,10 +172,18 @@ private fun DateField(
 }
 
 @Composable
-private fun SubmitButton(text: String, doOnClick: () -> Unit, isLoading: Boolean) {
+private fun SubmitButton(
+    text: String,
+    doOnClick: () -> Unit,
+    isGreen: Boolean,
+    isLoading: Boolean
+) {
+    val buttonColor =
+        if (isGreen) MaterialTheme.colors.primaryVariant else MaterialTheme.colors.onSecondary
+
     Button(
         onClick = doOnClick,
-        colors = ButtonDefaults.buttonColors(backgroundColor = MaterialTheme.colors.onSecondary)
+        colors = ButtonDefaults.buttonColors(backgroundColor = buttonColor)
     ) {
         if (!isLoading) {
             Text(

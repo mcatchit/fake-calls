@@ -9,6 +9,11 @@ import coil.memory.MemoryCache
 import com.alenskaya.fakecalls.presentation.execution.CallsScheduler
 import com.alenskaya.fakecalls.presentation.execution.CallsNotificationManagerBuilder
 import com.alenskaya.fakecalls.presentation.navigation.ApplicationRouter
+import com.google.firebase.analytics.ktx.analytics
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.remoteconfig.FirebaseRemoteConfig
+import com.google.firebase.remoteconfig.ktx.remoteConfig
+import com.google.firebase.remoteconfig.ktx.remoteConfigSettings
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -24,6 +29,28 @@ import javax.inject.Singleton
 internal abstract class PresentationModule {
 
     internal companion object {
+
+        /**
+         * Provides firebase remote config object.
+         * Is used for getting feature flags.
+         */
+        @Provides
+        @Singleton
+        fun provideFirebaseRemoteConfig(): FirebaseRemoteConfig {
+            return Firebase.remoteConfig.apply {
+                setConfigSettingsAsync(remoteConfigSettings {
+                    minimumFetchIntervalInSeconds = 3600
+                })
+            }
+        }
+
+        /**
+         * Provides firebase analytics service.
+         * Is used to send analytics events.
+         */
+        @Provides
+        @Singleton
+        fun provideFirebaseAnalytics() = Firebase.analytics
 
         /**
          * Provides calls notification manager.

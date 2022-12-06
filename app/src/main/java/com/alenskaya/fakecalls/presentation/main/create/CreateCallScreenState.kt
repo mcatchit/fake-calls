@@ -20,6 +20,11 @@ data class CreateCallScreenState(
     val formInput: CreateCallScreenFormModel,
 
     /**
+     * Feature flag from remote config which determines whether submit button is green or black.
+     */
+    val isCreateButtonGreen: Boolean,
+
+    /**
      * Is screen loaded
      */
     val isInitialDataLoading: Boolean = false,
@@ -31,10 +36,11 @@ data class CreateCallScreenState(
 ) : UiState {
 
     companion object {
-        fun initial(): CreateCallScreenState {
+        fun initial(isCreateButtonGreen: Boolean): CreateCallScreenState {
             return CreateCallScreenState(
-                CreateCallScreenFormLabels.initial(),
-                CreateCallScreenFormModel.initial()
+                formLabels = CreateCallScreenFormLabels.initial(),
+                formInput = CreateCallScreenFormModel.initial(),
+                isCreateButtonGreen = isCreateButtonGreen
             )
         }
     }

@@ -1,6 +1,7 @@
 package com.alenskaya.fakecalls.presentation
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.layout.padding
@@ -17,6 +18,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.alenskaya.fakecalls.R
 import com.alenskaya.fakecalls.presentation.execution.CallsScheduler
 import com.alenskaya.fakecalls.presentation.main.FakeCallsNavHost
 import com.alenskaya.fakecalls.presentation.main.MainBottomNavigationBar
@@ -27,11 +29,12 @@ import com.alenskaya.fakecalls.presentation.navigation.MainScreenNavigationDesti
 import com.alenskaya.fakecalls.presentation.navigation.NavigationCommandExecutor
 import com.alenskaya.fakecalls.presentation.navigation.mainScreenDestinations
 import com.alenskaya.fakecalls.presentation.theme.FakeCallsTheme
+import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 /**
- * Root app activity
+ * Root app activity.
  */
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
@@ -45,8 +48,14 @@ class MainActivity : AppCompatActivity() {
     @Inject
     lateinit var dialogsDisplayer: DialogsDisplayer
 
+    @Inject
+    lateinit var firebaseRemoteConfig: FirebaseRemoteConfig
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        activateFirebaseRemoteConfig()
+        loadFirebaseRemoteConfigDefaults()
 
         setContent {
             FakeCallsTheme {
@@ -57,16 +66,36 @@ class MainActivity : AppCompatActivity() {
         supportFragmentManager
             .subscribeOnDialogsRequests(dialogsDisplayer, lifecycleScope)
     }
-}
 
-private fun FragmentManager.subscribeOnDialogsRequests(
-    dialogsDisplayer: DialogsDisplayer,
-    lifecycleCoroutineScope: LifecycleCoroutineScope
-) {
-    lifecycleCoroutineScope.launchWhenResumed {
-        dialogsDisplayer.dialogs.collect { dialog ->
-            dialog.show(this@subscribeOnDialogsRequests, "Dialog")
+    private fun activateFirebaseRemoteConfig() {
+        firebaseRemoteConfig.fetchAndActivate()
+            .addOnCompleteListener(this) { task ->
+                if (task.isSuccessful) {
+                    val updated = task.result
+                    Log.d(TAG, "Config params updated: $updated")
+                } else {
+                    Log.d(TAG, "Failed to update remote config parameters")
+                }
+            }
+    }
+
+    private fun loadFirebaseRemoteConfigDefaults() {
+        firebaseRemoteConfig.setDefaultsAsync(R.xml.rc_defaults)
+    }
+
+    private fun FragmentManager.subscribeOnDialogsRequests(
+        dialogsDisplayer: DialogsDisplayer,
+        lifecycleCoroutineScope: LifecycleCoroutineScope
+    ) {
+        lifecycleCoroutineScope.launchWhenResumed {
+            dialogsDisplayer.dialogs.collect { dialog ->
+                dialog.show(this@subscribeOnDialogsRequests, "Dialog")
+            }
         }
+    }
+
+    companion object {
+        private const val TAG = "Main activity"
     }
 }
 
