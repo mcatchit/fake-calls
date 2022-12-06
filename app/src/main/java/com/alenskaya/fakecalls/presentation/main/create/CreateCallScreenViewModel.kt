@@ -14,8 +14,12 @@ import com.alenskaya.fakecalls.presentation.main.create.converter.SavedFakeConta
 import com.alenskaya.fakecalls.presentation.main.create.model.CreateCallScreenFormModel
 import com.alenskaya.fakecalls.presentation.execution.model.CallExecutionParams
 import com.alenskaya.fakecalls.presentation.execution.CallsScheduler
+import com.alenskaya.fakecalls.presentation.firebase.AnalyticsEvents
+import com.alenskaya.fakecalls.presentation.firebase.FeatureFlags
 import com.alenskaya.fakecalls.presentation.navigation.ApplicationRouter
 import com.alenskaya.fakecalls.presentation.navigation.NavigateBack
+import com.google.firebase.analytics.FirebaseAnalytics
+import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.SharedFlow
@@ -34,6 +38,7 @@ import javax.inject.Inject
  */
 @HiltViewModel
 class CreateCallScreenViewModel @Inject constructor(
+    firebaseRemoteConfig: FirebaseRemoteConfig,
     val imageLoader: ImageLoader,
     val dialogsDisplayer: DialogsDisplayer,
     private val callsScheduler: CallsScheduler,
@@ -41,6 +46,7 @@ class CreateCallScreenViewModel @Inject constructor(
     private val callsDataChangedNotifier: CallsDataChangedNotifier,
     private val createCallUseCase: CreateCallUseCase,
     private val getFakeContactUseCase: GetFakeContactUseCase,
+    private val firebaseAnalytics: FirebaseAnalytics
 ) : ViewModel() {
 
     val screenState: StateFlow<CreateCallScreenState>
@@ -54,7 +60,11 @@ class CreateCallScreenViewModel @Inject constructor(
     private val reducer =
         CreateCallScreenStateReducer(
             viewModelScope = viewModelScope,
-            initialState = CreateCallScreenState.initial(),
+            initialState = CreateCallScreenState.initial(
+                firebaseRemoteConfig.getBoolean(
+                    FeatureFlags.IS_CREATE_BUTTON_GREEN
+                )
+            ),
             navigateBackCallback = ::navigateBack,
             submitFormCallBack = ::submitForm
         )
@@ -118,6 +128,7 @@ class CreateCallScreenViewModel @Inject constructor(
                             form.toCallExecutionParams(response.payload),
                             form.date ?: error("Date cannot be null after validation")
                         )
+                        logCallCreatedEvent()
                     } else {
                         sendEvent(CreateCallScreenEvent.UnsuccessfulSubmit)
                     }
@@ -146,4 +157,8 @@ class CreateCallScreenViewModel @Inject constructor(
         phone = phone ?: error("Cannot be null. Should be called after validation"),
         photoUrl = photo
     )
+
+    private fun logCallCreatedEvent() {
+        firebaseAnalytics.logEvent(AnalyticsEvents.CALL_CREATED, null)
+    }
 }

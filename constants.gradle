@@ -21,7 +21,9 @@ ext {
             room_version                     : '2.4.3',
             junit_version                    : '4.13.2',
             material_design_version          : '1.8.0-alpha03',
-            appcompat_version                : '0.27.1'
+            appcompat_version                : '0.27.1',
+            google_services_version          : '4.3.14',
+            firebase_bom_version             : '31.1.0'
     ]
 
     kotlinCore = [
@@ -84,5 +86,15 @@ ext {
             runtime   : "androidx.room:room-runtime:$versions.room_version",
             compiler  : "androidx.room:room-compiler:$versions.room_version",
             coroutines: "androidx.room:room-ktx:$versions.room_version"
+    ]
+
+    google = [
+            services: "com.google.gms:google-services:$versions.google_services_version"
+    ]
+
+    firebase = [
+            bom      : "com.google.firebase:firebase-bom:$versions.firebase_bom_version",
+            analytics: "com.google.firebase:firebase-analytics-ktx",
+            config   : "com.google.firebase:firebase-config-ktx",
     ]
 }

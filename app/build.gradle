@@ -3,6 +3,7 @@ plugins {
     id 'org.jetbrains.kotlin.android'
     id 'kotlin-kapt'
     id 'com.google.dagger.hilt.android'
+    id 'com.google.gms.google-services'
 }
 
 android {
@@ -71,12 +72,17 @@ dependencies {
     implementation material.design
     implementation material.appcompat
 
+    implementation 'androidx.appcompat:appcompat:1.5.1'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+
     implementation coil.coil
     implementation coil.compose
 
+    implementation platform(firebase.bom)
+    implementation firebase.analytics
+    implementation firebase.config
+
     implementation daggerHilt.android
-    implementation 'androidx.appcompat:appcompat:1.5.1'
-    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
     kapt daggerHilt.compiler
     implementation daggerHilt.navigationCompose
 
