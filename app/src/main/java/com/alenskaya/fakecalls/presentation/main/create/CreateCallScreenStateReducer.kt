@@ -7,6 +7,7 @@ import com.alenskaya.fakecalls.presentation.main.create.model.TimePickerData
 import com.alenskaya.fakecalls.presentation.main.create.model.isFilled
 import com.alenskaya.fakecalls.presentation.main.extractHour
 import com.alenskaya.fakecalls.presentation.main.extractMinute
+import com.alenskaya.fakecalls.presentation.main.setToMidnight
 import kotlinx.coroutines.CoroutineScope
 import java.util.Date
 
@@ -61,7 +62,7 @@ class CreateCallScreenStateReducer(
     private fun showDatePicker(formInput: CreateCallScreenFormModel) {
         val selectedDate = formInput.date ?: Date()
         val dateTimePickerData = DateTimePickerData(
-            minDate = Date().time,
+            minDate = Date().setToMidnight().time,
             selectedDate = selectedDate.time,
             timePickerData = TimePickerData(
                 selectedHour = selectedDate.extractHour(),
