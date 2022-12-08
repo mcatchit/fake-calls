@@ -129,6 +129,14 @@ internal abstract class PresentationModule {
             DialogsDisplayer(coroutineScope)
 
         /**
+         * Provides notifications permission manager.
+         */
+        @Provides
+        @Singleton
+        fun provideNotificationsPermissionManager(coroutineScope: CoroutineScope) =
+            NotificationPermissionManager(coroutineScope)
+
+        /**
          * Provides notifier about changes in calls data.
          */
         @Singleton

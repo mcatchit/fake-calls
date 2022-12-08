@@ -3,6 +3,7 @@ package com.alenskaya.fakecalls.presentation.main.create
 import com.alenskaya.fakecalls.presentation.mvi.Reducer
 import com.alenskaya.fakecalls.presentation.main.create.model.CreateCallScreenFormModel
 import com.alenskaya.fakecalls.presentation.main.create.model.DateTimePickerData
+import com.alenskaya.fakecalls.presentation.main.create.model.FakeCallPermission
 import com.alenskaya.fakecalls.presentation.main.create.model.TimePickerData
 import com.alenskaya.fakecalls.presentation.main.create.model.isFilled
 import com.alenskaya.fakecalls.presentation.main.extractHour
@@ -39,7 +40,7 @@ class CreateCallScreenStateReducer(
             is CreateCallScreenEvent.InputChanged<*> -> processInputChangedEvent(oldState, event)
             is CreateCallScreenEvent.ShowDatePicker -> showDatePicker(oldState.formInput)
             is CreateCallScreenEvent.SubmitForm -> submitForm(oldState.formInput)
-            is CreateCallScreenEvent.PermissionToScheduleACallIsNotGranted -> processNotGrantedPermission()
+            is CreateCallScreenEvent.PermissionNotGranted -> processNotGrantedPermission(event.permission)
             is CreateCallScreenEvent.ProcessingSubmit -> setState(oldState.copy(isSubmitProcessing = true))
             is CreateCallScreenEvent.UnsuccessfulSubmit -> processUnsuccessfulSubmit(oldState)
             is CreateCallScreenEvent.ClickBack -> navigateBackCallback()
@@ -80,8 +81,13 @@ class CreateCallScreenStateReducer(
         }
     }
 
-    private fun processNotGrantedPermission() {
-        showToast("Please, give the application permission to set alarms") //FIXME
+    private fun processNotGrantedPermission(fakeCallPermission: FakeCallPermission) {
+        //FIXME
+        val message = when (fakeCallPermission) {
+            FakeCallPermission.SCHEDULE_ALARM -> "Please, give the application permission to set alarms"
+            FakeCallPermission.SHOW_NOTIFICATION -> "Please, give the application permission to show notifications"
+        }
+        showToast(message)
     }
 
     private fun processUnsuccessfulSubmit(oldState: CreateCallScreenState) {

@@ -3,6 +3,7 @@ package com.alenskaya.fakecalls.presentation.main.create
 import com.alenskaya.fakecalls.presentation.mvi.UiEvent
 import com.alenskaya.fakecalls.presentation.main.create.model.CreateCallScreenFormLabels
 import com.alenskaya.fakecalls.presentation.main.create.model.CreateCallScreenFormModel
+import com.alenskaya.fakecalls.presentation.main.create.model.FakeCallPermission
 import java.util.Date
 
 /**
@@ -62,7 +63,7 @@ sealed interface CreateCallScreenEvent : UiEvent {
     /**
      * Cannot schedule a call because permission is not granted.
      */
-    object PermissionToScheduleACallIsNotGranted: CreateCallScreenEvent
+    class PermissionNotGranted(val permission: FakeCallPermission) : CreateCallScreenEvent
 
     /**
      * Submit is processing.
@@ -72,7 +73,7 @@ sealed interface CreateCallScreenEvent : UiEvent {
     /**
      * Submit was unsuccessful
      */
-    object UnsuccessfulSubmit: CreateCallScreenEvent
+    object UnsuccessfulSubmit : CreateCallScreenEvent
 
     /**
      * Request to navigate back.
