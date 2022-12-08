@@ -15,7 +15,7 @@ android {
         minSdk projectMinSdk
         targetSdk projectTargetSdk
         versionCode 1
-        versionName "1.0"
+        versionName project.properties.version
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
