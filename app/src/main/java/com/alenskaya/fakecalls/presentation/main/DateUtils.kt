@@ -55,6 +55,20 @@ fun Date.setHourAndMinute(hour: Int, minute: Int): Date {
 }
 
 /**
+ * Sets date to 00:00:00
+ */
+fun Date.setToMidnight(): Date {
+    return getCalendar()
+        .apply {
+            time = this@setToMidnight
+            set(Calendar.HOUR_OF_DAY, 0)
+            set(Calendar.MINUTE, 0)
+            set(Calendar.MILLISECOND, 0)
+        }
+        .time
+}
+
+/**
  * Converts date to "dd.MM.yy HH:mm" pattern if its year equals current, "dd.MM HH:mm" - otherwise
  */
 fun Date.convertToString(): String {
