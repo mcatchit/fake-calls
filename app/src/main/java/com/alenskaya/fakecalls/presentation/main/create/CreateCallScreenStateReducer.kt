@@ -38,6 +38,7 @@ class CreateCallScreenStateReducer(
             is CreateCallScreenEvent.InputChanged<*> -> processInputChangedEvent(oldState, event)
             is CreateCallScreenEvent.ShowDatePicker -> showDatePicker(oldState.formInput)
             is CreateCallScreenEvent.SubmitForm -> submitForm(oldState.formInput)
+            is CreateCallScreenEvent.PermissionToScheduleACallIsNotGranted -> processNotGrantedPermission()
             is CreateCallScreenEvent.ProcessingSubmit -> setState(oldState.copy(isSubmitProcessing = true))
             is CreateCallScreenEvent.UnsuccessfulSubmit -> processUnsuccessfulSubmit(oldState)
             is CreateCallScreenEvent.ClickBack -> navigateBackCallback()
@@ -76,6 +77,10 @@ class CreateCallScreenStateReducer(
                 submitFormCallBack(formInput)
             }
         }
+    }
+
+    private fun processNotGrantedPermission() {
+        showToast("Please, give the application permission to set alarms") //FIXME
     }
 
     private fun processUnsuccessfulSubmit(oldState: CreateCallScreenState) {

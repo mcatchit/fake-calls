@@ -70,7 +70,7 @@ class CreateCallScreenViewModel @Inject constructor(
         )
 
     /**
-     * Must be called before screen initialization
+     * Must be called before screen initialization.
      */
     fun setMode(mode: CreateCallScreenMode) {
         this.mode = mode
@@ -83,7 +83,7 @@ class CreateCallScreenViewModel @Inject constructor(
     }
 
     /**
-     * Sends ui event
+     * Sends ui event.
      */
     fun sendEvent(event: CreateCallScreenEvent) {
         reducer.sendEvent(event)
@@ -117,23 +117,33 @@ class CreateCallScreenViewModel @Inject constructor(
     }
 
     private fun submitForm(form: CreateCallScreenFormModel) {
-        sendEvent(CreateCallScreenEvent.ProcessingSubmit)
-
         //todo refactoring
-        viewModelScope.launch(Dispatchers.IO) {
-            createCallUseCase(form.toCreateNewCallRequest()).collect { response ->
-                withContext(Dispatchers.Main) {
-                    if (response is BaseResponse.Success) {
-                        scheduleCall(
-                            form.toCallExecutionParams(response.payload),
-                            form.date ?: error("Date cannot be null after validation")
-                        )
-                        logCallCreatedEvent()
-                    } else {
-                        sendEvent(CreateCallScreenEvent.UnsuccessfulSubmit)
+        checkPermissionAndDo {
+            sendEvent(CreateCallScreenEvent.ProcessingSubmit)
+
+            viewModelScope.launch(Dispatchers.IO) {
+                createCallUseCase(form.toCreateNewCallRequest()).collect { response ->
+                    withContext(Dispatchers.Main) {
+                        if (response is BaseResponse.Success) {
+                            scheduleCall(
+                                form.toCallExecutionParams(response.payload),
+                                form.date ?: error("Date cannot be null after validation")
+                            )
+                            logCallCreatedEvent()
+                        } else {
+                            sendEvent(CreateCallScreenEvent.UnsuccessfulSubmit)
+                        }
                     }
                 }
             }
+        }
+    }
+
+    private fun checkPermissionAndDo(actionToDoIfPermissionGranted: () -> Unit) {
+        if (callsScheduler.hasPermissionToScheduleACall()) {
+            actionToDoIfPermissionGranted()
+        } else {
+            sendEvent(CreateCallScreenEvent.PermissionToScheduleACallIsNotGranted)
         }
     }
 
