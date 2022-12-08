@@ -60,6 +60,11 @@ sealed interface CreateCallScreenEvent : UiEvent {
     object SubmitForm : CreateCallScreenEvent
 
     /**
+     * Cannot schedule a call because permission is not granted.
+     */
+    object PermissionToScheduleACallIsNotGranted: CreateCallScreenEvent
+
+    /**
      * Submit is processing.
      */
     object ProcessingSubmit : CreateCallScreenEvent

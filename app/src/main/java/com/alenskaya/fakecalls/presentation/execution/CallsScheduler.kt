@@ -4,6 +4,7 @@ import android.app.AlarmManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.os.Build
 import com.alenskaya.fakecalls.presentation.execution.model.CallExecutionParams
 import java.util.Date
 
@@ -16,6 +17,17 @@ class CallsScheduler(
     private val context: Context,
     private val alarmManager: AlarmManager
 ) {
+
+    /**
+     * Checks permission to schedule a call.
+     */
+    fun hasPermissionToScheduleACall(): Boolean {
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            alarmManager.canScheduleExactAlarms()
+        } else {
+            true
+        }
+    }
 
     /**
      * Schedules a call with [callExecutionParams] at passed time [whenExecute].
