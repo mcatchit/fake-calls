@@ -23,20 +23,21 @@ object IncomingCallNotificationBuilder {
      */
     fun build(context: Context, callExecutionParams: CallExecutionParams): Notification {
         val fullScreenIntent = createIntent(context, callExecutionParams)
+        val person = Person.Builder().setName(callExecutionParams.name).build()
 
         return NotificationCompat.Builder(context, CallsNotificationManagerBuilder.CHANNEL_ID)
             .setSmallIcon(R.drawable.incoming_call_icon)
             .setContentTitle(context.getString(R.string.incoming_call_notification_title))
-            .setAutoCancel(false)
+            .setAutoCancel(true)
             .setStyle(
-                NotificationCompat.MessagingStyle("")
+                NotificationCompat.MessagingStyle(person)
                     .setConversationTitle("Incoming call")
                     .addMessage(
                         NotificationCompat.MessagingStyle
                             .Message(
                                 callExecutionParams.phone,
                                 Date().time,
-                                Person.Builder().setName(callExecutionParams.name).build()
+                                person
                             )
                     )
             )
