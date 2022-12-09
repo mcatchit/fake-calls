@@ -46,7 +46,7 @@ class CallsScreenViewModel @Inject constructor(
     }
 
     private fun refresh() {
-        sendEvent(CallsScreenEvent.LoadCalls)
+        sendEvent(CallsScreenEvent.CallsLoading)
     }
 
     private fun loadCalls() {

@@ -6,41 +6,64 @@ import com.alenskaya.fakecalls.presentation.main.home.model.HomeScreenFakeContac
 import kotlinx.coroutines.CoroutineScope
 
 /**
- * Manages HomeScreen state
+ * Manages HomeScreen state.
  */
 class HomeScreenStateReducer(
     viewModelScope: CoroutineScope,
-    initialState: HomeScreenState
+    initialState: HomeScreenState,
+    private val navigateToCreateCallScreenAction: (Int?) -> Unit
 ) : Reducer<HomeScreenState, HomeScreenEvent, HomeScreenOneTimeUiEffect>(
     viewModelScope,
     initialState
 ) {
 
     override fun processEvent(oldState: HomeScreenState, event: HomeScreenEvent) {
-        setState(oldState.reduce(event))
+        return when (event) {
+            is HomeScreenEvent.ContactsLoading -> setState(oldState.copy(isLoading = true))
 
-        if (event is HomeScreenEvent.ContactsNotLoaded) {
-            sendOneTimeEffect(HomeScreenOneTimeUiEffect(event.message))
+            is HomeScreenEvent.ContactsLoaded -> processContactsLoaded(oldState, event.contacts)
+
+            is HomeScreenEvent.ContactsNotLoaded -> processContactsNotLoaded(
+                oldState,
+                event.message
+            )
+
+            is HomeScreenEvent.ContactHintVisibilityChanged -> processHintVisibilityChanged(
+                oldState,
+                event
+            )
+
+            is HomeScreenEvent.CreateCallFromSuggested -> navigateToCreateCallScreenAction(event.fakeContactId)
+            is HomeScreenEvent.CreateCustomCall -> navigateToCreateCallScreenAction(null)
         }
     }
 
-    private fun HomeScreenState.reduce(event: HomeScreenEvent): HomeScreenState {
-        return when (event) {
-            is HomeScreenEvent.ContactsLoading -> copy(isLoading = true)
-            is HomeScreenEvent.ContactsLoaded -> copy(
+    private fun processContactsLoaded(oldState: HomeScreenState, contacts: List<SavedFakeContact>) {
+        setState(
+            oldState.copy(
                 isLoading = false,
-                contacts = event.contacts.toScreenModel()
+                contacts = contacts.toScreenModel()
             )
-            is HomeScreenEvent.ContactsNotLoaded -> copy(
-                isLoading = false
-            )
-            is HomeScreenEvent.ContactHintVisibilityChanged -> copy(
-                contacts = contacts.changeContactsHintVisibility(
+        )
+    }
+
+    private fun processContactsNotLoaded(oldState: HomeScreenState, message: String) {
+        setState(oldState.copy(isLoading = false))
+        sendOneTimeEffect(HomeScreenOneTimeUiEffect(message))
+    }
+
+    private fun processHintVisibilityChanged(
+        oldState: HomeScreenState,
+        event: HomeScreenEvent.ContactHintVisibilityChanged
+    ) {
+        setState(
+            oldState.copy(
+                contacts = oldState.contacts.changeContactsHintVisibility(
                     event.contactId,
                     event.isHinted
                 )
             )
-        }
+        )
     }
 
     private fun List<SavedFakeContact>.toScreenModel() = map { fakeContact ->

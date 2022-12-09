@@ -14,6 +14,7 @@ import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.ImageLoader
+import com.alenskaya.fakecalls.presentation.Subscribe
 import com.alenskaya.fakecalls.presentation.main.home.model.HomeScreenFakeContactModel
 import com.alenskaya.fakecalls.presentation.main.home.ui.CreateCustomContactCell
 import com.alenskaya.fakecalls.presentation.main.home.ui.FakeContactIconCell
@@ -24,44 +25,35 @@ import com.alenskaya.fakecalls.presentation.main.home.ui.MoreCell
 import com.alenskaya.fakecalls.presentation.showToast
 
 /**
- * Home screen ui
+ * Home screen ui.
  */
 @Composable
 fun HomeScreen(
     viewModel: HomeScreenViewModel = hiltViewModel(),
 ) {
     val state by viewModel.screenState.collectAsState()
-    val toastEvent by viewModel.oneTimeEffect.collectAsState(initial = null)
 
     val imageLoader = viewModel.imageLoader
-
-    val onSelectContactClick = { contactId: Int ->
-        viewModel.createFakeCall(contactId)
-    }
-
-    val onContactHintVisibilityChanged = { id: Int, isHinted: Boolean ->
-        viewModel.contactHintVisibilityChanged(id, isHinted)
-    }
-
-    val onCreateCustomClick = {
-        viewModel.createCustomCall()
-    }
-
-    val onMoreClick = {
-        //TODO
-    }
 
     HomeScreen(
         imageLoader = imageLoader,
         state = state,
-        onSelectContactClick = onSelectContactClick,
-        onContactHintVisibilityChanged = onContactHintVisibilityChanged,
-        onCreateCustomClick = onCreateCustomClick,
-        onMoreClick = onMoreClick
+        onSelectContactClick = { id ->
+            viewModel.sendEvent(HomeScreenEvent.CreateCallFromSuggested(id))
+        },
+        onContactHintVisibilityChanged = { id: Int, isHinted: Boolean ->
+            viewModel.sendEvent(HomeScreenEvent.ContactHintVisibilityChanged(id, isHinted))
+        },
+        onCreateCustomClick = {
+            viewModel.sendEvent(HomeScreenEvent.CreateCustomCall)
+        },
+        onMoreClick = {}
     )
 
-    toastEvent?.let { homeScreenOneTimeUiEffect ->
-        LocalContext.current.showToast(homeScreenOneTimeUiEffect.toastMessage)
+    val context = LocalContext.current
+
+    viewModel.oneTimeEffect.Subscribe { homeScreenOneTimeUiEffect ->
+        context.showToast(homeScreenOneTimeUiEffect.toastMessage)
     }
 }
 

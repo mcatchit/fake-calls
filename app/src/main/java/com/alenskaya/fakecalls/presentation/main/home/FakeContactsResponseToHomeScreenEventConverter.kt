@@ -6,7 +6,10 @@ import com.alenskaya.fakecalls.domain.RemoteRequestErrorCause
 import com.alenskaya.fakecalls.domain.contacts.model.SavedFakeContactsResponse
 import com.alenskaya.fakecalls.util.Converter
 
-//TODO move messages to strings
+/**
+ * Converts fake contacts remote response to HomeScreen event.
+ * TODO move messages to strings
+ */
 object FakeContactsResponseToHomeScreenEventConverter :
     Converter<BaseResponse<SavedFakeContactsResponse, out ErrorCause>, HomeScreenEvent> {
 

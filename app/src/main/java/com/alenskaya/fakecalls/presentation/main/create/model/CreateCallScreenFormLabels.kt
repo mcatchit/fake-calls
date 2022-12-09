@@ -4,6 +4,7 @@ package com.alenskaya.fakecalls.presentation.main.create.model
  * Labels values displayed on create call screen
  */
 data class CreateCallScreenFormLabels(
+
     /**
      * Screen title
      */

@@ -16,7 +16,7 @@ class CallsScreenStateReducer(
     ) {
 
     override fun processEvent(oldState: CallsScreenState, event: CallsScreenEvent) {
-        if (event is CallsScreenEvent.LoadCalls) {
+        if (event is CallsScreenEvent.CallsLoading) {
             loadCallsAction()
         }
         setState(oldState.reduce(event))
@@ -24,7 +24,7 @@ class CallsScreenStateReducer(
 
     private fun CallsScreenState.reduce(event: CallsScreenEvent): CallsScreenState {
         return when (event) {
-            CallsScreenEvent.LoadCalls -> copy(isLoading = true)
+            CallsScreenEvent.CallsLoading -> copy(isLoading = true)
             is CallsScreenEvent.CallsLoaded -> copy(
                 isLoading = false,
                 scheduledCalls = event.scheduledCalls,

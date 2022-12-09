@@ -2,6 +2,7 @@ package com.alenskaya.fakecalls.presentation.main.create
 
 import com.alenskaya.fakecalls.presentation.mvi.Reducer
 import com.alenskaya.fakecalls.presentation.main.create.model.CreateCallScreenFormModel
+import com.alenskaya.fakecalls.presentation.main.create.model.CreateNewCallData
 import com.alenskaya.fakecalls.presentation.main.create.model.DateTimePickerData
 import com.alenskaya.fakecalls.presentation.main.create.model.FakeCallPermission
 import com.alenskaya.fakecalls.presentation.main.create.model.TimePickerData
@@ -21,7 +22,7 @@ class CreateCallScreenStateReducer(
     viewModelScope: CoroutineScope,
     initialState: CreateCallScreenState,
     private val navigateBackCallback: () -> Unit,
-    private val submitFormCallBack: (CreateCallScreenFormModel) -> Unit
+    private val submitFormCallBack: (CreateNewCallData) -> Unit
 ) : Reducer<CreateCallScreenState, CreateCallScreenEvent, CreateCallScreenOneTimeUiEffect>(
     viewModelScope,
     initialState
@@ -76,7 +77,7 @@ class CreateCallScreenStateReducer(
     private fun submitForm(formInput: CreateCallScreenFormModel) {
         checkFormInput(formInput) {
             validateDate(formInput.date ?: error("Valid date cannot be null")) {
-                submitFormCallBack(formInput)
+                submitFormCallBack(formInput.toCreateNewCallData())
             }
         }
     }
@@ -110,6 +111,13 @@ class CreateCallScreenStateReducer(
             showToast("Date is not valid") //FIXME
         }
     }
+
+    private fun CreateCallScreenFormModel.toCreateNewCallData() = CreateNewCallData(
+        name = name ?: error("Name cannot be null after validation."),
+        phone = phone ?: error("Phone cannot be null after validation."),
+        date = date ?: error("Date cannot be null after validation."),
+        photoUrl = photo
+    )
 
     private fun showToast(message: String) {
         sendOneTimeEffect(CreateCallScreenOneTimeUiEffect.ShowToast(message))

@@ -23,11 +23,11 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import coil.ImageLoader
 import com.alenskaya.fakecalls.R
 import com.alenskaya.fakecalls.presentation.DialogsDisplayer
+import com.alenskaya.fakecalls.presentation.Subscribe
 import com.alenskaya.fakecalls.presentation.main.create.model.DateTimePickerData
 import com.alenskaya.fakecalls.presentation.main.create.ui.CreateCallForm
 import com.alenskaya.fakecalls.presentation.main.create.ui.DateTimePickerDialog
 import com.alenskaya.fakecalls.presentation.showToast
-import kotlinx.coroutines.flow.SharedFlow
 import java.util.Date
 
 /**
@@ -105,17 +105,6 @@ private fun CreateCallScreen(
                 calendarClicked = calendarClicked,
                 submitClicked = submitClicked
             )
-        }
-    }
-}
-
-@Composable
-private fun SharedFlow<CreateCallScreenOneTimeUiEffect>.Subscribe(
-    doWhenReceive: (CreateCallScreenOneTimeUiEffect) -> Unit
-) {
-    LaunchedEffect(true) {
-        collect { oneTimeUiEffect ->
-            doWhenReceive(oneTimeUiEffect)
         }
     }
 }
