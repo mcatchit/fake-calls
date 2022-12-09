@@ -1,9 +1,7 @@
 package com.alenskaya.fakecalls.data
 
-import com.alenskaya.fakecalls.data.local.db.FakeContactsRoomRepository
 import com.alenskaya.fakecalls.data.remote.FakeContactApiRemoteRepository
 import com.alenskaya.fakecalls.data.remote.contacts.api.FakeContactApi
-import com.alenskaya.fakecalls.domain.contacts.FakeContactLocalRepository
 import com.alenskaya.fakecalls.domain.contacts.FakeContactRemoteRepository
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory

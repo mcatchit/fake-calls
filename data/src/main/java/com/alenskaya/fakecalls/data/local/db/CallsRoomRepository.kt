@@ -3,8 +3,8 @@ package com.alenskaya.fakecalls.data.local.db
 import com.alenskaya.fakecalls.data.local.catchExceptions
 import com.alenskaya.fakecalls.data.local.db.calls.CallDao
 import com.alenskaya.fakecalls.data.local.db.calls.converter.CallStatusToStringConverter
-import com.alenskaya.fakecalls.data.local.db.calls.toCallEntity
-import com.alenskaya.fakecalls.data.local.db.calls.toSavedCall
+import com.alenskaya.fakecalls.data.local.db.calls.converter.toCallEntity
+import com.alenskaya.fakecalls.data.local.db.calls.converter.toSavedCall
 import com.alenskaya.fakecalls.domain.BaseResponse
 import com.alenskaya.fakecalls.domain.DatabaseError
 import com.alenskaya.fakecalls.domain.calls.model.CallStatus

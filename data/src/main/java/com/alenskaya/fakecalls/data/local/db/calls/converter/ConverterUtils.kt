@@ -1,6 +1,6 @@
-package com.alenskaya.fakecalls.data.local.db.calls
+package com.alenskaya.fakecalls.data.local.db.calls.converter
 
-import com.alenskaya.fakecalls.data.local.db.calls.converter.CallStatusToStringConverter
+import com.alenskaya.fakecalls.data.local.db.calls.CallEntity
 import com.alenskaya.fakecalls.domain.calls.model.CallStatus
 import com.alenskaya.fakecalls.domain.calls.model.CreateNewCallRequest
 import com.alenskaya.fakecalls.domain.calls.model.SavedCall

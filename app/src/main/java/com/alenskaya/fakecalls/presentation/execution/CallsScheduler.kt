@@ -7,6 +7,7 @@ import android.content.Intent
 import android.os.Build
 import com.alenskaya.fakecalls.presentation.execution.model.CallExecutionParams
 import java.util.Date
+import java.util.UUID
 
 /**
  * Requests [alarmManager] to execute a call notification at specified time.
@@ -49,13 +50,9 @@ class CallsScheduler(
 
         return PendingIntent.getBroadcast(
             context,
-            PLAN_CALL_REQUEST_CODE,
+            UUID.randomUUID().hashCode(), //Request code must be unique!
             intent,
             PendingIntent.FLAG_IMMUTABLE
         )
-    }
-
-    companion object {
-        private const val PLAN_CALL_REQUEST_CODE = 1239
     }
 }

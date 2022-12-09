@@ -19,6 +19,7 @@ import com.alenskaya.fakecalls.presentation.execution.model.CallExecutionParams
 import com.alenskaya.fakecalls.presentation.execution.CallsScheduler
 import com.alenskaya.fakecalls.presentation.firebase.AnalyticsEvents
 import com.alenskaya.fakecalls.presentation.firebase.FeatureFlags
+import com.alenskaya.fakecalls.presentation.main.create.model.CreateNewCallData
 import com.alenskaya.fakecalls.presentation.main.create.model.FakeCallPermission
 import com.alenskaya.fakecalls.presentation.navigation.ApplicationRouter
 import com.alenskaya.fakecalls.presentation.navigation.NavigateBack
@@ -121,36 +122,20 @@ class CreateCallScreenViewModel @Inject constructor(
         applicationRouter.navigate(NavigateBack)
     }
 
-    private fun submitForm(form: CreateCallScreenFormModel) {
-        //todo refactoring
-        checkNotificationPermission {
-            checkAlarmManagerPermissionAndDo {
+    private fun submitForm(createNewCallData: CreateNewCallData) {
+        doAfterCheckNotificationPermission {
+            doAfterCheckAlarmManagerPermission {
                 sendEvent(CreateCallScreenEvent.ProcessingSubmit)
-
-                viewModelScope.launch(Dispatchers.IO) {
-                    createCallUseCase(form.toCreateNewCallRequest()).collect { response ->
-                        withContext(Dispatchers.Main) {
-                            if (response is BaseResponse.Success) {
-                                scheduleCall(
-                                    form.toCallExecutionParams(response.payload),
-                                    form.date ?: error("Date cannot be null after validation")
-                                )
-                                logCallCreatedEvent()
-                            } else {
-                                sendEvent(CreateCallScreenEvent.UnsuccessfulSubmit)
-                            }
-                        }
-                    }
-                }
+                saveNewCall(createNewCallData)
             }
         }
     }
 
     @SuppressLint("InlinedApi")
-    private fun checkNotificationPermission(action: () -> Unit) {
+    private fun doAfterCheckNotificationPermission(actionToDoIfPermissionGranted: () -> Unit) {
         notificationPermissionManager.requestNotificationPermission(
             NotificationPermissionCallback(
-                doWhenGranted = action,
+                doWhenGranted = actionToDoIfPermissionGranted,
                 doWhenNotGranted = {
                     sendEvent(CreateCallScreenEvent.PermissionNotGranted(FakeCallPermission.SHOW_NOTIFICATION))
                 }
@@ -158,7 +143,7 @@ class CreateCallScreenViewModel @Inject constructor(
         )
     }
 
-    private fun checkAlarmManagerPermissionAndDo(actionToDoIfPermissionGranted: () -> Unit) {
+    private fun doAfterCheckAlarmManagerPermission(actionToDoIfPermissionGranted: () -> Unit) {
         if (callsScheduler.hasPermissionToScheduleACall()) {
             actionToDoIfPermissionGranted()
         } else {
@@ -166,11 +151,30 @@ class CreateCallScreenViewModel @Inject constructor(
         }
     }
 
-    private fun CreateCallScreenFormModel.toCreateNewCallRequest() = CreateNewCallRequest(
-        name = name ?: error("Cannot be null. Should be called after validation"),
-        phone = phone ?: error("Cannot be null. Should be called after validation"),
-        date = date ?: error("Cannot be null. Should be called after validation"),
-        photoUrl = photo
+    private fun saveNewCall(createNewCallData: CreateNewCallData) {
+        viewModelScope.launch(Dispatchers.IO) {
+            createCallUseCase(createNewCallData.toCreateNewCallRequest()).collect { response ->
+
+                withContext(Dispatchers.Main) {
+                    if (response is BaseResponse.Success) {
+                        scheduleCall(
+                            createNewCallData.toCallExecutionParams(response.payload),
+                            createNewCallData.date
+                        )
+                        logCallCreatedEvent()
+                    } else {
+                        sendEvent(CreateCallScreenEvent.UnsuccessfulSubmit)
+                    }
+                }
+            }
+        }
+    }
+
+    private fun CreateNewCallData.toCreateNewCallRequest() = CreateNewCallRequest(
+        name = name,
+        phone = phone,
+        date = date,
+        photoUrl = photoUrl
     )
 
     private fun scheduleCall(callExecutionParams: CallExecutionParams, whenExecute: Date) {
@@ -180,11 +184,11 @@ class CreateCallScreenViewModel @Inject constructor(
         navigateBack()
     }
 
-    private fun CreateCallScreenFormModel.toCallExecutionParams(callId: Int) = CallExecutionParams(
+    private fun CreateNewCallData.toCallExecutionParams(callId: Int) = CallExecutionParams(
         callId = callId,
-        name = name ?: error("Cannot be null. Should be called after validation"),
-        phone = phone ?: error("Cannot be null. Should be called after validation"),
-        photoUrl = photo
+        name = name,
+        phone = phone,
+        photoUrl = photoUrl
     )
 
     private fun logCallCreatedEvent() {
