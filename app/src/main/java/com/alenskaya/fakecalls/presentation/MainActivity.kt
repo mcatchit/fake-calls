@@ -104,10 +104,8 @@ class MainActivity : AppCompatActivity() {
     private fun requestNotificationsPermission(request: NotificationPermissionCallback) {
         notificationPermissionCallback = request
 
-        if (ContextCompat.checkSelfPermission(
-                this,
-                Manifest.permission.POST_NOTIFICATIONS
-            ) == PackageManager.PERMISSION_GRANTED
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS)
+            == PackageManager.PERMISSION_GRANTED
         ) {
             notificationPermissionCallback.doWhenGranted()
         } else {

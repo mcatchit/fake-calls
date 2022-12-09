@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import coil.ImageLoader
 import com.alenskaya.fakecalls.domain.contacts.GetFakeContactsListUseCase
 import com.alenskaya.fakecalls.presentation.navigation.ApplicationRouter
+import com.alenskaya.fakecalls.presentation.navigation.NavigationDestination
 import com.alenskaya.fakecalls.presentation.navigation.create.CreateRoutes
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -26,7 +27,11 @@ class HomeScreenViewModel @Inject constructor(
     private val applicationRouter: ApplicationRouter
 ) : ViewModel() {
 
-    private val reducer = HomeScreenStateReducer(viewModelScope, HomeScreenState.initial())
+    private val reducer = HomeScreenStateReducer(
+        viewModelScope,
+        HomeScreenState.initial(),
+        ::navigateToCreateCallScreen
+    )
 
     val screenState: StateFlow<HomeScreenState>
         get() = reducer.state
@@ -38,20 +43,8 @@ class HomeScreenViewModel @Inject constructor(
         loadFakeContacts()
     }
 
-    fun contactHintVisibilityChanged(contactId: Int, isHinted: Boolean) {
-        sendEvent(HomeScreenEvent.ContactHintVisibilityChanged(contactId, isHinted))
-    }
-
-    fun createFakeCall(contactId: Int) {
-        applicationRouter.navigate(
-            CreateRoutes.CreateCallFromFakeContactRoute.createDestination(
-                contactId
-            )
-        )
-    }
-
-    fun createCustomCall() {
-        applicationRouter.navigate(CreateRoutes.CreateCallFromCustomContactRoute.createDestination())
+    fun sendEvent(event: HomeScreenEvent) {
+        reducer.sendEvent(event)
     }
 
     private fun loadFakeContacts() {
@@ -66,7 +59,15 @@ class HomeScreenViewModel @Inject constructor(
         }
     }
 
-    private fun sendEvent(event: HomeScreenEvent) {
-        reducer.sendEvent(event)
+    private fun navigateToCreateCallScreen(contactId: Int? = null) {
+        applicationRouter.navigate(getCreateCallScreenDestination(contactId))
+    }
+
+    private fun getCreateCallScreenDestination(contactId: Int? = null): NavigationDestination {
+        return if (contactId == null) {
+            CreateRoutes.CreateCallFromCustomContactRoute.createDestination()
+        } else {
+            CreateRoutes.CreateCallFromFakeContactRoute.createDestination(contactId)
+        }
     }
 }
