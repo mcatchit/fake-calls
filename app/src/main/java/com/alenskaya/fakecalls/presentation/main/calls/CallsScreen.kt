@@ -43,7 +43,9 @@ fun CallsScreen(
         repeatCallAction = { call: CallsScreenCallModel ->
             viewModel.sendEvent(CallsScreenEvent.RepeatCall(call.id))
         },
-        deleteCallAction = {}
+        deleteCallAction = {call: CallsScreenCallModel ->
+            viewModel.sendEvent(CallsScreenEvent.DeleteCall(call.id, true))
+        }
     )
 }
 

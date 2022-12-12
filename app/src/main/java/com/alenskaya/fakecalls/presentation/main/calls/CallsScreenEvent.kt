@@ -35,6 +35,13 @@ sealed class CallsScreenEvent : UiEvent {
 
     /**
      * User clicked repeat button.
+     * @property callId - call identifier.
      */
     class RepeatCall(val callId: Int) : CallsScreenEvent()
+
+    /**
+     * User clicked delete button on completed call.
+     * @property callId - call identifier.
+     */
+    class DeleteCall(val callId: Int, val isCompleted: Boolean) : CallsScreenEvent()
 }
