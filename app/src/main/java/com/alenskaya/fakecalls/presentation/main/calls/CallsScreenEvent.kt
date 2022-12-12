@@ -32,4 +32,9 @@ sealed class CallsScreenEvent : UiEvent {
      * An error occurred during loading calls.
      */
     object CallsNotLoaded : CallsScreenEvent()
+
+    /**
+     * User clicked repeat button.
+     */
+    class RepeatCall(val callId: Int) : CallsScreenEvent()
 }

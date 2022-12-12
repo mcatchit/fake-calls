@@ -27,6 +27,14 @@ interface CallsRepository {
     suspend fun getSavedCalls(): BaseResponse<List<SavedCall>, DatabaseError>
 
     /**
+     * Requests call with given id
+     * @param callId - call identifier.
+     * @return [BaseResponse.Success] with saved call as a payload in case of success,
+     * [BaseResponse.Error] otherwise
+     */
+    suspend fun getSavedCallById(callId: Int): BaseResponse<SavedCall, DatabaseError>
+
+    /**
      * Updates call according to [updateCallRequest].
      * @return empty [BaseResponse.Success] in case of success, [BaseResponse.Error] otherwise.
      */

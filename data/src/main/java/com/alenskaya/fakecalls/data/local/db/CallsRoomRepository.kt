@@ -37,6 +37,12 @@ internal class CallsRoomRepository @Inject constructor(
         }
     }
 
+    override suspend fun getSavedCallById(callId: Int): BaseResponse<SavedCall, DatabaseError> {
+        return catchExceptions {
+            BaseResponse.Success(callDao.getCallById(callId).toSavedCall())
+        }
+    }
+
     override suspend fun updateCall(updateCallRequest: UpdateCallRequest): BaseResponse<Unit, DatabaseError> {
         return catchExceptions {
             BaseResponse.Success(callDao.updateCall(updateCallRequest.toCallEntity()))

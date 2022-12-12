@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import coil.ImageLoader
 import com.alenskaya.fakecalls.domain.BaseResponse
 import com.alenskaya.fakecalls.domain.calls.CreateCallUseCase
+import com.alenskaya.fakecalls.domain.calls.GetCallByIdUseCase
 import com.alenskaya.fakecalls.domain.calls.model.CreateNewCallRequest
 import com.alenskaya.fakecalls.domain.contacts.GetFakeContactUseCase
 import com.alenskaya.fakecalls.presentation.DialogsDisplayer
@@ -19,6 +20,7 @@ import com.alenskaya.fakecalls.presentation.execution.model.CallExecutionParams
 import com.alenskaya.fakecalls.presentation.execution.CallsScheduler
 import com.alenskaya.fakecalls.presentation.firebase.AnalyticsEvents
 import com.alenskaya.fakecalls.presentation.firebase.FeatureFlags
+import com.alenskaya.fakecalls.presentation.main.create.converter.SavedCallToFormModelConverter
 import com.alenskaya.fakecalls.presentation.main.create.model.CreateNewCallData
 import com.alenskaya.fakecalls.presentation.main.create.model.FakeCallPermission
 import com.alenskaya.fakecalls.presentation.navigation.ApplicationRouter
@@ -52,6 +54,7 @@ class CreateCallScreenViewModel @Inject constructor(
     private val callsDataChangedNotifier: CallsDataChangedNotifier,
     private val createCallUseCase: CreateCallUseCase,
     private val getFakeContactUseCase: GetFakeContactUseCase,
+    private val getCallByIdUseCase: GetCallByIdUseCase,
     private val firebaseAnalytics: FirebaseAnalytics
 ) : ViewModel() {
 
@@ -96,8 +99,11 @@ class CreateCallScreenViewModel @Inject constructor(
     }
 
     private fun loadFormInfoIfNecessary(mode: CreateCallScreenMode) {
-        if (mode is CreateCallScreenMode.CreateFake) {
-            loadChosenSuggestedContact(mode.id)
+        when (mode) {
+            is CreateCallScreenMode.CreateFake -> loadChosenSuggestedContact(mode.id)
+            is CreateCallScreenMode.Repeat -> loadSavedCall(mode.callId, false)
+            is CreateCallScreenMode.Edit -> loadSavedCall(mode.callId, true)
+            else -> Unit
         }
     }
 
@@ -109,6 +115,25 @@ class CreateCallScreenViewModel @Inject constructor(
                 .map { response ->
                     when (response) {
                         is BaseResponse.Success -> SavedFakeContactToFormConverter.convert(response.payload)
+                        is BaseResponse.Error -> CreateCallScreenFormModel.initial()
+                    }
+                }
+                .collect { formModel ->
+                    sendEvent(CreateCallScreenEvent.FormLoaded(formModel))
+                }
+        }
+    }
+
+    private fun loadSavedCall(callId: Int, isEditing: Boolean) {
+        sendEvent(CreateCallScreenEvent.FormLoading)
+
+        viewModelScope.launch(Dispatchers.IO) {
+            getCallByIdUseCase(callId)
+                .map { response ->
+                    when (response) {
+                        is BaseResponse.Success -> SavedCallToFormModelConverter(isEditing).convert(
+                            response.payload
+                        )
                         is BaseResponse.Error -> CreateCallScreenFormModel.initial()
                     }
                 }

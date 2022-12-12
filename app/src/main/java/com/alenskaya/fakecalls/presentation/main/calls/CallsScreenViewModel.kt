@@ -6,6 +6,8 @@ import coil.ImageLoader
 import com.alenskaya.fakecalls.domain.calls.LoadSavedCallsUseCase
 import com.alenskaya.fakecalls.presentation.CallsDataChangedListener
 import com.alenskaya.fakecalls.presentation.CallsDataChangedNotifier
+import com.alenskaya.fakecalls.presentation.navigation.ApplicationRouter
+import com.alenskaya.fakecalls.presentation.navigation.create.CreateRoutes
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.StateFlow
@@ -21,6 +23,7 @@ import javax.inject.Inject
 @HiltViewModel
 class CallsScreenViewModel @Inject constructor(
     val imageLoader: ImageLoader,
+    private val router: ApplicationRouter,
     private val loadSavedCallsUseCase: LoadSavedCallsUseCase,
     private val callsDataChangedNotifier: CallsDataChangedNotifier
 ) : ViewModel() {
@@ -31,7 +34,8 @@ class CallsScreenViewModel @Inject constructor(
     private val reducer = CallsScreenStateReducer(
         viewModelScope,
         CallsScreenState.initial(),
-        ::loadCalls
+        ::loadCalls,
+        ::repeatCall
     )
 
     private val callsDataChangedListener = object : CallsDataChangedListener {
@@ -43,6 +47,10 @@ class CallsScreenViewModel @Inject constructor(
     init {
         callsDataChangedNotifier.addListener(callsDataChangedListener)
         refresh()
+    }
+
+    fun sendEvent(event: CallsScreenEvent) {
+        reducer.sendEvent(event)
     }
 
     private fun refresh() {
@@ -59,8 +67,8 @@ class CallsScreenViewModel @Inject constructor(
         }
     }
 
-    private fun sendEvent(event: CallsScreenEvent) {
-        reducer.sendEvent(event)
+    private fun repeatCall(callId: Int) {
+        router.navigate(CreateRoutes.RepeatCallRoute.createDestination(callId))
     }
 
     override fun onCleared() {
