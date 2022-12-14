@@ -36,19 +36,14 @@ fun CallsScreen(
     val state by viewModel.screenState.collectAsState()
     val imageLoader = viewModel.imageLoader
 
-    val editCallAction = { call: CallsScreenCallModel ->
-    }
-    val repeatCallAction = { call: CallsScreenCallModel ->
-    }
-    val deleteCallAction = { call: CallsScreenCallModel ->
-    }
-
     CallsScreen(
         state = state,
         imageLoader = imageLoader,
-        editCallAction = editCallAction,
-        repeatCallAction = repeatCallAction,
-        deleteCallAction = deleteCallAction
+        editCallAction = {},
+        repeatCallAction = { call: CallsScreenCallModel ->
+            viewModel.sendEvent(CallsScreenEvent.RepeatCall(call.id))
+        },
+        deleteCallAction = {}
     )
 }
 
