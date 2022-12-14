@@ -38,4 +38,11 @@ data class CallsScreenState(
             message = null
         )
     }
+
+    /**
+     * Returns true if both lists of calls are empty
+     */
+    fun areCallsEmpty(): Boolean {
+        return scheduledCalls.isEmpty() && completedCalls.isEmpty()
+    }
 }
