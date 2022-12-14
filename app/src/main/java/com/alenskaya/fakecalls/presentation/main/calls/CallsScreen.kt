@@ -2,17 +2,17 @@ package com.alenskaya.fakecalls.presentation.main.calls
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
@@ -20,11 +20,17 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.ImageLoader
 import com.alenskaya.fakecalls.presentation.main.calls.model.CallsScreenCallModel
-import com.alenskaya.fakecalls.presentation.main.calls.ui.CompletedCallsList
-import com.alenskaya.fakecalls.presentation.main.calls.ui.ScheduledCallsList
 import com.alenskaya.fakecalls.presentation.components.FullScreenLoadingMessage
 import com.alenskaya.fakecalls.presentation.components.MainTitle
 import com.alenskaya.fakecalls.presentation.components.PlaceInCenter
+import com.alenskaya.fakecalls.presentation.main.calls.model.CallType
+import com.alenskaya.fakecalls.presentation.main.calls.model.CallsScreenListItem
+import com.alenskaya.fakecalls.presentation.main.calls.ui.CallTypeToHeaderTitleConverter
+import com.alenskaya.fakecalls.presentation.main.calls.ui.CallsList
+import com.alenskaya.fakecalls.presentation.main.calls.ui.CompletedCallRowBuilder
+import com.alenskaya.fakecalls.presentation.main.calls.ui.CallGroupHeaderBuilder
+import com.alenskaya.fakecalls.presentation.main.calls.ui.CallsListFactory
+import com.alenskaya.fakecalls.presentation.main.calls.ui.ScheduledCallRowBuilder
 
 /**
  * Calls screen ui
@@ -43,7 +49,9 @@ fun CallsScreen(
         repeatCallAction = { call: CallsScreenCallModel ->
             viewModel.sendEvent(CallsScreenEvent.RepeatCall(call.id))
         },
-        deleteCallAction = {}
+        deleteCallAction = { call: CallsScreenCallModel ->
+            viewModel.sendEvent(CallsScreenEvent.DeleteCall(call.id, true))
+        }
     )
 }
 
@@ -66,9 +74,9 @@ private fun CallsScreen(
                 modifier = Modifier.padding(24.dp)
             )
             when {
-                state.isLoading -> FullScreenLoadingMessage("Wait a second. Loading calls") //FIXME
+                state.isLoading && state.areCallsEmpty() -> FullScreenLoadingMessage("Wait a second. Loading calls") //FIXME
                 state.message != null -> Message(text = state.message)
-                else -> CallsLists(
+                else -> ListOfCalls(
                     scheduledCalls = state.scheduledCalls,
                     completedCalls = state.completedCalls,
                     imageLoader = imageLoader,
@@ -96,7 +104,7 @@ private fun Message(text: String) {
 }
 
 @Composable
-private fun CallsLists(
+private fun ListOfCalls(
     scheduledCalls: List<CallsScreenCallModel>,
     completedCalls: List<CallsScreenCallModel>,
     imageLoader: ImageLoader,
@@ -104,28 +112,51 @@ private fun CallsLists(
     repeatCallAction: (CallsScreenCallModel) -> Unit,
     deleteCallAction: (CallsScreenCallModel) -> Unit
 ) {
-    Column(
-        modifier = Modifier
-            .padding(horizontal = 24.dp)
-            .verticalScroll(rememberScrollState())
-    ) {
-        if (scheduledCalls.isNotEmpty()) {
-            ScheduledCallsList(
-                calls = scheduledCalls,
-                modifier = Modifier.fillMaxWidth(),
-                imageLoader = imageLoader,
-                editCallAction = editCallAction,
-                deleteCallAction = deleteCallAction
+    var isScheduledCallsOpened by remember { mutableStateOf(true) }
+    var isCompletedCallsOpened by remember { mutableStateOf(true) }
+
+    val callsListItems = listOf<CallsScreenListItem>()
+        .addCallsGroup(scheduledCalls, CallType.SCHEDULED, isScheduledCallsOpened)
+        .addCallsGroup(completedCalls, CallType.COMPLETED, isCompletedCallsOpened)
+
+    val callGroupHeaderBuilders = mapOf(
+        CallType.SCHEDULED to CallGroupHeaderBuilder { isScheduledCallsOpened = !isScheduledCallsOpened },
+        CallType.COMPLETED to CallGroupHeaderBuilder { isCompletedCallsOpened = !isCompletedCallsOpened }
+    )
+
+    val callRowBuilders = mapOf(
+        CallType.SCHEDULED
+                to ScheduledCallRowBuilder(imageLoader, editCallAction, deleteCallAction),
+        CallType.COMPLETED
+                to CompletedCallRowBuilder(imageLoader, repeatCallAction, deleteCallAction)
+    )
+
+    CallsList(
+        items = callsListItems,
+        callsListFactory = CallsListFactory(callGroupHeaderBuilders, callRowBuilders)
+    )
+}
+
+private fun List<CallsScreenListItem>.addCallsGroup(
+    calls: List<CallsScreenCallModel>,
+    type: CallType,
+    isOpened: Boolean
+): List<CallsScreenListItem> {
+    return this.toMutableList().apply {
+        if (calls.isNotEmpty()) {
+            add(
+                CallsScreenListItem.Header(
+                    title = CallTypeToHeaderTitleConverter().convert(type),
+                    isOpened = isOpened,
+                    type = type
+                )
             )
-        }
-        if (completedCalls.isNotEmpty()) {
-            CompletedCallsList(
-                calls = completedCalls,
-                modifier = Modifier.fillMaxWidth(),
-                imageLoader = imageLoader,
-                repeatCallAction = repeatCallAction,
-                deleteCallAction = deleteCallAction
-            )
+
+            if (isOpened) {
+                calls.forEach { call ->
+                    add(CallsScreenListItem.CallItem(call, type))
+                }
+            }
         }
     }
 }

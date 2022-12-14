@@ -3,6 +3,7 @@ package com.alenskaya.fakecalls.presentation.main.calls
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import coil.ImageLoader
+import com.alenskaya.fakecalls.domain.calls.DeleteCallUseCase
 import com.alenskaya.fakecalls.domain.calls.LoadSavedCallsUseCase
 import com.alenskaya.fakecalls.presentation.CallsDataChangedListener
 import com.alenskaya.fakecalls.presentation.CallsDataChangedNotifier
@@ -25,6 +26,7 @@ class CallsScreenViewModel @Inject constructor(
     val imageLoader: ImageLoader,
     private val router: ApplicationRouter,
     private val loadSavedCallsUseCase: LoadSavedCallsUseCase,
+    private val deleteCallUseCase: DeleteCallUseCase,
     private val callsDataChangedNotifier: CallsDataChangedNotifier
 ) : ViewModel() {
 
@@ -35,7 +37,8 @@ class CallsScreenViewModel @Inject constructor(
         viewModelScope,
         CallsScreenState.initial(),
         ::loadCalls,
-        ::repeatCall
+        ::repeatCall,
+        ::deleteCall
     )
 
     private val callsDataChangedListener = object : CallsDataChangedListener {
@@ -69,6 +72,14 @@ class CallsScreenViewModel @Inject constructor(
 
     private fun repeatCall(callId: Int) {
         router.navigate(CreateRoutes.RepeatCallRoute.createDestination(callId))
+    }
+
+    private fun deleteCall(callId: Int, isCompleted: Boolean) {
+        viewModelScope.launch(Dispatchers.IO) {
+            deleteCallUseCase(callId).collect {
+                callsDataChangedNotifier.callsDataChanged()
+            }
+        }
     }
 
     override fun onCleared() {

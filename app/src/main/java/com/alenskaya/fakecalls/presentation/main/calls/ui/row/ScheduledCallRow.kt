@@ -1,4 +1,4 @@
-package com.alenskaya.fakecalls.presentation.main.calls.ui
+package com.alenskaya.fakecalls.presentation.main.calls.ui.row
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -7,15 +7,15 @@ import com.alenskaya.fakecalls.R
 import com.alenskaya.fakecalls.presentation.main.calls.model.CallsScreenCallModel
 
 /**
- * Row which represents a completed call.
+ * Row which represents a scheduled call.
  * @param call - information about the call.
- * @param repeatCallAction - calls repeating of the call.
+ * @param editCallAction - calls editing of the call.
  * @param deleteCallAction - calls deletion of the call.
  */
 @Composable
-fun CompletedCallRow(
+fun ScheduledCallRow(
     call: CallsScreenCallModel,
-    repeatCallAction: (CallsScreenCallModel) -> Unit,
+    editCallAction: (CallsScreenCallModel) -> Unit,
     deleteCallAction: (CallsScreenCallModel) -> Unit,
     imageLoader: ImageLoader,
     modifier: Modifier = Modifier
@@ -24,10 +24,10 @@ fun CompletedCallRow(
         call = call,
         actions = listOf(
             CallRowAction(
-                iconId = R.drawable.repeat_icon,
-                description = "Repeat call button", //FIXME
+                iconId = R.drawable.edit_icon,
+                description = "Edit call button", //FIXME
                 onClickAction = {
-                    repeatCallAction(call)
+                    editCallAction(call)
                 }
             ),
             CallRowAction(

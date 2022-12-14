@@ -70,9 +70,7 @@ class CreateCallScreenViewModel @Inject constructor(
         CreateCallScreenStateReducer(
             viewModelScope = viewModelScope,
             initialState = CreateCallScreenState.initial(
-                firebaseRemoteConfig.getBoolean(
-                    FeatureFlags.IS_CREATE_BUTTON_GREEN
-                )
+                firebaseRemoteConfig.getBoolean(FeatureFlags.IS_CREATE_BUTTON_GREEN)
             ),
             navigateBackCallback = ::navigateBack,
             submitFormCallBack = ::submitForm
@@ -84,9 +82,7 @@ class CreateCallScreenViewModel @Inject constructor(
     fun setMode(mode: CreateCallScreenMode) {
         this.mode = mode
         sendEvent(
-            CreateCallScreenEvent.ModeLoaded(
-                labels = CreateCallScreenModeToLabelsConverter().convert(mode)
-            )
+            CreateCallScreenEvent.ModeLoaded(CreateCallScreenModeToLabelsConverter().convert(mode))
         )
         loadFormInfoIfNecessary(mode)
     }

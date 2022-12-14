@@ -49,6 +49,12 @@ internal class CallsRoomRepository @Inject constructor(
         }
     }
 
+    override suspend fun deleteCall(callId: Int): BaseResponse<Unit, DatabaseError> {
+        return catchExceptions {
+            BaseResponse.Success(callDao.deleteCall(callId))
+        }
+    }
+
     override suspend fun markCallAsCompleted(callId: Int): BaseResponse<Unit, DatabaseError> {
         return catchExceptions {
             val call = callDao.getCallById(callId)

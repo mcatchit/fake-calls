@@ -43,6 +43,12 @@ interface CallsRepository {
     ): BaseResponse<Unit, DatabaseError>
 
     /**
+     * Deletes call with given id.
+     * @param callId - call identifier.
+     */
+    suspend fun deleteCall(callId: Int): BaseResponse<Unit, DatabaseError>
+
+    /**
      * Updates status of call with id = [callId] to COMPLETED.
      * @return empty [BaseResponse.Success] in case of success, [BaseResponse.Error] otherwise.
      */

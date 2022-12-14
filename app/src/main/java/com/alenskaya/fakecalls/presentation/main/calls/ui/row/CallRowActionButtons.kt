@@ -1,4 +1,4 @@
-package com.alenskaya.fakecalls.presentation.main.calls.ui
+package com.alenskaya.fakecalls.presentation.main.calls.ui.row
 
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Row
