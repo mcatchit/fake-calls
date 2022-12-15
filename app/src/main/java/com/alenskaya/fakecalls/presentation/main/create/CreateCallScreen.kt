@@ -47,6 +47,8 @@ fun CreateCallScreen(
     CreateCallScreen(
         createCallScreenState = createCallScreenState,
         imageLoader = viewModel.imageLoader,
+        createStrings = viewModel.createStrings,
+        navigateBackDescription = viewModel.createStrings.navigateBack(),
         navigateBackAction = {
             viewModel.sendEvent(CreateCallScreenEvent.ClickBack)
         },
@@ -68,6 +70,7 @@ fun CreateCallScreen(
 
     viewModel.oneTimeEffect.Subscribe { oneTimeUiEffect ->
         processOneTimeUiEffect(
+            createStrings = viewModel.createStrings,
             oneTimeUiEffect = oneTimeUiEffect,
             context = context,
             dialogsDisplayer = viewModel.dialogsDisplayer,
@@ -82,6 +85,8 @@ fun CreateCallScreen(
 private fun CreateCallScreen(
     createCallScreenState: CreateCallScreenState,
     imageLoader: ImageLoader,
+    createStrings: CreateStrings,
+    navigateBackDescription: String,
     navigateBackAction: () -> Unit,
     nameChanged: (String) -> Unit,
     phoneChanged: (String) -> Unit,
@@ -94,12 +99,13 @@ private fun CreateCallScreen(
         color = MaterialTheme.colors.background,
     ) {
         Column(modifier = Modifier.fillMaxWidth()) {
-            NavigationBackIcon {
+            NavigationBackIcon(navigateBackDescription) {
                 navigateBackAction()
             }
             CreateCallForm(
                 createCallScreenState = createCallScreenState,
                 imageLoader = imageLoader,
+                createStrings = createStrings,
                 nameChanged = nameChanged,
                 phoneChanged = phoneChanged,
                 calendarClicked = calendarClicked,
@@ -110,6 +116,7 @@ private fun CreateCallScreen(
 }
 
 private fun processOneTimeUiEffect(
+    createStrings: CreateStrings,
     oneTimeUiEffect: CreateCallScreenOneTimeUiEffect,
     context: Context,
     dialogsDisplayer: DialogsDisplayer,
@@ -117,9 +124,11 @@ private fun processOneTimeUiEffect(
 ) {
     when (oneTimeUiEffect) {
         is CreateCallScreenOneTimeUiEffect.ShowDatePicker -> showDatePicker(
-            dialogsDisplayer,
-            oneTimeUiEffect.dateTimePickerData,
-            updateDateCallBack
+            datePickerTitle = createStrings.datePickerTitle(),
+            timePickerTitle = createStrings.timePickerTitle(),
+            dialogsDisplayer = dialogsDisplayer,
+            dateTimePickerData = oneTimeUiEffect.dateTimePickerData,
+            updateDateCallBack = updateDateCallBack
         )
         is CreateCallScreenOneTimeUiEffect.ShowToast -> {
             context.showToast(oneTimeUiEffect.message)
@@ -128,14 +137,17 @@ private fun processOneTimeUiEffect(
 }
 
 @Composable
-private fun NavigationBackIcon(doOnBackClick: () -> Unit) {
+private fun NavigationBackIcon(
+    description: String,
+    doOnBackClick: () -> Unit
+) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
             .padding(16.dp)
     ) {
         Icon(
-            contentDescription = "Navigate back", //FIXME
+            contentDescription = description,
             imageVector = ImageVector.vectorResource(id = R.drawable.back_icon),
             modifier = Modifier.clickable {
                 doOnBackClick()
@@ -145,10 +157,12 @@ private fun NavigationBackIcon(doOnBackClick: () -> Unit) {
 }
 
 private fun showDatePicker(
+    datePickerTitle: String,
+    timePickerTitle: String,
     dialogsDisplayer: DialogsDisplayer,
     dateTimePickerData: DateTimePickerData,
     updateDateCallBack: (Date) -> Unit
 ) {
-    DateTimePickerDialog(dialogsDisplayer)
+    DateTimePickerDialog(datePickerTitle, timePickerTitle, dialogsDisplayer)
         .pickDate(dateTimePickerData, updateDateCallBack)
 }

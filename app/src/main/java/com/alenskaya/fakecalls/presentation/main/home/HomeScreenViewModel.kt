@@ -23,6 +23,7 @@ import javax.inject.Inject
 @HiltViewModel
 class HomeScreenViewModel @Inject constructor(
     val imageLoader: ImageLoader,
+    val homeStrings: HomeStrings,
     private val getContactsUseCase: GetFakeContactsListUseCase,
     private val applicationRouter: ApplicationRouter
 ) : ViewModel() {
@@ -52,7 +53,9 @@ class HomeScreenViewModel @Inject constructor(
 
         viewModelScope.launch(Dispatchers.IO) {
             getContactsUseCase().map { fakeContactsResponse ->
-                FakeContactsResponseToHomeScreenEventConverter.convert(fakeContactsResponse)
+                FakeContactsResponseToHomeScreenEventConverter(homeStrings).convert(
+                    fakeContactsResponse
+                )
             }.collect { homeScreenEvent ->
                 sendEvent(homeScreenEvent)
             }

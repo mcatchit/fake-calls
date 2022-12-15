@@ -16,6 +16,8 @@ import java.util.Date
  * @property dialogsDisplayer - application dialogs displayer.
  */
 class DateTimePickerDialog(
+    private val datePickerTitle: String,
+    private val timePickerTitle: String,
     private val dialogsDisplayer: DialogsDisplayer
 ) {
 
@@ -25,17 +27,18 @@ class DateTimePickerDialog(
      * @param datePickedCallback - callback which called when user has selected date and time.
      */
     fun pickDate(data: DateTimePickerData, datePickedCallback: (Date) -> Unit) {
-        createDatePickerDialog(data) { selectedDate ->
-            pickTime(selectedDate, data.timePickerData, datePickedCallback)
+        createDatePickerDialog(datePickerTitle, data) { selectedDate ->
+            pickTime(timePickerTitle, selectedDate, data.timePickerData, datePickedCallback)
         }.showWithDisplayer()
     }
 
     private fun createDatePickerDialog(
+        title: String,
         data: DateTimePickerData,
         onPositiveButtonClickListener: (Long) -> Unit
     ): DialogFragment {
         return MaterialDatePicker.Builder.datePicker()
-            .setTitleText("Select date") //FIXME
+            .setTitleText(title)
             .setSelection(data.selectedDate)
             .setCalendarConstraints(createCalendarConstraints(data.minDate))
             .build()
@@ -45,22 +48,24 @@ class DateTimePickerDialog(
     }
 
     private fun pickTime(
+        title: String,
         selectedDate: Long,
         timePickerData: TimePickerData,
         datePickedCallback: (Date) -> Unit
     ) {
         createTimePickerDialog(
-            selectedDate, timePickerData, datePickedCallback
+            title, selectedDate, timePickerData, datePickedCallback
         ).showWithDisplayer()
     }
 
     private fun createTimePickerDialog(
+        title: String,
         selectedDate: Long,
         timePickerData: TimePickerData,
         datePickedCallback: (Date) -> Unit
     ): DialogFragment {
         return MaterialTimePicker.Builder()
-            .setTitleText("Select time")//FIXME display date
+            .setTitleText(title)
             .setHour(timePickerData.selectedHour)
             .setMinute(timePickerData.selectedMinute)
             .build().apply {

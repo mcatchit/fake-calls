@@ -21,6 +21,7 @@ import java.util.Date
 class CreateCallScreenStateReducer(
     viewModelScope: CoroutineScope,
     initialState: CreateCallScreenState,
+    private val createStrings: CreateStrings,
     private val navigateBackCallback: () -> Unit,
     private val submitFormCallBack: (CreateNewCallData) -> Unit
 ) : Reducer<CreateCallScreenState, CreateCallScreenEvent, CreateCallScreenOneTimeUiEffect>(
@@ -83,24 +84,23 @@ class CreateCallScreenStateReducer(
     }
 
     private fun processNotGrantedPermission(fakeCallPermission: FakeCallPermission) {
-        //FIXME
         val message = when (fakeCallPermission) {
-            FakeCallPermission.SCHEDULE_ALARM -> "Please, give the application permission to set alarms"
-            FakeCallPermission.SHOW_NOTIFICATION -> "Please, give the application permission to show notifications"
+            FakeCallPermission.SCHEDULE_ALARM -> createStrings.alarmPermissionToast()
+            FakeCallPermission.SHOW_NOTIFICATION -> createStrings.notificationPermissionToast()
         }
         showToast(message)
     }
 
     private fun processUnsuccessfulSubmit(oldState: CreateCallScreenState) {
         setState(oldState.copy(isSubmitProcessing = false))
-        showToast("Oooops.. Please, try again") //FIXME
+        showToast(createStrings.tryAgainToast())
     }
 
     private fun checkFormInput(formInput: CreateCallScreenFormModel, doIfValid: () -> Unit) {
         if (formInput.isFilled()) {
             doIfValid()
         } else {
-            showToast("Please, fill in all fields") //FIXME
+            showToast(createStrings.fillAllFieldsToast())
         }
     }
 
@@ -108,7 +108,7 @@ class CreateCallScreenStateReducer(
         if (userInputDate > Date()) {
             doIfValid()
         } else {
-            showToast("Date is not valid") //FIXME
+            showToast(createStrings.invalidDateToast())
         }
     }
 

@@ -19,7 +19,10 @@ import com.alenskaya.fakecalls.R
  * More item on home screen
  */
 @Composable
-fun MoreCell(onMoreClick: () -> Unit) {
+fun MoreCell(
+    text: String,
+    onMoreClick: () -> Unit
+) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -31,12 +34,12 @@ fun MoreCell(onMoreClick: () -> Unit) {
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Text(
-            text = "more",
+            text = text,
             style = MaterialTheme.typography.subtitle1,
             color = MaterialTheme.colors.onSecondary,
         )
         Icon(
-            contentDescription = "more",
+            contentDescription = text,
             imageVector = ImageVector.vectorResource(id = R.drawable.more_icon),
             tint = MaterialTheme.colors.onSecondary
         )
