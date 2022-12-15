@@ -21,6 +21,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import com.alenskaya.fakecalls.R
@@ -85,7 +86,10 @@ private fun TitleText(
 }
 
 @Composable
-private fun ArrowButton(rotationState: Float, onClick: () -> Unit) {
+private fun ArrowButton(
+    rotationState: Float,
+    onClick: () -> Unit
+) {
     IconButton(
         onClick = onClick,
         modifier = Modifier
@@ -95,7 +99,7 @@ private fun ArrowButton(rotationState: Float, onClick: () -> Unit) {
     ) {
         Icon(
             imageVector = ImageVector.vectorResource(id = R.drawable.arrow_icon),
-            contentDescription = "Drop-Down Arrow" //FIXME
+            contentDescription = LocalContext.current.getString(R.string.drop_down_arrow_description)
         )
     }
 }

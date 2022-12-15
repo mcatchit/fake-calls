@@ -1,5 +1,47 @@
 <resources>
     <string name="app_name">Fake Calls</string>
 
+    <string name="navigate_back">Navigate back</string>
+
+    <string name="home_screen_title">Create new call</string>
+    <string name="home_screen_loading_suggestions">Loading suggestions</string>
+    <string name="home_screen_create_custom_button">+\ncustom</string>
+    <string name="home_screen_more_button">more</string>
+    <string name="home_screen_no_internet_connection_message">No internet connection. Can not load suggestions</string>
+    <string name="home_screen_failed_to_load_suggestions_message">Failed to load contacts suggestions. You still may select a contact from phonebook or create a custom one.</string>
+
+    <string name="create_screen_create_new_title">Create new call</string>
+    <string name="create_screen_edit_title">Edit call</string>
+    <string name="create_screen_repeat_title">Repeat call</string>
+    <string name="create_screen_create_button">Create</string>
+    <string name="create_screen_save_button">Save</string>
+    <string name="create_screen_name_label">Name</string>
+    <string name="create_screen_phone_label">Phone</string>
+    <string name="create_screen_date_label">Date</string>
+    <string name="create_screen_date_description">Pick date</string>
+    <string name="create_screen_photo_description">Contact photo</string>
+    <string name="create_screen_date_picker_title">Select date</string>
+    <string name="create_screen_time_picker_title">Select time</string>
+    <string name="create_screen_alarm_permission_toast">Please, give the application permission to set alarms</string>
+    <string name="create_screen_notification_permission_toast">Please, give the application permission to show notifications</string>
+    <string name="create_screen_try_again_toast">Oooops.. Please, try again</string>
+    <string name="create_screen_fill_all_fields_toast">Please, fill in all fields</string>
+    <string name="create_screen_invalid_date_toast">Date is not valid</string>
+
+    <string name="calls_screen_title">My calls</string>
+    <string name="calls_screen_scheduled_title">Scheduled</string>
+    <string name="calls_screen_completed_title">Completed</string>
+    <string name="calls_screen_loading_message">Wait a second. Loading calls</string>
+    <string name="calls_screen_repeat_button_description">Repeat call</string>
+    <string name="calls_screen_delete_button_description">Delete call</string>
+    <string name="calls_screen_edit_button_description">Edit call</string>
+
+    <string name="execution_screen_title">Incoming call</string>
+    <string name="execution_screen_photo_description">Contact photo</string>
+    <string name="execution_screen_accept_description">Accept</string>
+    <string name="execution_screen_decline_description">Decline</string>
+
     <string name="incoming_call_notification_title">Incoming call</string>
+    <string name="drop_down_arrow_description">Drop-Down Arrow</string>
+    <string name="default_avatar_description">Avatar icon is absent</string>
 </resources>

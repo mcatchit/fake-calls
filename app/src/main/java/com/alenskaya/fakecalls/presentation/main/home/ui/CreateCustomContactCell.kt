@@ -10,12 +10,14 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.style.TextAlign
 
 /**
  * Create custom contact item on home screen
  */
 @Composable
 fun CreateCustomContactCell(
+    text: String,
     onCreateClick: () -> Unit
 ) {
     Column(
@@ -29,14 +31,10 @@ fun CreateCustomContactCell(
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Text(
-            text = "+",
+            text = text,
             style = MaterialTheme.typography.subtitle1,
             color = MaterialTheme.colors.onSecondary,
-        )
-        Text(
-            text = "custom",
-            style = MaterialTheme.typography.subtitle1,
-            color = MaterialTheme.colors.onSecondary,
+            textAlign = TextAlign.Center
         )
     }
 }

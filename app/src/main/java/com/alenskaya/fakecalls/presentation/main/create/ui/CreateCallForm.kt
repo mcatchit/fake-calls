@@ -29,6 +29,7 @@ import com.alenskaya.fakecalls.presentation.components.LoadingDots
 import com.alenskaya.fakecalls.presentation.components.MainTitle
 import com.alenskaya.fakecalls.presentation.main.create.CreateCallScreenState
 import com.alenskaya.fakecalls.presentation.gesturesDisabled
+import com.alenskaya.fakecalls.presentation.main.create.CreateStrings
 
 /**
  * Displays main content of Create call screen.
@@ -44,6 +45,7 @@ import com.alenskaya.fakecalls.presentation.gesturesDisabled
 fun CreateCallForm(
     createCallScreenState: CreateCallScreenState,
     imageLoader: ImageLoader,
+    createStrings: CreateStrings,
     nameChanged: (String) -> Unit,
     phoneChanged: (String) -> Unit,
     calendarClicked: () -> Unit,
@@ -59,11 +61,19 @@ fun CreateCallForm(
         with(createCallScreenState) {
             MainTitle(text = formLabels.title)
             Spacer(modifier = Modifier.height(24.dp))
-            Photo(url = formInput.photo, imageLoader = imageLoader)
+            Photo(
+                url = formInput.photo,
+                description = createStrings.photoDescription(),
+                imageLoader = imageLoader
+            )
             Spacer(modifier = Modifier.height(24.dp))
             InputForm(
+                nameLabel = createStrings.nameLabel(),
                 name = formInput.name,
+                phoneLabel = createStrings.phoneLabel(),
                 phone = formInput.phone,
+                dateLabel = createStrings.dateLabel(),
+                dateDescription = createStrings.dateDescription(),
                 date = formInput.displayableDate,
                 nameChanged = nameChanged,
                 phoneChanged = phoneChanged,
@@ -83,13 +93,14 @@ fun CreateCallForm(
 @Composable
 private fun Photo(
     url: String?,
+    description: String,
     imageLoader: ImageLoader,
     modifier: Modifier = Modifier
 ) {
     FakeContactIcon(
         url = url,
         size = 48.dp,
-        description = "Contact photo",
+        description = description,
         imageLoader = imageLoader,
         modifier = modifier
     )
@@ -97,8 +108,12 @@ private fun Photo(
 
 @Composable
 private fun InputForm(
+    nameLabel: String,
     name: String?,
+    phoneLabel: String,
     phone: String?,
+    dateLabel: String,
+    dateDescription: String,
     date: String?,
     nameChanged: (String) -> Unit,
     phoneChanged: (String) -> Unit,
@@ -123,11 +138,16 @@ private fun InputForm(
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp, vertical = 16.dp)
             ) {
-                InputField(label = "Name", value = name ?: "", onValueChanged = nameChanged)
+                InputField(label = nameLabel, value = name ?: "", onValueChanged = nameChanged)
                 Spacer(modifier = Modifier.height(12.dp))
-                InputField(label = "Phone", value = phone ?: "", onValueChanged = phoneChanged)
+                InputField(label = phoneLabel, value = phone ?: "", onValueChanged = phoneChanged)
                 Spacer(modifier = Modifier.height(12.dp))
-                DateField(date = date ?: "", calendarClicked)
+                DateField(
+                    label = dateLabel,
+                    description = dateDescription,
+                    date = date ?: "",
+                    onClick = calendarClicked
+                )
             }
         }
     }
@@ -149,6 +169,8 @@ private fun InputField(
 
 @Composable
 private fun DateField(
+    label: String,
+    description: String,
     date: String,
     onClick: () -> Unit
 ) {
@@ -156,10 +178,10 @@ private fun DateField(
         value = date,
         readOnly = true,
         onValueChange = {},
-        label = { Text("Date") }, //FIXME
+        label = { Text(label) },
         trailingIcon = {
             Icon(
-                contentDescription = "Pick date icon", //FIXME
+                contentDescription = description,
                 imageVector = ImageVector.vectorResource(id = R.drawable.calendar_icon),
                 modifier = Modifier.clickable {
                     onClick()

@@ -47,6 +47,7 @@ import javax.inject.Inject
 class CreateCallScreenViewModel @Inject constructor(
     firebaseRemoteConfig: FirebaseRemoteConfig,
     val imageLoader: ImageLoader,
+    val createStrings: CreateStrings,
     val dialogsDisplayer: DialogsDisplayer,
     private val callsScheduler: CallsScheduler,
     private val notificationPermissionManager: NotificationPermissionManager,
@@ -72,6 +73,7 @@ class CreateCallScreenViewModel @Inject constructor(
             initialState = CreateCallScreenState.initial(
                 firebaseRemoteConfig.getBoolean(FeatureFlags.IS_CREATE_BUTTON_GREEN)
             ),
+            createStrings = createStrings,
             navigateBackCallback = ::navigateBack,
             submitFormCallBack = ::submitForm
         )
@@ -82,7 +84,9 @@ class CreateCallScreenViewModel @Inject constructor(
     fun setMode(mode: CreateCallScreenMode) {
         this.mode = mode
         sendEvent(
-            CreateCallScreenEvent.ModeLoaded(CreateCallScreenModeToLabelsConverter().convert(mode))
+            CreateCallScreenEvent.ModeLoaded(
+                CreateCallScreenModeToLabelsConverter(createStrings).convert(mode)
+            )
         )
         loadFormInfoIfNecessary(mode)
     }

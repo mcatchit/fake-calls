@@ -8,9 +8,10 @@ import com.alenskaya.fakecalls.util.Converter
 
 /**
  * Converts fake contacts remote response to HomeScreen event.
- * TODO move messages to strings
  */
-object FakeContactsResponseToHomeScreenEventConverter :
+class FakeContactsResponseToHomeScreenEventConverter(
+    private val homeStrings: HomeStrings
+) :
     Converter<BaseResponse<SavedFakeContactsResponse, out ErrorCause>, HomeScreenEvent> {
 
     override fun convert(input: BaseResponse<SavedFakeContactsResponse, out ErrorCause>): HomeScreenEvent {
@@ -22,8 +23,8 @@ object FakeContactsResponseToHomeScreenEventConverter :
 
     private fun getErrorMessage(cause: ErrorCause): String {
         return when (cause) {
-            RemoteRequestErrorCause.NoInternetConnection -> "No internet connection. Can not load suggestions"
-            else -> "Failed to load contacts suggestions. You still may select a contact from phonebook or create a custom one."
+            RemoteRequestErrorCause.NoInternetConnection -> homeStrings.noInternetConnectionMessage()
+            else -> homeStrings.failedToLoadContactsMessage()
         }
     }
 }

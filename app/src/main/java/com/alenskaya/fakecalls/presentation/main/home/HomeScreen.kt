@@ -37,6 +37,7 @@ fun HomeScreen(
 
     HomeScreen(
         imageLoader = imageLoader,
+        homeStrings = viewModel.homeStrings,
         state = state,
         onSelectContactClick = { id ->
             viewModel.sendEvent(HomeScreenEvent.CreateCallFromSuggested(id))
@@ -60,6 +61,7 @@ fun HomeScreen(
 @Composable
 private fun HomeScreen(
     imageLoader: ImageLoader,
+    homeStrings: HomeStrings,
     state: HomeScreenState,
     onSelectContactClick: (Int) -> Unit,
     onContactHintVisibilityChanged: (Int, Boolean) -> Unit,
@@ -69,7 +71,9 @@ private fun HomeScreen(
     val screenWidth = LocalConfiguration.current.screenWidthDp.dp
 
     val staticCells = getStaticCells(
+        customText = homeStrings.createCustomButton(),
         onCreateCustomClick = onCreateCustomClick,
+        moreText = homeStrings.moreButton(),
         onMoreClick = onMoreClick
     )
 
@@ -91,7 +95,7 @@ private fun HomeScreen(
             val (title, progress, grid) = createRefs()
 
             MainTitle(
-                text = "Create new call", //FIXME
+                text = homeStrings.title(),
                 modifier = Modifier
                     .constrainAs(title) {
                         top.linkTo(parent.top, margin = 116.dp)
@@ -102,7 +106,7 @@ private fun HomeScreen(
 
             if (state.isLoading) {
                 LoadingProgress(
-                    text = "Loading suggestions", //FIXME
+                    text = homeStrings.loadingSuggestions(),
                     modifier = Modifier
                         .constrainAs(progress) {
                             top.linkTo(title.bottom, margin = 16.dp)
@@ -130,14 +134,22 @@ private fun HomeScreen(
 }
 
 private fun getStaticCells(
+    customText: String,
     onCreateCustomClick: () -> Unit,
+    moreText: String,
     onMoreClick: () -> Unit
 ): List<@Composable BoxScope.() -> Unit> = mutableListOf<@Composable BoxScope.() -> Unit>().apply {
     add {
-        CreateCustomContactCell(onCreateClick = onCreateCustomClick)
+        CreateCustomContactCell(
+            text = customText,
+            onCreateClick = onCreateCustomClick
+        )
     }
     add {
-        MoreCell(onMoreClick = onMoreClick)
+        MoreCell(
+            text = moreText,
+            onMoreClick = onMoreClick
+        )
     }
 }
 

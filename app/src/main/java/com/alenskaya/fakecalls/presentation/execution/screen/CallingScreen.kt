@@ -24,6 +24,7 @@ import coil.ImageLoader
 import coil.compose.LocalImageLoader
 import com.alenskaya.fakecalls.R
 import com.alenskaya.fakecalls.presentation.components.FakeContactIcon
+import com.alenskaya.fakecalls.presentation.execution.ExecutionStrings
 import com.alenskaya.fakecalls.presentation.execution.model.CallExecutionParams
 import com.alenskaya.fakecalls.presentation.theme.FakeCallsTheme
 
@@ -33,6 +34,7 @@ import com.alenskaya.fakecalls.presentation.theme.FakeCallsTheme
 @Composable
 fun CallingScreen(
     imageLoader: ImageLoader,
+    executionStrings: ExecutionStrings,
     callExecutionParams: CallExecutionParams,
     doOnAccept: () -> Unit,
     doOnDecline: () -> Unit
@@ -48,14 +50,14 @@ fun CallingScreen(
         ) {
             Spacer(modifier = Modifier.height(20.dp))
             Text(
-                text = "Incoming call",//FIXME
+                text = executionStrings.incomingCall(),
                 style = MaterialTheme.typography.h1
             )
             Spacer(modifier = Modifier.height(40.dp))
             FakeContactIcon(
                 url = callExecutionParams.photoUrl,
                 size = 60.dp,
-                description = "photo", //FIXME
+                description = executionStrings.photoDescription(),
                 imageLoader = imageLoader
             )
             Spacer(modifier = Modifier.height(40.dp))
@@ -71,7 +73,9 @@ fun CallingScreen(
             Spacer(modifier = Modifier.height(60.dp))
             AcceptDeclineButtons(
                 doOnAccept = doOnAccept,
-                doOnDecline = doOnDecline
+                acceptDescription = executionStrings.accept(),
+                doOnDecline = doOnDecline,
+                declineDescription = executionStrings.decline()
             )
         }
     }
@@ -80,12 +84,14 @@ fun CallingScreen(
 @Composable
 private fun AcceptDeclineButtons(
     doOnAccept: () -> Unit,
-    doOnDecline: () -> Unit
+    acceptDescription: String,
+    doOnDecline: () -> Unit,
+    declineDescription: String
 ) {
     Row {
         AcceptButton(
             image = R.drawable.incoming_call_icon,
-            description = "Accept", //FIXME
+            description = acceptDescription,
             doOnClickAction = doOnAccept
         )
 
@@ -93,7 +99,7 @@ private fun AcceptDeclineButtons(
 
         AcceptButton(
             image = R.drawable.decline_call_icon,
-            description = "Decline", //FIXME
+            description = declineDescription,
             doOnClickAction = doOnDecline
         )
     }
@@ -122,6 +128,15 @@ private fun CallingPreview() {
     FakeCallsTheme {
         CallingScreen(
             imageLoader = LocalImageLoader.current,
+            executionStrings = object : ExecutionStrings {
+                override fun incomingCall() = "Incoming call"
+
+                override fun photoDescription() = "Photo"
+
+                override fun accept() = "Accept"
+
+                override fun decline() = "Decline"
+            },
             callExecutionParams = CallExecutionParams(
                 1,
                 "Kendall Stewart",
