@@ -31,7 +31,7 @@ object IncomingCallNotificationBuilder {
             .setAutoCancel(true)
             .setStyle(
                 NotificationCompat.MessagingStyle(person)
-                    .setConversationTitle("Incoming call")
+                    .setConversationTitle(context.getString(R.string.incoming_call_notification_title))
                     .addMessage(
                         NotificationCompat.MessagingStyle
                             .Message(

@@ -8,6 +8,10 @@ import coil.disk.DiskCache
 import coil.memory.MemoryCache
 import com.alenskaya.fakecalls.presentation.execution.CallsScheduler
 import com.alenskaya.fakecalls.presentation.execution.CallsNotificationManagerBuilder
+import com.alenskaya.fakecalls.presentation.execution.ExecutionStrings
+import com.alenskaya.fakecalls.presentation.execution.ExecutionStringsImpl
+import com.alenskaya.fakecalls.presentation.main.calls.CallsStrings
+import com.alenskaya.fakecalls.presentation.main.calls.CallsStringsImpl
 import com.alenskaya.fakecalls.presentation.main.create.CreateStrings
 import com.alenskaya.fakecalls.presentation.main.create.CreateStringsImpl
 import com.alenskaya.fakecalls.presentation.main.home.HomeStrings
@@ -44,6 +48,14 @@ internal abstract class PresentationModule {
     @Binds
     @Singleton
     abstract fun createStrings(impl: CreateStringsImpl): CreateStrings
+
+    @Binds
+    @Singleton
+    abstract fun callStrings(impl: CallsStringsImpl): CallsStrings
+
+    @Binds
+    @Singleton
+    abstract fun executionStrings(impl: ExecutionStringsImpl): ExecutionStrings
 
     internal companion object {
 

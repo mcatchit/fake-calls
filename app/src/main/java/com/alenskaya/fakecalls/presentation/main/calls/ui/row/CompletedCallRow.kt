@@ -16,7 +16,9 @@ import com.alenskaya.fakecalls.presentation.main.calls.model.CallsScreenCallMode
 fun CompletedCallRow(
     call: CallsScreenCallModel,
     repeatCallAction: (CallsScreenCallModel) -> Unit,
+    repeatDescription: String,
     deleteCallAction: (CallsScreenCallModel) -> Unit,
+    deleteDescription: String,
     imageLoader: ImageLoader,
     modifier: Modifier = Modifier
 ) {
@@ -25,14 +27,14 @@ fun CompletedCallRow(
         actions = listOf(
             CallRowAction(
                 iconId = R.drawable.repeat_icon,
-                description = "Repeat call button", //FIXME
+                description = repeatDescription,
                 onClickAction = {
                     repeatCallAction(call)
                 }
             ),
             CallRowAction(
                 iconId = R.drawable.delete_icon,
-                description = "Delete call button", //FIXME
+                description = deleteDescription,
                 onClickAction = {
                     deleteCallAction(call)
                 }

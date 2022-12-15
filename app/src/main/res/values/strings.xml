@@ -28,5 +28,20 @@
     <string name="create_screen_fill_all_fields_toast">Please, fill in all fields</string>
     <string name="create_screen_invalid_date_toast">Date is not valid</string>
 
+    <string name="calls_screen_title">My calls</string>
+    <string name="calls_screen_scheduled_title">Scheduled</string>
+    <string name="calls_screen_completed_title">Completed</string>
+    <string name="calls_screen_loading_message">Wait a second. Loading calls</string>
+    <string name="calls_screen_repeat_button_description">Repeat call</string>
+    <string name="calls_screen_delete_button_description">Delete call</string>
+    <string name="calls_screen_edit_button_description">Edit call</string>
+
+    <string name="execution_screen_title">Incoming call</string>
+    <string name="execution_screen_photo_description">Contact photo</string>
+    <string name="execution_screen_accept_description">Accept</string>
+    <string name="execution_screen_decline_description">Decline</string>
+
     <string name="incoming_call_notification_title">Incoming call</string>
+    <string name="drop_down_arrow_description">Drop-Down Arrow</string>
+    <string name="default_avatar_description">Avatar icon is absent</string>
 </resources>

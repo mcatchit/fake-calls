@@ -24,6 +24,7 @@ import javax.inject.Inject
 @HiltViewModel
 class CallsScreenViewModel @Inject constructor(
     val imageLoader: ImageLoader,
+    val callsStrings: CallsStrings,
     private val router: ApplicationRouter,
     private val loadSavedCallsUseCase: LoadSavedCallsUseCase,
     private val deleteCallUseCase: DeleteCallUseCase,

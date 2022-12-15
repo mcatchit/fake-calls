@@ -77,7 +77,7 @@ private fun DefaultContactIcon(modifier: Modifier = Modifier) {
     Image(
         painter = painterResource(id = R.drawable.default_avatar),
         contentScale = ContentScale.Crop,
-        contentDescription = "Avatar icon is absent", //FIXME
+        contentDescription = LocalContext.current.getString(R.string.default_avatar_description),
         modifier = modifier
             .fillMaxSize()
     )

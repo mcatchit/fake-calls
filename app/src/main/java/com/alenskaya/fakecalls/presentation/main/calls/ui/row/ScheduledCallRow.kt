@@ -16,7 +16,9 @@ import com.alenskaya.fakecalls.presentation.main.calls.model.CallsScreenCallMode
 fun ScheduledCallRow(
     call: CallsScreenCallModel,
     editCallAction: (CallsScreenCallModel) -> Unit,
+    editDescription: String,
     deleteCallAction: (CallsScreenCallModel) -> Unit,
+    deleteDescription: String,
     imageLoader: ImageLoader,
     modifier: Modifier = Modifier
 ) {
@@ -25,14 +27,14 @@ fun ScheduledCallRow(
         actions = listOf(
             CallRowAction(
                 iconId = R.drawable.edit_icon,
-                description = "Edit call button", //FIXME
+                description = editDescription,
                 onClickAction = {
                     editCallAction(call)
                 }
             ),
             CallRowAction(
                 iconId = R.drawable.delete_icon,
-                description = "Delete call button", //FIXME
+                description = deleteDescription,
                 onClickAction = {
                     deleteCallAction(call)
                 }

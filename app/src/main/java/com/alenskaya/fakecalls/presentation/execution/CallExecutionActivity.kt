@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.WindowManager
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
+import com.alenskaya.fakecalls.presentation.execution.screen.CallExecutionScreen
 import com.alenskaya.fakecalls.presentation.theme.FakeCallsTheme
 import dagger.hilt.android.AndroidEntryPoint
 

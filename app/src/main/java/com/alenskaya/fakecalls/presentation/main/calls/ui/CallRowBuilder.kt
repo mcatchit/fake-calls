@@ -26,7 +26,9 @@ interface CallRowBuilder {
 class ScheduledCallRowBuilder(
     private val imageLoader: ImageLoader,
     private val editCallAction: (CallsScreenCallModel) -> Unit,
-    private val deleteCallAction: (CallsScreenCallModel) -> Unit
+    private val editDescription: String,
+    private val deleteCallAction: (CallsScreenCallModel) -> Unit,
+    private val deleteDescription: String
 ) : CallRowBuilder {
 
     override fun buildRow(call: CallsScreenCallModel): @Composable () -> Unit {
@@ -34,7 +36,9 @@ class ScheduledCallRowBuilder(
             ScheduledCallRow(
                 call = call,
                 editCallAction = editCallAction,
+                editDescription = editDescription,
                 deleteCallAction = deleteCallAction,
+                deleteDescription = deleteDescription,
                 imageLoader = imageLoader
             )
         }
@@ -50,7 +54,9 @@ class ScheduledCallRowBuilder(
 class CompletedCallRowBuilder(
     private val imageLoader: ImageLoader,
     private val repeatCallAction: (CallsScreenCallModel) -> Unit,
-    private val deleteCallAction: (CallsScreenCallModel) -> Unit
+    private val repeatDescription: String,
+    private val deleteCallAction: (CallsScreenCallModel) -> Unit,
+    private val deleteDescription: String
 ) : CallRowBuilder {
 
     override fun buildRow(call: CallsScreenCallModel): @Composable () -> Unit {
@@ -58,7 +64,9 @@ class CompletedCallRowBuilder(
             CompletedCallRow(
                 call = call,
                 repeatCallAction = repeatCallAction,
+                repeatDescription = repeatDescription,
                 deleteCallAction = deleteCallAction,
+                deleteDescription = deleteDescription,
                 imageLoader = imageLoader
             )
         }

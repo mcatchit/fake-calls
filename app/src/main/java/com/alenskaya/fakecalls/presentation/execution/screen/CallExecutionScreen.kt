@@ -1,4 +1,4 @@
-package com.alenskaya.fakecalls.presentation.execution
+package com.alenskaya.fakecalls.presentation.execution.screen
 
 import androidx.compose.runtime.Composable
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -20,6 +20,7 @@ fun CallExecutionScreen(
 ) {
     CallingScreen(
         imageLoader = viewModel.imageLoader,
+        executionStrings = viewModel.executionStrings,
         callExecutionParams = callExecutionParams,
         doOnAccept = {},
         doOnDecline = exitApplicationAction
