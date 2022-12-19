@@ -8,6 +8,7 @@ import com.alenskaya.fakecalls.domain.BaseResponse
 import com.alenskaya.fakecalls.domain.calls.CreateCallUseCase
 import com.alenskaya.fakecalls.domain.calls.GetCallByIdUseCase
 import com.alenskaya.fakecalls.domain.calls.model.CreateNewCallRequest
+import com.alenskaya.fakecalls.domain.calls.model.SavedCall
 import com.alenskaya.fakecalls.domain.contacts.GetFakeContactUseCase
 import com.alenskaya.fakecalls.presentation.DialogsDisplayer
 import com.alenskaya.fakecalls.presentation.CallsDataChangedNotifier
@@ -35,6 +36,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.util.Date
+import java.util.UUID
 import javax.inject.Inject
 
 /**
@@ -182,9 +184,10 @@ class CreateCallScreenViewModel @Inject constructor(
 
                 withContext(Dispatchers.Main) {
                     if (response is BaseResponse.Success) {
+                        val savedCall = response.payload
                         scheduleCall(
-                            createNewCallData.toCallExecutionParams(response.payload),
-                            createNewCallData.date
+                            savedCall.toCallExecutionParams(),
+                            savedCall.date
                         )
                         logCallCreatedEvent()
                     } else {
@@ -199,7 +202,8 @@ class CreateCallScreenViewModel @Inject constructor(
         name = name,
         phone = phone,
         date = date,
-        photoUrl = photoUrl
+        photoUrl = photoUrl,
+        requestCode = UUID.randomUUID().hashCode()
     )
 
     private fun scheduleCall(callExecutionParams: CallExecutionParams, whenExecute: Date) {
@@ -209,11 +213,12 @@ class CreateCallScreenViewModel @Inject constructor(
         navigateBack()
     }
 
-    private fun CreateNewCallData.toCallExecutionParams(callId: Int) = CallExecutionParams(
-        callId = callId,
+    private fun SavedCall.toCallExecutionParams() = CallExecutionParams(
+        callId = id,
         name = name,
         phone = phone,
-        photoUrl = photoUrl
+        photoUrl = photoUrl,
+        requestCode = requestCode
     )
 
     private fun logCallCreatedEvent() {

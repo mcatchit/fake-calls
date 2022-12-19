@@ -33,5 +33,10 @@ data class CallsScreenCallModel(
     /**
      * Url of the photo, can be null when the photo is not set.
      */
-    val photoUrl: String?
+    val photoUrl: String?,
+
+    /**
+     * Request code of call execution intent.
+     */
+    val requestCode: Int
 )

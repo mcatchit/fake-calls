@@ -1,5 +1,6 @@
 package com.alenskaya.fakecalls.presentation.main.calls
 
+import com.alenskaya.fakecalls.presentation.main.calls.model.CallType
 import com.alenskaya.fakecalls.presentation.mvi.UiEvent
 import com.alenskaya.fakecalls.presentation.main.calls.model.CallsScreenCallModel
 
@@ -40,8 +41,9 @@ sealed class CallsScreenEvent : UiEvent {
     class RepeatCall(val callId: Int) : CallsScreenEvent()
 
     /**
-     * User clicked delete button on completed call.
-     * @property callId - call identifier.
+     * User clicked delete button.
+     * @property call - clicked call.
+     * @property type - call type.
      */
-    class DeleteCall(val callId: Int, val isCompleted: Boolean) : CallsScreenEvent()
+    class DeleteCall(val call: CallsScreenCallModel, val type: CallType) : CallsScreenEvent()
 }

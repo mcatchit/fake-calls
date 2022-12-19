@@ -51,6 +51,7 @@ internal abstract class LocalDataModule {
                 FakeCallsDatabase::class.java, "fake-calls-database"
             )
                 .addMigrations(FakeCallsDatabase.MIGRATION_1_2)
+                .addMigrations(FakeCallsDatabase.MIGRATION_2_3)
                 .build()
     }
 }

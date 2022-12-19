@@ -23,5 +23,10 @@ data class CallExecutionParams(
     /**
      * Photo url of calling person.
      */
-    val photoUrl: String?
+    val photoUrl: String?,
+
+    /**
+     * Call execution intent request code.
+     */
+    val requestCode: Int
 )

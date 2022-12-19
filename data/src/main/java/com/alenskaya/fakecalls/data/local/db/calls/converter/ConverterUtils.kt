@@ -15,7 +15,8 @@ internal fun CreateNewCallRequest.toCallEntity() = CallEntity(
     contactPhone = phone,
     photoUrl = photoUrl,
     date = date.time,
-    status = CallStatusToStringConverter.convert(CallStatus.SCHEDULED)
+    status = CallStatusToStringConverter.convert(CallStatus.SCHEDULED),
+    requestCode = requestCode
 )
 
 /**
@@ -27,7 +28,8 @@ internal fun UpdateCallRequest.toCallEntity() = CallEntity(
     contactPhone = phone,
     photoUrl = photoUrl,
     date = date.time,
-    status = CallStatusToStringConverter.convert(status)
+    status = CallStatusToStringConverter.convert(status),
+    requestCode = requestCode
 )
 
 /**
@@ -39,5 +41,6 @@ internal fun CallEntity.toSavedCall() = SavedCall(
     phone = contactPhone,
     photoUrl = photoUrl,
     date = Date(date),
-    callStatus = CallStatusToStringConverter.convertBack(status)
+    callStatus = CallStatusToStringConverter.convertBack(status),
+    requestCode = requestCode
 )

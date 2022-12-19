@@ -14,7 +14,7 @@ import com.alenskaya.fakecalls.data.local.db.contacts.FakeContactEntity
  */
 @Database(
     entities = [CallEntity::class, FakeContactEntity::class],
-    version = 2
+    version = 3
 )
 internal abstract class FakeCallsDatabase : RoomDatabase() {
 
@@ -26,6 +26,12 @@ internal abstract class FakeCallsDatabase : RoomDatabase() {
         val MIGRATION_1_2 = object : Migration(1, 2) {
             override fun migrate(database: SupportSQLiteDatabase) {
                 database.execSQL("ALTER TABLE fake_contacts ADD COLUMN country TEXT NOT NULL DEFAULT 'Poland' ")
+            }
+        }
+
+        val MIGRATION_2_3 = object : Migration(2, 3) {
+            override fun migrate(database: SupportSQLiteDatabase) {
+                database.execSQL("ALTER TABLE calls ADD COLUMN request_code INTEGER NOT NULL DEFAULT 0")
             }
         }
     }

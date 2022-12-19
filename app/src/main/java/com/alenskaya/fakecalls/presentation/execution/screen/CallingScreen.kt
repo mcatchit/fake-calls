@@ -141,7 +141,8 @@ private fun CallingPreview() {
                 1,
                 "Kendall Stewart",
                 "+342342334",
-                "https://tinypng.com/images/social/website.jpg"
+                "https://tinypng.com/images/social/website.jpg",
+                123
             ),
             doOnAccept = {},
             doOnDecline = {}

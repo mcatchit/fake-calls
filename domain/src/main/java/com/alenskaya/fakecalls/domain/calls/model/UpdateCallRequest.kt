@@ -34,5 +34,10 @@ data class UpdateCallRequest(
     /**
      * Call status
      */
-    val status: CallStatus
+    val status: CallStatus,
+
+    /**
+     * Call execution intent request code
+     */
+    val requestCode: Int
 )

@@ -27,5 +27,8 @@ internal data class CallEntity(
     val date: Long,
 
     @ColumnInfo(name = "status")
-    val status: String
+    val status: String,
+
+    @ColumnInfo(name = "request_code")
+    val requestCode: Int
 )

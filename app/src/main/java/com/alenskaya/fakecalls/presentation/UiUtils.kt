@@ -8,7 +8,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.pointer.PointerEventPass
 import androidx.compose.ui.input.pointer.PointerInputChange
 import androidx.compose.ui.input.pointer.pointerInput
-import com.alenskaya.fakecalls.presentation.main.create.CreateCallScreenOneTimeUiEffect
 import com.alenskaya.fakecalls.presentation.mvi.OneTimeUiEffect
 import kotlinx.coroutines.flow.SharedFlow
 
