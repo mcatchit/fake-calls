@@ -36,4 +36,9 @@ data class SavedCall(
      * Status of the call
      */
     val callStatus: CallStatus,
+
+    /**
+     * Unique request code of call intent.
+     */
+    val requestCode: Int
 )

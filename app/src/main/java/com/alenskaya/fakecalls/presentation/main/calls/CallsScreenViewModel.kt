@@ -7,6 +7,10 @@ import com.alenskaya.fakecalls.domain.calls.DeleteCallUseCase
 import com.alenskaya.fakecalls.domain.calls.LoadSavedCallsUseCase
 import com.alenskaya.fakecalls.presentation.CallsDataChangedListener
 import com.alenskaya.fakecalls.presentation.CallsDataChangedNotifier
+import com.alenskaya.fakecalls.presentation.execution.CallsScheduler
+import com.alenskaya.fakecalls.presentation.execution.model.CallExecutionParams
+import com.alenskaya.fakecalls.presentation.main.calls.model.CallType
+import com.alenskaya.fakecalls.presentation.main.calls.model.CallsScreenCallModel
 import com.alenskaya.fakecalls.presentation.navigation.ApplicationRouter
 import com.alenskaya.fakecalls.presentation.navigation.create.CreateRoutes
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -14,6 +18,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 /**
@@ -28,6 +33,7 @@ class CallsScreenViewModel @Inject constructor(
     private val router: ApplicationRouter,
     private val loadSavedCallsUseCase: LoadSavedCallsUseCase,
     private val deleteCallUseCase: DeleteCallUseCase,
+    private val callsScheduler: CallsScheduler,
     private val callsDataChangedNotifier: CallsDataChangedNotifier
 ) : ViewModel() {
 
@@ -75,10 +81,15 @@ class CallsScreenViewModel @Inject constructor(
         router.navigate(CreateRoutes.RepeatCallRoute.createDestination(callId))
     }
 
-    private fun deleteCall(callId: Int, isCompleted: Boolean) {
-        viewModelScope.launch(Dispatchers.IO) {
-            deleteCallUseCase(callId).collect {
-                callsDataChangedNotifier.callsDataChanged()
+    private fun deleteCall(call: CallsScreenCallModel, callType: CallType) {
+        viewModelScope.launch(Dispatchers.Main) {
+            if (callType == CallType.SCHEDULED) {
+                callsScheduler.cancelCall(call.toCallExecutionParams())
+            }
+            withContext(Dispatchers.IO) {
+                deleteCallUseCase(call.id).collect {
+                    callsDataChangedNotifier.callsDataChanged()
+                }
             }
         }
     }
@@ -87,4 +98,12 @@ class CallsScreenViewModel @Inject constructor(
         super.onCleared()
         callsDataChangedNotifier.removeListener(callsDataChangedListener)
     }
+
+    private fun CallsScreenCallModel.toCallExecutionParams() = CallExecutionParams(
+        callId = id,
+        name = name,
+        phone = phone,
+        photoUrl = photoUrl,
+        requestCode = requestCode
+    )
 }

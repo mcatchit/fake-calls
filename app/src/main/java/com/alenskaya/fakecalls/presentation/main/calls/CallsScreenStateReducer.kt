@@ -1,5 +1,7 @@
 package com.alenskaya.fakecalls.presentation.main.calls
 
+import com.alenskaya.fakecalls.presentation.main.calls.model.CallType
+import com.alenskaya.fakecalls.presentation.main.calls.model.CallsScreenCallModel
 import com.alenskaya.fakecalls.presentation.mvi.Reducer
 import kotlinx.coroutines.CoroutineScope
 
@@ -11,7 +13,7 @@ class CallsScreenStateReducer(
     initialState: CallsScreenState,
     private val loadCallsAction: () -> Unit,
     private val openRepeatCallScreen: (Int) -> Unit,
-    private val deleteCall: (Int, Boolean) -> Unit
+    private val deleteCall: (CallsScreenCallModel, CallType) -> Unit
 ) :
     Reducer<CallsScreenState, CallsScreenEvent, CallsScreenOneTimeUiEffect>(
         viewModelScope, initialState
@@ -40,7 +42,7 @@ class CallsScreenStateReducer(
                 )
             )
             is CallsScreenEvent.RepeatCall -> openRepeatCallScreen(event.callId)
-            is CallsScreenEvent.DeleteCall -> deleteCall(event.callId, event.isCompleted)
+            is CallsScreenEvent.DeleteCall -> deleteCall(event.call, event.type)
         }
     }
 

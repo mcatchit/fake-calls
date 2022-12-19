@@ -50,8 +50,8 @@ fun CallsScreen(
         repeatCallAction = { call: CallsScreenCallModel ->
             viewModel.sendEvent(CallsScreenEvent.RepeatCall(call.id))
         },
-        deleteCallAction = { call: CallsScreenCallModel ->
-            viewModel.sendEvent(CallsScreenEvent.DeleteCall(call.id, true))
+        deleteCallAction = { call: CallsScreenCallModel, type: CallType ->
+            viewModel.sendEvent(CallsScreenEvent.DeleteCall(call, type))
         }
     )
 }
@@ -63,7 +63,7 @@ private fun CallsScreen(
     callsStrings: CallsStrings,
     editCallAction: (CallsScreenCallModel) -> Unit,
     repeatCallAction: (CallsScreenCallModel) -> Unit,
-    deleteCallAction: (CallsScreenCallModel) -> Unit,
+    deleteCallAction: (CallsScreenCallModel, CallType) -> Unit,
 ) {
     Surface(
         modifier = Modifier
@@ -119,7 +119,7 @@ private fun ListOfCalls(
     editDescription: String,
     repeatCallAction: (CallsScreenCallModel) -> Unit,
     repeatDescription: String,
-    deleteCallAction: (CallsScreenCallModel) -> Unit,
+    deleteCallAction: (CallsScreenCallModel, CallType) -> Unit,
     deleteDescription: String
 ) {
     var isScheduledCallsOpened by remember { mutableStateOf(true) }
@@ -151,18 +151,22 @@ private fun ListOfCalls(
 
     val callRowBuilders = mapOf(
         CallType.SCHEDULED to ScheduledCallRowBuilder(
-            imageLoader,
-            editCallAction,
-            editDescription,
-            deleteCallAction,
-            deleteDescription
+            imageLoader = imageLoader,
+            editCallAction = editCallAction,
+            editDescription = editDescription,
+            deleteCallAction = { call ->
+                deleteCallAction(call, CallType.SCHEDULED)
+            },
+            deleteDescription = deleteDescription
         ),
         CallType.COMPLETED to CompletedCallRowBuilder(
-            imageLoader,
-            repeatCallAction,
-            repeatDescription,
-            deleteCallAction,
-            deleteDescription
+            imageLoader = imageLoader,
+            repeatCallAction = repeatCallAction,
+            repeatDescription = repeatDescription,
+            deleteCallAction = { call ->
+                deleteCallAction(call, CallType.COMPLETED)
+            },
+            deleteDescription = deleteDescription
         )
     )
 

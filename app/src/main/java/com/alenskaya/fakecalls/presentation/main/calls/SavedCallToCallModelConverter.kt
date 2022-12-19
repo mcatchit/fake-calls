@@ -18,7 +18,8 @@ object SavedCallToCallModelConverter : Converter<SavedCall, CallsScreenCallModel
             phone = phone,
             day = date.extractDayWithMonth(),
             time = date.extractTime(),
-            photoUrl = photoUrl
+            photoUrl = photoUrl,
+            requestCode = requestCode
         )
     }
 }

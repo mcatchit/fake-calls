@@ -7,7 +7,6 @@ import android.content.Intent
 import android.os.Build
 import com.alenskaya.fakecalls.presentation.execution.model.CallExecutionParams
 import java.util.Date
-import java.util.UUID
 
 /**
  * Requests [alarmManager] to execute a call notification at specified time.
@@ -32,6 +31,7 @@ class CallsScheduler(
 
     /**
      * Schedules a call with [callExecutionParams] at passed time [whenExecute].
+     * @return request code of call pending intent.
      */
     fun scheduleCall(callExecutionParams: CallExecutionParams, whenExecute: Date) {
         val plannedCallIntent = createExactAlarmIntent(callExecutionParams)
@@ -43,14 +43,31 @@ class CallsScheduler(
         )
     }
 
-    private fun createExactAlarmIntent(callExecutionParams: CallExecutionParams): PendingIntent {
+    /**
+     * Cancels a call with given parameters.
+     * @param callExecutionParams - params of cancelling call.
+     * @return true if call was cancelled, false if something went wrong.
+     */
+    fun cancelCall(callExecutionParams: CallExecutionParams): Boolean {
+        return try {
+            val intent = createExactAlarmIntent(callExecutionParams)
+            alarmManager.cancel(intent)
+            true
+        } catch (e: Exception) {
+            false
+        }
+    }
+
+    private fun createExactAlarmIntent(
+        callExecutionParams: CallExecutionParams
+    ): PendingIntent {
         val intent = Intent(context, ScheduledCallBroadcastReceiver::class.java).apply {
             putExtras(callExecutionParams.convertToBundle())
         }
 
         return PendingIntent.getBroadcast(
             context,
-            UUID.randomUUID().hashCode(), //Request code must be unique!
+            callExecutionParams.requestCode, //Request code must be unique!
             intent,
             PendingIntent.FLAG_IMMUTABLE
         )

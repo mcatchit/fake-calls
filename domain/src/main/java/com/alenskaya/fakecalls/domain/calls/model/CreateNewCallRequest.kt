@@ -25,5 +25,10 @@ data class CreateNewCallRequest(
     /**
      * Link to contact photo. Can be null when photo is not specified
      */
-    val photoUrl: String?
+    val photoUrl: String?,
+
+    /**
+     * Call execution intent request code.
+     */
+    val requestCode: Int
 )

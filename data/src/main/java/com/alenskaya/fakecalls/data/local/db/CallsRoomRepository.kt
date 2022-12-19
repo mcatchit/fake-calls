@@ -21,9 +21,10 @@ internal class CallsRoomRepository @Inject constructor(
     private val callDao: CallDao
 ) : CallsRepository {
 
-    override suspend fun createCall(createNewCallRequest: CreateNewCallRequest): BaseResponse<Int, DatabaseError> {
+    override suspend fun createCall(createNewCallRequest: CreateNewCallRequest): BaseResponse<SavedCall, DatabaseError> {
         return catchExceptions {
-            BaseResponse.Success(callDao.createNewCall(createNewCallRequest.toCallEntity()).toInt())
+            val newCallId = callDao.createNewCall(createNewCallRequest.toCallEntity()).toInt()
+            BaseResponse.Success(callDao.getCallById(newCallId).toSavedCall())
         }
     }
 
