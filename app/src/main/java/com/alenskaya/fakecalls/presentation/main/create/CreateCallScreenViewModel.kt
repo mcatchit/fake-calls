@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import coil.ImageLoader
 import com.alenskaya.fakecalls.domain.BaseResponse
 import com.alenskaya.fakecalls.domain.calls.CreateCallUseCase
+import com.alenskaya.fakecalls.domain.calls.DeleteCallUseCase
 import com.alenskaya.fakecalls.domain.calls.GetCallByIdUseCase
 import com.alenskaya.fakecalls.domain.calls.model.CreateNewCallRequest
 import com.alenskaya.fakecalls.domain.calls.model.SavedCall
@@ -21,6 +22,7 @@ import com.alenskaya.fakecalls.presentation.execution.model.CallExecutionParams
 import com.alenskaya.fakecalls.presentation.execution.CallsScheduler
 import com.alenskaya.fakecalls.presentation.firebase.AnalyticsEvents
 import com.alenskaya.fakecalls.presentation.firebase.FeatureFlags
+import com.alenskaya.fakecalls.presentation.main.calls.model.CallType
 import com.alenskaya.fakecalls.presentation.main.create.converter.SavedCallToFormModelConverter
 import com.alenskaya.fakecalls.presentation.main.create.model.CreateNewCallData
 import com.alenskaya.fakecalls.presentation.main.create.model.FakeCallPermission
@@ -44,6 +46,8 @@ import javax.inject.Inject
  * @property imageLoader - application image loader.
  * @property applicationRouter - global application router.
  * @property createCallUseCase - use case to create a new call.
+ *
+ * TODO requires refactoring
  */
 @HiltViewModel
 class CreateCallScreenViewModel @Inject constructor(
@@ -56,6 +60,7 @@ class CreateCallScreenViewModel @Inject constructor(
     private val applicationRouter: ApplicationRouter,
     private val callsDataChangedNotifier: CallsDataChangedNotifier,
     private val createCallUseCase: CreateCallUseCase,
+    private val deleteCallUseCase: DeleteCallUseCase,
     private val getFakeContactUseCase: GetFakeContactUseCase,
     private val getCallByIdUseCase: GetCallByIdUseCase,
     private val firebaseAnalytics: FirebaseAnalytics
@@ -68,6 +73,7 @@ class CreateCallScreenViewModel @Inject constructor(
         get() = reducer.oneTimeEffect
 
     private lateinit var mode: CreateCallScreenMode
+    private var savedCall: SavedCall? = null
 
     private val reducer =
         CreateCallScreenStateReducer(
@@ -103,8 +109,8 @@ class CreateCallScreenViewModel @Inject constructor(
     private fun loadFormInfoIfNecessary(mode: CreateCallScreenMode) {
         when (mode) {
             is CreateCallScreenMode.CreateFake -> loadChosenSuggestedContact(mode.id)
-            is CreateCallScreenMode.Repeat -> loadSavedCall(mode.callId, false)
-            is CreateCallScreenMode.Edit -> loadSavedCall(mode.callId, true)
+            is CreateCallScreenMode.Repeat -> loadSavedCall(mode.callId)
+            is CreateCallScreenMode.Edit -> loadSavedCall(mode.callId)
             else -> Unit
         }
     }
@@ -126,21 +132,30 @@ class CreateCallScreenViewModel @Inject constructor(
         }
     }
 
-    private fun loadSavedCall(callId: Int, isEditing: Boolean) {
+    private fun loadSavedCall(callId: Int) {
         sendEvent(CreateCallScreenEvent.FormLoading)
 
         viewModelScope.launch(Dispatchers.IO) {
             getCallByIdUseCase(callId)
-                .map { response ->
+                .collect { response ->
                     when (response) {
-                        is BaseResponse.Success -> SavedCallToFormModelConverter(isEditing).convert(
-                            response.payload
+                        is BaseResponse.Success -> {
+                            savedCall = response.payload
+
+                            sendEvent(
+                                CreateCallScreenEvent.FormLoaded(
+                                    SavedCallToFormModelConverter(mode is CreateCallScreenMode.Edit).convert(
+                                        response.payload
+                                    )
+                                )
+                            )
+                        }
+                        is BaseResponse.Error -> sendEvent(
+                            CreateCallScreenEvent.CannotLoadPrefilledData(
+                                createStrings.failedToLoadPrefilledData()
+                            )
                         )
-                        is BaseResponse.Error -> CreateCallScreenFormModel.initial()
                     }
-                }
-                .collect { formModel ->
-                    sendEvent(CreateCallScreenEvent.FormLoaded(formModel))
                 }
         }
     }
@@ -153,7 +168,13 @@ class CreateCallScreenViewModel @Inject constructor(
         doAfterCheckNotificationPermission {
             doAfterCheckAlarmManagerPermission {
                 sendEvent(CreateCallScreenEvent.ProcessingSubmit)
-                saveNewCall(createNewCallData)
+                if (mode is CreateCallScreenMode.Edit) {
+                    deleteOldCall(savedCall ?: error("SavedCall cannot be null in edit mode")) {
+                        saveNewCall(createNewCallData)
+                    }
+                } else {
+                    saveNewCall(createNewCallData)
+                }
             }
         }
     }
@@ -175,6 +196,23 @@ class CreateCallScreenViewModel @Inject constructor(
             actionToDoIfPermissionGranted()
         } else {
             sendEvent(CreateCallScreenEvent.PermissionNotGranted(FakeCallPermission.SCHEDULE_ALARM))
+        }
+    }
+
+    private fun deleteOldCall(call: SavedCall, doNext: () -> Unit) {
+        viewModelScope.launch(Dispatchers.Main) {
+            callsScheduler.cancelCall(call.toCallExecutionParams())
+
+            withContext(Dispatchers.IO) {
+                deleteCallUseCase(call.id).collect { response ->
+                    when (response) {
+                        is BaseResponse.Success -> doNext()
+                        is BaseResponse.Error -> {
+                            sendEvent(CreateCallScreenEvent.UnsuccessfulSubmit)
+                        }
+                    }
+                }
+            }
         }
     }
 

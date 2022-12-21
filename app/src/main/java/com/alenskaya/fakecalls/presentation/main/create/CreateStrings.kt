@@ -9,6 +9,7 @@ import javax.inject.Inject
  */
 interface CreateStrings {
     fun navigateBack(): String
+    fun failedToLoadPrefilledData(): String
     fun alarmPermissionToast(): String
     fun notificationPermissionToast(): String
     fun tryAgainToast(): String
@@ -34,6 +35,10 @@ class CreateStringsImpl @Inject constructor(
 
     override fun navigateBack(): String {
         return appStrings.getString(R.string.navigate_back)
+    }
+
+    override fun failedToLoadPrefilledData(): String {
+        return appStrings.getString(R.string.create_screen_failed_to_load_prefilled_data)
     }
 
     override fun alarmPermissionToast(): String {

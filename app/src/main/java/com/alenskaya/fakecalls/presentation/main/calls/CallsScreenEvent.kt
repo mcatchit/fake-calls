@@ -41,6 +41,12 @@ sealed class CallsScreenEvent : UiEvent {
     class RepeatCall(val callId: Int) : CallsScreenEvent()
 
     /**
+     * User clicked edit button.
+     * @property callId - call identifier.
+     */
+    class EditCall(val callId: Int) : CallsScreenEvent()
+
+    /**
      * User clicked delete button.
      * @property call - clicked call.
      * @property type - call type.

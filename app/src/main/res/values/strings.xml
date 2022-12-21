@@ -11,6 +11,7 @@
     <string name="home_screen_failed_to_load_suggestions_message">Failed to load contacts suggestions. You still may select a contact from phonebook or create a custom one.</string>
 
     <string name="create_screen_create_new_title">Create new call</string>
+    <string name="create_screen_failed_to_load_prefilled_data">Something went wrong, please, try again</string>
     <string name="create_screen_edit_title">Edit call</string>
     <string name="create_screen_repeat_title">Repeat call</string>
     <string name="create_screen_create_button">Create</string>

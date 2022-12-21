@@ -13,6 +13,7 @@ class CallsScreenStateReducer(
     initialState: CallsScreenState,
     private val loadCallsAction: () -> Unit,
     private val openRepeatCallScreen: (Int) -> Unit,
+    private val openEditCallScreen: (Int) -> Unit,
     private val deleteCall: (CallsScreenCallModel, CallType) -> Unit
 ) :
     Reducer<CallsScreenState, CallsScreenEvent, CallsScreenOneTimeUiEffect>(
@@ -42,6 +43,7 @@ class CallsScreenStateReducer(
                 )
             )
             is CallsScreenEvent.RepeatCall -> openRepeatCallScreen(event.callId)
+            is CallsScreenEvent.EditCall -> openEditCallScreen(event.callId)
             is CallsScreenEvent.DeleteCall -> deleteCall(event.call, event.type)
         }
     }
