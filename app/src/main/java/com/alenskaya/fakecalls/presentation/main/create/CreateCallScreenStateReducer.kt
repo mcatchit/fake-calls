@@ -39,6 +39,7 @@ class CreateCallScreenStateReducer(
                     formInput = event.formModel
                 )
             )
+            is CreateCallScreenEvent.CannotLoadInitialData -> processFailedToLoadData(event.message)
             is CreateCallScreenEvent.InputChanged<*> -> processInputChangedEvent(oldState, event)
             is CreateCallScreenEvent.ShowDatePicker -> showDatePicker(oldState.formInput)
             is CreateCallScreenEvent.SubmitForm -> submitForm(oldState.formInput)
@@ -47,6 +48,11 @@ class CreateCallScreenStateReducer(
             is CreateCallScreenEvent.UnsuccessfulSubmit -> processUnsuccessfulSubmit(oldState)
             is CreateCallScreenEvent.ClickBack -> navigateBackCallback()
         }
+    }
+
+    private fun processFailedToLoadData(message: String) {
+        showToast(message)
+        navigateBackCallback()
     }
 
     private fun processInputChangedEvent(

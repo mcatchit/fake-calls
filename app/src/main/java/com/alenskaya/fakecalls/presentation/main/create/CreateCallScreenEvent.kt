@@ -29,6 +29,11 @@ sealed interface CreateCallScreenEvent : UiEvent {
     data class FormLoaded(val formModel: CreateCallScreenFormModel) : CreateCallScreenEvent
 
     /**
+     * Failed to load prefilled data.
+     */
+    data class CannotLoadInitialData(val message: String) : CreateCallScreenEvent
+
+    /**
      * Basic implementation of events which cause input changes.
      * @param T - type of changed value.
      * @property newValue - new input value.

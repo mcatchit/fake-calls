@@ -46,7 +46,9 @@ fun CallsScreen(
         state = state,
         imageLoader = imageLoader,
         callsStrings = viewModel.callsStrings,
-        editCallAction = {},
+        editCallAction = { call: CallsScreenCallModel ->
+            viewModel.sendEvent(CallsScreenEvent.EditCall(call.id))
+        },
         repeatCallAction = { call: CallsScreenCallModel ->
             viewModel.sendEvent(CallsScreenEvent.RepeatCall(call.id))
         },

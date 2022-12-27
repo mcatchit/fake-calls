@@ -45,6 +45,7 @@ class CallsScreenViewModel @Inject constructor(
         CallsScreenState.initial(),
         ::loadCalls,
         ::repeatCall,
+        ::editCall,
         ::deleteCall
     )
 
@@ -79,6 +80,10 @@ class CallsScreenViewModel @Inject constructor(
 
     private fun repeatCall(callId: Int) {
         router.navigate(CreateRoutes.RepeatCallRoute.createDestination(callId))
+    }
+
+    private fun editCall(callId: Int) {
+        router.navigate(CreateRoutes.EditCallRoute.createDestination(callId))
     }
 
     private fun deleteCall(call: CallsScreenCallModel, callType: CallType) {

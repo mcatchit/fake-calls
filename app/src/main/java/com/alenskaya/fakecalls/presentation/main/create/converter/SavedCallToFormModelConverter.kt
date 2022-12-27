@@ -7,11 +7,11 @@ import com.alenskaya.fakecalls.util.Converter
 /**
  * Transforms saved call to form model depending on mode.
  *
- * @property isEditing - screen mode.
+ * @property showDate - whether to show call date.
  * If isEditing is false, date will be null.
  */
 class SavedCallToFormModelConverter(
-    private val isEditing: Boolean
+    private val showDate: Boolean
 ) : Converter<SavedCall, CreateCallScreenFormModel> {
 
     override fun convert(input: SavedCall) = with(input) {
@@ -19,7 +19,7 @@ class SavedCallToFormModelConverter(
             photo = photoUrl,
             name = name,
             phone = phone,
-            date = if (isEditing) date else null
+            date = if (showDate) date else null
         )
     }
 }
