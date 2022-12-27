@@ -31,7 +31,7 @@ sealed interface CreateCallScreenEvent : UiEvent {
     /**
      * Failed to load prefilled data.
      */
-    data class CannotLoadPrefilledData(val message: String) : CreateCallScreenEvent
+    data class CannotLoadInitialData(val message: String) : CreateCallScreenEvent
 
     /**
      * Basic implementation of events which cause input changes.

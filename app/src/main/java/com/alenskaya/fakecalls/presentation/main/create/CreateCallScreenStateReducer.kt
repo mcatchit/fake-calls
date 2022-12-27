@@ -39,7 +39,7 @@ class CreateCallScreenStateReducer(
                     formInput = event.formModel
                 )
             )
-            is CreateCallScreenEvent.CannotLoadPrefilledData -> processFailedToLoadData(event.message)
+            is CreateCallScreenEvent.CannotLoadInitialData -> processFailedToLoadData(event.message)
             is CreateCallScreenEvent.InputChanged<*> -> processInputChangedEvent(oldState, event)
             is CreateCallScreenEvent.ShowDatePicker -> showDatePicker(oldState.formInput)
             is CreateCallScreenEvent.SubmitForm -> submitForm(oldState.formInput)
