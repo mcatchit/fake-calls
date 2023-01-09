@@ -12,6 +12,7 @@ interface ExecutionStrings {
     fun photoDescription(): String
     fun accept(): String
     fun decline(): String
+    fun missedCall(): String
 }
 
 class ExecutionStringsImpl @Inject constructor(
@@ -32,5 +33,9 @@ class ExecutionStringsImpl @Inject constructor(
 
     override fun decline(): String {
         return appStrings.getString(R.string.execution_screen_decline_description)
+    }
+
+    override fun missedCall(): String {
+        return appStrings.getString(R.string.execution_screen_missed_call)
     }
 }

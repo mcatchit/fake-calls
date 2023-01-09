@@ -41,6 +41,7 @@
     <string name="execution_screen_photo_description">Contact photo</string>
     <string name="execution_screen_accept_description">Accept</string>
     <string name="execution_screen_decline_description">Decline</string>
+    <string name="execution_screen_missed_call">Missed call</string>
 
     <string name="incoming_call_notification_title">Incoming call</string>
     <string name="drop_down_arrow_description">Drop-Down Arrow</string>

@@ -18,6 +18,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
@@ -30,9 +31,10 @@ import com.alenskaya.fakecalls.presentation.theme.GreenHalo
  * Animated circle halo displayed behind component.
  */
 @Composable
-fun AnimatedGreenHalo(
+fun AnimatedHalo(
     minSize: Dp,
     maxSize: Dp,
+    color: Color,
     modifier: Modifier = Modifier,
     surroundedComponent: @Composable () -> Unit,
 ) {
@@ -43,18 +45,19 @@ fun AnimatedGreenHalo(
         targetValue = maxSize,
         typeConverter = Dp.VectorConverter,
         animationSpec = infiniteRepeatable(
-            animation = tween(600, easing = LinearEasing, delayMillis = 600),
+            animation = tween(600, easing = LinearEasing, delayMillis = 300),
             repeatMode = RepeatMode.Reverse
         )
     )
 
-    Halo(offsetAnimation, maxSize, surroundedComponent, modifier)
+    Halo(offsetAnimation, maxSize, color, surroundedComponent, modifier)
 }
 
 @Composable
 private fun Halo(
     size: Dp,
     maxSize: Dp,
+    color: Color,
     surroundedComponent: @Composable () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -62,7 +65,7 @@ private fun Halo(
         Box(
             modifier = Modifier
                 .size(size)
-                .background(color = GreenHalo, shape = CircleShape)
+                .background(color = color, shape = CircleShape)
                 .align(Alignment.Center)
         )
         Box(
@@ -79,7 +82,7 @@ private fun Halo(
 private fun AnimatedHaloPreview() {
     FakeCallsTheme {
         Column(modifier = Modifier.fillMaxSize()) {
-            AnimatedGreenHalo(100.dp, 130.dp, modifier = Modifier) {
+            AnimatedHalo(100.dp, 130.dp, GreenHalo, modifier = Modifier) {
                 Image(
                     painter = painterResource(id = R.drawable.incoming_call_icon),
                     contentDescription = "Accept",
