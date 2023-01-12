@@ -4,18 +4,16 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.scaleOut
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.alenskaya.fakecalls.R
 import com.alenskaya.fakecalls.presentation.components.AnimatedHalo
 import com.alenskaya.fakecalls.presentation.components.swipe.DoubleSidedSwipeToAction
+import com.alenskaya.fakecalls.presentation.execution.screen.ui.ControlButton
 import com.alenskaya.fakecalls.presentation.theme.GreenHalo
 
 /**
@@ -62,17 +60,4 @@ fun ControlButtons(
                 .fillMaxWidth()
         )
     }
-}
-
-@Composable
-private fun ControlButton(
-    image: Int,
-    description: String
-) {
-    Image(
-        painter = painterResource(id = image),
-        contentDescription = description,
-        modifier = Modifier
-            .size(60.dp)
-    )
 }

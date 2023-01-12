@@ -34,7 +34,7 @@ class CallExecutionActivity : AppCompatActivity() {
             FakeCallsTheme {
                 CallExecutionScreen(
                     callExecutionParams = bundle.extractCallExecutionParams(),
-                    exitApplicationAction = ::exitApplicationAction
+                    endCallAction = ::exitApplicationAction
                 )
             }
         }

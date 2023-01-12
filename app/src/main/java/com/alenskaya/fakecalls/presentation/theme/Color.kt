@@ -11,10 +11,14 @@ val Red = Color(0xFFFF4545)
 val Black = Color(0xFF2F3331)
 val White = Color(0xFFFFFFFF)
 
+val CallingGreen = Color(0xFF33A867)
 val GreenHalo = Color(0x5933A867)
 
-val GradientDark = Color(0xFF000000)
-val GradientLight = Color(0xFF293010)
+val DeclineCallTint = Color(0xFF8A0101)
+
+val CallingGradientDark = Color(0xFF000000)
+val CallingGradientLight = Color(0xFF293010)
+val OngoingCallBackground = Color(0xFFEDEDED)
 
 val Purple200 = Color(0xFFBB86FC)
 val Purple700 = Color(0xFF3700B3)

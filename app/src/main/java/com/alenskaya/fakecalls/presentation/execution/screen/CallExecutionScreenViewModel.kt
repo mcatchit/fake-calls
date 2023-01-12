@@ -5,6 +5,8 @@ import androidx.lifecycle.viewModelScope
 import coil.ImageLoader
 import com.alenskaya.fakecalls.presentation.execution.ExecutionStrings
 import com.alenskaya.fakecalls.presentation.execution.model.CallExecutionParams
+import com.alenskaya.fakecalls.presentation.execution.screen.ongoing.OngoingCallSecondsTimer
+import com.alenskaya.fakecalls.presentation.execution.screen.ongoing.OngoingCallSecondsToStringConverter
 
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -18,6 +20,8 @@ typealias CancelCallAction = () -> Unit
 
 /**
  * View model of call execution screen.
+ * @param imageLoader - application image loader.
+ * @param executionStrings - string resources for call execution.
  */
 @HiltViewModel
 class CallExecutionScreenViewModel @Inject constructor(
@@ -25,12 +29,16 @@ class CallExecutionScreenViewModel @Inject constructor(
     val executionStrings: ExecutionStrings
 ) : ViewModel() {
 
-    private var cancelCallAction by Delegates.notNull<CancelCallAction>()
+    private var endCallAction by Delegates.notNull<CancelCallAction>()
+
+    private var timer = OngoingCallSecondsTimer(viewModelScope, ::updateTime, ::timeLimitExceeded)
 
     private var reducer = CallExecutionScreenStateReducer(
         viewModelScope,
-        CallExecutionScreenState.initial(),
-        ::cancelCall
+        CallExecutionScreenState.Default,
+        ::cancelCall,
+        ::startTimer,
+        ::stopTimer
     )
 
     val screenState: StateFlow<CallExecutionScreenState>
@@ -39,20 +47,43 @@ class CallExecutionScreenViewModel @Inject constructor(
     /**
      * Must be call before usage.
      */
-    fun init(cancelCallAction: CancelCallAction, callExecutionParams: CallExecutionParams) {
-        this.cancelCallAction = cancelCallAction
-        sendEvent(CallExecutionScreenEvent.CallParametersLoaded(callExecutionParams))
+    fun init(endCallAction: CancelCallAction, callExecutionParams: CallExecutionParams) {
+        this.endCallAction = endCallAction
+        sendEvent(CallingScreenEvent.CallParametersLoaded(callExecutionParams))
     }
 
+    /**
+     * Sends event.
+     */
     fun sendEvent(event: CallExecutionScreenEvent) {
         reducer.sendEvent(event)
+    }
+
+    private fun updateTime(seconds: Int) {
+        sendEvent(
+            OngoingCallScreenEvent.UpdateTimer(
+                OngoingCallSecondsToStringConverter.convert(seconds)
+            )
+        )
+    }
+
+    private fun timeLimitExceeded() {
+        sendEvent(OngoingCallScreenEvent.EndCall)
     }
 
     private fun cancelCall() {
         viewModelScope.launch(Dispatchers.Main) {
             delay(CANCEL_CALL_DELAY)
-            cancelCallAction()
+            endCallAction()
         }
+    }
+
+    private fun startTimer() {
+        timer.start()
+    }
+
+    private fun stopTimer() {
+        timer.stop()
     }
 
     companion object {

@@ -37,11 +37,14 @@
     <string name="calls_screen_delete_button_description">Delete call</string>
     <string name="calls_screen_edit_button_description">Edit call</string>
 
-    <string name="execution_screen_title">Incoming call</string>
+    <string name="execution_incoming_call_screen_title">Incoming call</string>
+    <string name="execution_ongoing_call_screen_title">Ongoing call</string>
+    <string name="execution_ongoing_call_execution_time_icon">Call execution time</string>
     <string name="execution_screen_photo_description">Contact photo</string>
     <string name="execution_screen_accept_description">Accept</string>
     <string name="execution_screen_decline_description">Decline</string>
     <string name="execution_screen_missed_call">Missed call</string>
+    <string name="execution_screen_call_completed">Call completed</string>
 
     <string name="incoming_call_notification_title">Incoming call</string>
     <string name="drop_down_arrow_description">Drop-Down Arrow</string>
