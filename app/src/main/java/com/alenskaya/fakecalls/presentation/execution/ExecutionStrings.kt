@@ -9,9 +9,13 @@ import javax.inject.Inject
  */
 interface ExecutionStrings {
     fun incomingCall(): String
+    fun ongoingCall(): String
+    fun callExecutionTimeIcon(): String
     fun photoDescription(): String
     fun accept(): String
     fun decline(): String
+    fun missedCall(): String
+    fun callCompleted(): String
 }
 
 class ExecutionStringsImpl @Inject constructor(
@@ -19,7 +23,15 @@ class ExecutionStringsImpl @Inject constructor(
 ) : ExecutionStrings {
 
     override fun incomingCall(): String {
-        return appStrings.getString(R.string.execution_screen_title)
+        return appStrings.getString(R.string.execution_incoming_call_screen_title)
+    }
+
+    override fun ongoingCall(): String {
+        return appStrings.getString(R.string.execution_ongoing_call_screen_title)
+    }
+
+    override fun callExecutionTimeIcon(): String {
+        return appStrings.getString(R.string.execution_ongoing_call_execution_time_icon)
     }
 
     override fun photoDescription(): String {
@@ -32,5 +44,13 @@ class ExecutionStringsImpl @Inject constructor(
 
     override fun decline(): String {
         return appStrings.getString(R.string.execution_screen_decline_description)
+    }
+
+    override fun missedCall(): String {
+        return appStrings.getString(R.string.execution_screen_missed_call)
+    }
+
+    override fun callCompleted(): String {
+        return appStrings.getString(R.string.execution_screen_call_completed)
     }
 }

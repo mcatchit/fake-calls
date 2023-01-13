@@ -23,13 +23,18 @@ class CallExecutionActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         showOnLockScreenAndTurnScreenOn()
 
+        window.setFlags(
+            WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
+            WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
+        )
+
         val bundle = intent.extras ?: error("Call execution screen bundle cannot be null")
 
         setContent {
             FakeCallsTheme {
                 CallExecutionScreen(
                     callExecutionParams = bundle.extractCallExecutionParams(),
-                    exitApplicationAction = ::exitApplicationAction
+                    endCallAction = ::exitApplicationAction
                 )
             }
         }

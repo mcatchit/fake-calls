@@ -7,7 +7,7 @@ private const val CALL_ID_BUNDLE_KEY = "call_id"
 private const val CONTACT_NAME_BUNDLE_KEY = "contact_name"
 private const val CONTACT_PHONE_BUNDLE_KEY = "contact_phone"
 private const val CONTACT_PHOTO_BUNDLE_KEY = "contact_photo"
-private const val REQUEST_CODE_BUNDLE_KEY = "contact_photo"
+private const val REQUEST_CODE_BUNDLE_KEY = "request_code"
 
 /**
  * Extracts call execution parameters from bundle.
