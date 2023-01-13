@@ -96,19 +96,24 @@ private fun Modifier.makeSwipeable(
     composed {
 
         var anchors by remember {
-            mutableStateOf(mapOf(0f to SwipeDirection.LEFT, 1f to SwipeDirection.RIGHT))
+            mutableStateOf(mapOf(0f to SwipeDirection.LEFT, 0f to SwipeDirection.RIGHT))
         }
 
-        this
-            .onGloballyPositioned { layout ->
-                val left = layout.positionInParent().x
-                val right = left + layout.size.width - sliderSize
-                anchors = mutableMapOf(left to SwipeDirection.LEFT, right to SwipeDirection.RIGHT)
+        onGloballyPositioned { layout ->
+            val left = layout.positionInParent().x
+            val right = left + layout.size.width - sliderSize
+            anchors = mutableMapOf(left to SwipeDirection.LEFT, right to SwipeDirection.RIGHT)
+
+        }.run {
+            if (anchors.size > 1) {
+                swipeable(
+                    state = state,
+                    anchors = anchors,
+                    thresholds = { _, _ -> FractionalThreshold(0.5f) },
+                    orientation = Orientation.Horizontal
+                )
+            } else {
+                this
             }
-            .swipeable(
-                state = state,
-                anchors = anchors,
-                thresholds = { _, _ -> FractionalThreshold(0.5f) },
-                orientation = Orientation.Horizontal
-            )
+        }
     }
