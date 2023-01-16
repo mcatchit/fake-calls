@@ -2,11 +2,10 @@ package com.alenskaya.fakecalls.domain.contacts
 
 import com.alenskaya.fakecalls.domain.BaseResponse
 import com.alenskaya.fakecalls.domain.DatabaseError
-import com.alenskaya.fakecalls.domain.RemoteRequestErrorCause
 import com.alenskaya.fakecalls.domain.contacts.model.RemoteFakeContact
-import com.alenskaya.fakecalls.domain.contacts.model.RemoteFakeContactsResponse
 import com.alenskaya.fakecalls.domain.contacts.model.SavedFakeContact
 import com.alenskaya.fakecalls.domain.contacts.model.SavedFakeContactsResponse
+import kotlinx.coroutines.flow.Flow
 
 /**
  * Repository for manipulating fake contacts data locally.
@@ -20,13 +19,13 @@ interface FakeContactLocalRepository {
      */
     suspend fun saveFakeContacts(
         contacts: List<RemoteFakeContact>
-    ): BaseResponse<SavedFakeContactsResponse, DatabaseError>
+    ): BaseResponse<Unit, DatabaseError>
 
     /**
      * Returns all saved contacts.
-     * @return list of saved contacts.
+     * @return flow which emits list of saved contacts.
      */
-    suspend fun getFakeContacts(): BaseResponse<SavedFakeContactsResponse, DatabaseError>
+    fun getFakeContacts(): Flow<BaseResponse<SavedFakeContactsResponse, DatabaseError>>
 
     /**
      * Finds contact with passed [id].

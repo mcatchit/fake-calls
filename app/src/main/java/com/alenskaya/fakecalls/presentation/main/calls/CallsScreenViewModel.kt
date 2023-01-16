@@ -5,8 +5,6 @@ import androidx.lifecycle.viewModelScope
 import coil.ImageLoader
 import com.alenskaya.fakecalls.domain.calls.DeleteCallUseCase
 import com.alenskaya.fakecalls.domain.calls.LoadSavedCallsUseCase
-import com.alenskaya.fakecalls.presentation.CallsDataChangedListener
-import com.alenskaya.fakecalls.presentation.CallsDataChangedNotifier
 import com.alenskaya.fakecalls.presentation.execution.CallsScheduler
 import com.alenskaya.fakecalls.presentation.execution.model.CallExecutionParams
 import com.alenskaya.fakecalls.presentation.main.calls.model.CallType
@@ -33,8 +31,7 @@ class CallsScreenViewModel @Inject constructor(
     private val router: ApplicationRouter,
     private val loadSavedCallsUseCase: LoadSavedCallsUseCase,
     private val deleteCallUseCase: DeleteCallUseCase,
-    private val callsScheduler: CallsScheduler,
-    private val callsDataChangedNotifier: CallsDataChangedNotifier
+    private val callsScheduler: CallsScheduler
 ) : ViewModel() {
 
     val screenState: StateFlow<CallsScreenState>
@@ -49,14 +46,7 @@ class CallsScreenViewModel @Inject constructor(
         ::deleteCall
     )
 
-    private val callsDataChangedListener = object : CallsDataChangedListener {
-        override fun callsDataChanged() {
-            refresh()
-        }
-    }
-
     init {
-        callsDataChangedNotifier.addListener(callsDataChangedListener)
         refresh()
     }
 
@@ -92,16 +82,9 @@ class CallsScreenViewModel @Inject constructor(
                 callsScheduler.cancelCall(call.toCallExecutionParams())
             }
             withContext(Dispatchers.IO) {
-                deleteCallUseCase(call.id).collect {
-                    callsDataChangedNotifier.callsDataChanged()
-                }
+                deleteCallUseCase(call.id).collect {}
             }
         }
-    }
-
-    override fun onCleared() {
-        super.onCleared()
-        callsDataChangedNotifier.removeListener(callsDataChangedListener)
     }
 
     private fun CallsScreenCallModel.toCallExecutionParams() = CallExecutionParams(

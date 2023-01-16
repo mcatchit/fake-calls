@@ -4,7 +4,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
-import com.alenskaya.fakecalls.domain.calls.model.CallStatus
+import kotlinx.coroutines.flow.Flow
 
 /**
  * Makes requests to calls table.
@@ -17,7 +17,7 @@ internal interface CallDao {
      * @return list of all calls.
      */
     @Query("SELECT * FROM calls")
-    suspend fun getAllCalls(): List<CallEntity>
+    fun getAllCalls(): Flow<List<CallEntity>>
 
     /**
      * Finds call with passed [id].

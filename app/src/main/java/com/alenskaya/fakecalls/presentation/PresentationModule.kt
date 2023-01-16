@@ -164,12 +164,5 @@ internal abstract class PresentationModule {
         @Singleton
         fun provideNotificationsPermissionManager(coroutineScope: CoroutineScope) =
             NotificationPermissionManager(coroutineScope)
-
-        /**
-         * Provides notifier about changes in calls data.
-         */
-        @Singleton
-        @Provides
-        fun providesListOfCallsUpdatedNotifier() = CallsDataChangedNotifier()
     }
 }

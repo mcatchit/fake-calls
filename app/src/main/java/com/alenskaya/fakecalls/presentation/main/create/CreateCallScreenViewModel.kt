@@ -5,7 +5,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import coil.ImageLoader
 import com.alenskaya.fakecalls.presentation.DialogsDisplayer
-import com.alenskaya.fakecalls.presentation.CallsDataChangedNotifier
 import com.alenskaya.fakecalls.presentation.NotificationPermissionManager
 import com.alenskaya.fakecalls.presentation.NotificationPermissionCallback
 import com.alenskaya.fakecalls.presentation.main.create.converter.CreateCallScreenModeToLabelsConverter
@@ -39,7 +38,6 @@ import kotlin.properties.Delegates
  * @property callsScheduler - schedules calls.
  * @property notificationPermissionManager - provides information about notification permission.
  * @property applicationRouter - global application router.
- * @property callsDataChangedNotifier - application notifier about changes in calls data.
  */
 @HiltViewModel
 class CreateCallScreenViewModel @Inject constructor(
@@ -51,8 +49,7 @@ class CreateCallScreenViewModel @Inject constructor(
     private val submitterFactory: SubmitterFactory,
     private val callsScheduler: CallsScheduler,
     private val notificationPermissionManager: NotificationPermissionManager,
-    private val applicationRouter: ApplicationRouter,
-    private val callsDataChangedNotifier: CallsDataChangedNotifier,
+    private val applicationRouter: ApplicationRouter
 ) : ViewModel() {
 
     val screenState: StateFlow<CreateCallScreenState>
@@ -154,7 +151,6 @@ class CreateCallScreenViewModel @Inject constructor(
 
     private fun getSubmitCallback() = object : SubmitCallback {
         override fun success() {
-            callsDataChangedNotifier.callsDataChanged()
             navigateBack()
         }
 
