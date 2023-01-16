@@ -5,6 +5,7 @@ import com.alenskaya.fakecalls.domain.DatabaseError
 import com.alenskaya.fakecalls.domain.calls.model.CreateNewCallRequest
 import com.alenskaya.fakecalls.domain.calls.model.SavedCall
 import com.alenskaya.fakecalls.domain.calls.model.UpdateCallRequest
+import kotlinx.coroutines.flow.Flow
 
 /**
  * Repository for handling calls data.
@@ -21,10 +22,10 @@ interface CallsRepository {
 
     /**
      * Requests list of saved calls.
-     * @return [BaseResponse.Success] with sorted by date list of calls as a payload in case of success,
+     * @return flow which emits [BaseResponse.Success] with sorted by date list of calls as a payload in case of success,
      * [BaseResponse.Error] otherwise
      */
-    suspend fun getSavedCalls(): BaseResponse<List<SavedCall>, DatabaseError>
+    fun getSavedCalls(): Flow<BaseResponse<List<SavedCall>, DatabaseError>>
 
     /**
      * Requests call with given id

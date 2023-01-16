@@ -3,6 +3,7 @@ package com.alenskaya.fakecalls.data.local.db.contacts
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
+import kotlinx.coroutines.flow.Flow
 
 /**
  * Makes requests to fake_contacts table
@@ -15,7 +16,7 @@ internal interface FakeContactDao {
      * @return list of all fake contacts
      */
     @Query("SELECT * FROM fake_contacts")
-    suspend fun getAllContacts(): List<FakeContactEntity>
+    fun getAllContacts(): Flow<List<FakeContactEntity>>
 
     /**
      * Requests list of all fake contacts
