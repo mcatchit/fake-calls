@@ -16,6 +16,7 @@ import androidx.lifecycle.lifecycleScope
 import com.alenskaya.fakecalls.R
 import com.alenskaya.fakecalls.presentation.execution.CallsScheduler
 import com.alenskaya.fakecalls.presentation.navigation.ApplicationRouter
+import com.alenskaya.fakecalls.presentation.phonebook.PhonebookContactsRetriever
 import com.alenskaya.fakecalls.presentation.theme.FakeCallsTheme
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import dagger.hilt.android.AndroidEntryPoint
@@ -23,6 +24,7 @@ import javax.inject.Inject
 
 /**
  * Root app activity.
+ * TODO fix permissions requests!!! Issue #77
  */
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
@@ -62,6 +64,20 @@ class MainActivity : AppCompatActivity() {
         supportFragmentManager.subscribeToDialogsRequests(lifecycleScope)
 
         subscribeToNotificationPermissionRequests(lifecycleScope)
+
+        requestReadPhonebookPermission()
+
+        val contacts = PhonebookContactsRetriever(contentResolver).getAllContacts()
+        println(contacts)
+    }
+
+    //FIXME
+    private fun requestReadPhonebookPermission(){
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_CONTACTS)
+            != PackageManager.PERMISSION_GRANTED
+        ){
+            activityResultLauncher.launch(Manifest.permission.READ_CONTACTS)
+        }
     }
 
     private fun activateFirebaseRemoteConfig() {
@@ -85,7 +101,7 @@ class MainActivity : AppCompatActivity() {
     ) {
         lifecycleCoroutineScope.launchWhenResumed {
             dialogsDisplayer.dialogs.collect { dialog ->
-                dialog.show(this@subscribeToDialogsRequests, "Dialog")
+                dialog.show(this@subscribeToDialogsRequests, DIALOG_TAG)
             }
         }
     }
@@ -116,15 +132,16 @@ class MainActivity : AppCompatActivity() {
     private fun initActivityResultLauncher() {
         activityResultLauncher =
             registerForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->
-                if (granted) {
-                    notificationPermissionCallback.doWhenGranted()
-                } else {
-                    notificationPermissionCallback.doWhenNotGranted()
-                }
+//                if (granted) {
+//                    notificationPermissionCallback.doWhenGranted()
+//                } else {
+//                    notificationPermissionCallback.doWhenNotGranted()
+//                }
             }
     }
 
     companion object {
         private const val TAG = "Main activity"
+        private const val DIALOG_TAG = "Dialog"
     }
 }
