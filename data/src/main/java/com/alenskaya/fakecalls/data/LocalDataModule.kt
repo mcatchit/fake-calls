@@ -5,10 +5,10 @@ import androidx.room.Room
 import com.alenskaya.fakecalls.data.local.db.CallsRoomRepository
 import com.alenskaya.fakecalls.data.local.db.calls.CallDao
 import com.alenskaya.fakecalls.data.local.db.FakeCallsDatabase
-import com.alenskaya.fakecalls.data.local.db.FakeContactsRoomRepository
+import com.alenskaya.fakecalls.data.local.db.ContactsRoomRepository
 import com.alenskaya.fakecalls.data.local.db.contacts.FakeContactDao
 import com.alenskaya.fakecalls.domain.calls.CallsRepository
-import com.alenskaya.fakecalls.domain.contacts.FakeContactLocalRepository
+import com.alenskaya.fakecalls.domain.contacts.ContactsLocalRepository
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
@@ -30,7 +30,7 @@ internal abstract class LocalDataModule {
 
     @Binds
     @Singleton
-    abstract fun fakeContactsLocalRepository(impl: FakeContactsRoomRepository): FakeContactLocalRepository
+    abstract fun fakeContactsLocalRepository(impl: ContactsRoomRepository): ContactsLocalRepository
 
     companion object {
 

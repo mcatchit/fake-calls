@@ -15,7 +15,7 @@ object CreateRoutes {
     /**
      * Route to create call from fake contact
      */
-    object CreateCallFromFakeContactRoute : CreateRoute {
+    object CreateCallFromContactRoute : CreateRoute {
 
         private const val PATH = "createFake"
 
@@ -117,7 +117,7 @@ object CreateRoutes {
      * List of all create call routes
      */
     val allRoutes = listOf(
-        CreateCallFromFakeContactRoute,
+        CreateCallFromContactRoute,
         CreateCallFromCustomContactRoute,
         EditCallRoute,
         RepeatCallRoute

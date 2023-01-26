@@ -1,16 +1,16 @@
 package com.alenskaya.fakecalls.data.local.db.contacts
 
-import com.alenskaya.fakecalls.domain.contacts.model.SavedFakeContact
+import com.alenskaya.fakecalls.domain.contacts.model.SavedContact
 import com.alenskaya.fakecalls.util.Converter
 
 /**
  * Converts database entity of fake contact to domain model
  */
 internal object FakeContactEntityToSavedContactConverter :
-    Converter<FakeContactEntity, SavedFakeContact> {
+    Converter<FakeContactEntity, SavedContact> {
 
     override fun convert(input: FakeContactEntity) = with(input) {
-        SavedFakeContact(
+        SavedContact(
             id = id,
             name = name,
             phone = phone,

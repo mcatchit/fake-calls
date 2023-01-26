@@ -9,7 +9,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.dp
 import coil.ImageLoader
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
@@ -19,7 +18,7 @@ import com.alenskaya.fakecalls.presentation.components.honeycomb.hexagonalSize
 
 /**
  * Component for displaying contact icon.
- * @param url - photo url, if null default icon is used.
+ * @param uri - photo uri (url or external uri), if null default icon is used.
  * @param size - size of icon in dp.
  * @param description - image description (for accessibility).
  * @param imageLoader - application image loader.
@@ -27,7 +26,7 @@ import com.alenskaya.fakecalls.presentation.components.honeycomb.hexagonalSize
  */
 @Composable
 fun FakeContactIcon(
-    url: String?,
+    uri: String?,
     size: Dp,
     description: String,
     imageLoader: ImageLoader,
@@ -40,9 +39,9 @@ fun FakeContactIcon(
         width = iconSize.width,
         modifier = modifier
     ) {
-        if (url != null) {
+        if (uri != null) {
             UrlContactIcon(
-                url = url,
+                url = uri,
                 description = description,
                 imageLoader = imageLoader
             )

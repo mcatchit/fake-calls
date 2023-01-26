@@ -29,6 +29,12 @@
     <string name="create_screen_fill_all_fields_toast">Please, fill in all fields</string>
     <string name="create_screen_invalid_date_toast">Date is not valid</string>
 
+    <string name="phonebook_screen_title">Phonebook</string>
+    <string name="phonebook_screen_loading_message">Loading contacts</string>
+    <string name="phonebook_screen_empty_message">Phonebook is empty</string>
+    <string name="phonebook_screen_error_message">Something went wrong\nCannot load contacts:(</string>
+    <string name="phonebook_screen_navigate_back_description">Navigate back</string>
+
     <string name="calls_screen_title">My calls</string>
     <string name="calls_screen_scheduled_title">Scheduled</string>
     <string name="calls_screen_completed_title">Completed</string>

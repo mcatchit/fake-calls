@@ -5,7 +5,7 @@ import com.alenskaya.fakecalls.domain.DatabaseError
 import com.alenskaya.fakecalls.domain.ErrorCause
 import com.alenskaya.fakecalls.domain.RemoteRequestErrorCause
 import com.alenskaya.fakecalls.domain.contacts.model.RemoteFakeContactsResponse
-import com.alenskaya.fakecalls.domain.contacts.model.SavedFakeContactsResponse
+import com.alenskaya.fakecalls.domain.contacts.model.SavedContactsResponse
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
@@ -13,23 +13,23 @@ import kotlinx.coroutines.flow.transform
 import javax.inject.Inject
 
 /**
- * Requests list of fake users
+ * Requests list of suggested users.
  */
-class GetFakeContactsListUseCase @Inject constructor(
+class GetSuggestedContactsListUseCase @Inject constructor(
     private val remoteRepository: FakeContactRemoteRepository,
-    private val localRepository: FakeContactLocalRepository
+    private val localRepository: ContactsLocalRepository
 ) {
 
-    operator fun invoke(): Flow<BaseResponse<SavedFakeContactsResponse, out ErrorCause>> {
+    operator fun invoke(): Flow<BaseResponse<SavedContactsResponse, out ErrorCause>> {
         return flow {
-            emit(remoteRepository.getFakeUsers(FAKE_USERS_AMOUNT))
+            emit(remoteRepository.getFakeUsers(CONTACTS_QUANTITY))
         }.map { remoteResponse ->
             remoteResponse.toSavedContactsResponse()
         }.transform { response ->
             if (response is BaseResponse.Error) {
                 emit(BaseResponse.Error(DatabaseError))
             } else {
-                localRepository.getFakeContacts().collect {
+                localRepository.getSavedContacts(CONTACTS_QUANTITY).collect {
                     emit(it)
                 }
             }
@@ -39,12 +39,12 @@ class GetFakeContactsListUseCase @Inject constructor(
     private suspend fun BaseResponse<RemoteFakeContactsResponse, RemoteRequestErrorCause>.toSavedContactsResponse() =
         when (this) {
             is BaseResponse.Success -> localRepository
-                .saveFakeContacts(payload.contacts)
+                .saveContacts(payload.contacts)
 
             is BaseResponse.Error -> BaseResponse.Error(cause)
         }
 
     companion object {
-        private const val FAKE_USERS_AMOUNT = 5
+        private const val CONTACTS_QUANTITY = 5
     }
 }

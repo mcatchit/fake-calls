@@ -16,7 +16,7 @@ fun FullScreenLoadingMessage(
     PlaceInCenter {
         LoadingProgress(
             text = text,
-            modifier = Modifier
+            modifier = modifier
                 .align(Alignment.Center)
         )
     }

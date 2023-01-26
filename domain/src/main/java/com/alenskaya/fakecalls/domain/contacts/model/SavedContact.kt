@@ -3,7 +3,7 @@ package com.alenskaya.fakecalls.domain.contacts.model
 /**
  * Model of locally saved fake contact
  */
-data class SavedFakeContact(
+data class SavedContact(
 
     /**
      * Unique contact identifier.

@@ -16,7 +16,10 @@ import com.alenskaya.fakecalls.presentation.main.create.CreateStrings
 import com.alenskaya.fakecalls.presentation.main.create.CreateStringsImpl
 import com.alenskaya.fakecalls.presentation.main.home.HomeStrings
 import com.alenskaya.fakecalls.presentation.main.home.HomeStringsImpl
+import com.alenskaya.fakecalls.presentation.main.phonebook.PhonebookStrings
+import com.alenskaya.fakecalls.presentation.main.phonebook.PhonebookStringsImpl
 import com.alenskaya.fakecalls.presentation.navigation.ApplicationRouter
+import com.alenskaya.fakecalls.presentation.phonebook.PhonebookContactsProvider
 import com.google.firebase.analytics.ktx.analytics
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
@@ -48,6 +51,10 @@ internal abstract class PresentationModule {
     @Binds
     @Singleton
     abstract fun createStrings(impl: CreateStringsImpl): CreateStrings
+
+    @Binds
+    @Singleton
+    abstract fun phonebookStrings(impl: PhonebookStringsImpl): PhonebookStrings
 
     @Binds
     @Singleton
@@ -130,6 +137,12 @@ internal abstract class PresentationModule {
                         .build()
                 }
                 .build()
+        }
+
+        @Provides
+        @Singleton
+        fun providePhonebookContactsRetriever(@ApplicationContext context: Context): PhonebookContactsProvider {
+            return PhonebookContactsProvider(context.contentResolver)
         }
 
         /**

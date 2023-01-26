@@ -30,7 +30,7 @@ fun Contact(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         FakeContactIcon(
-            url = callExecutionParams.photoUrl,
+            uri = callExecutionParams.photoUrl,
             size = 40.dp,
             description = callExecutionParams.name,
             imageLoader = imageLoader

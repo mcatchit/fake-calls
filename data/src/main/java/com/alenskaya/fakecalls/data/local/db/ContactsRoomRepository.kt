@@ -8,22 +8,22 @@ import com.alenskaya.fakecalls.data.local.db.contacts.FakeContactEntityToSavedCo
 import com.alenskaya.fakecalls.data.local.db.contacts.RemoteFakeContactToEntityConverter
 import com.alenskaya.fakecalls.domain.BaseResponse
 import com.alenskaya.fakecalls.domain.DatabaseError
-import com.alenskaya.fakecalls.domain.contacts.FakeContactLocalRepository
-import com.alenskaya.fakecalls.domain.contacts.model.RemoteFakeContact
-import com.alenskaya.fakecalls.domain.contacts.model.SavedFakeContact
-import com.alenskaya.fakecalls.domain.contacts.model.SavedFakeContactsResponse
+import com.alenskaya.fakecalls.domain.contacts.ContactsLocalRepository
+import com.alenskaya.fakecalls.domain.contacts.model.ContactToSave
+import com.alenskaya.fakecalls.domain.contacts.model.SavedContact
+import com.alenskaya.fakecalls.domain.contacts.model.SavedContactsResponse
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 /**
  * Implementation of fake contacts local repository based on the Room database
  */
-internal class FakeContactsRoomRepository @Inject constructor(
+internal class ContactsRoomRepository @Inject constructor(
     private val contactDao: FakeContactDao
-) : FakeContactLocalRepository {
+) : ContactsLocalRepository {
 
-    override suspend fun saveFakeContacts(
-        contacts: List<RemoteFakeContact>
+    override suspend fun saveContacts(
+        contacts: List<ContactToSave>
     ): BaseResponse<Unit, DatabaseError> = catchExceptions {
         contactDao.deleteAllContacts()
 
@@ -34,11 +34,17 @@ internal class FakeContactsRoomRepository @Inject constructor(
         BaseResponse.Success(Unit)
     }
 
-    override fun getFakeContacts() = contactDao.getAllContacts()
-        .map<List<FakeContactEntity>, BaseResponse.Success<SavedFakeContactsResponse, DatabaseError>> { fakeContactEntities ->
+    override suspend fun saveContact(contact: ContactToSave) = catchExceptions {
+        BaseResponse.Success(
+            contactDao.saveContact(RemoteFakeContactToEntityConverter.convert(contact)).toInt()
+        )
+    }
+
+    override fun getSavedContacts(quantity: Int) = contactDao.getAllContacts()
+        .map<List<FakeContactEntity>, BaseResponse.Success<SavedContactsResponse, DatabaseError>> { fakeContactEntities ->
             BaseResponse.Success(
-                SavedFakeContactsResponse(
-                    fakeContactEntities.map { fakeContactEntity ->
+                SavedContactsResponse(
+                    fakeContactEntities.take(quantity).map { fakeContactEntity ->
                         FakeContactEntityToSavedContactConverter.convert(fakeContactEntity)
                     }
                 )
@@ -46,7 +52,7 @@ internal class FakeContactsRoomRepository @Inject constructor(
         }
         .catchDatabaseExceptions()
 
-    override suspend fun getFakeContact(id: Int): BaseResponse<SavedFakeContact, DatabaseError> {
+    override suspend fun getSavedContact(id: Int): BaseResponse<SavedContact, DatabaseError> {
         return catchExceptions {
             BaseResponse.Success(
                 FakeContactEntityToSavedContactConverter.convert(contactDao.getContactById(id))

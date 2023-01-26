@@ -98,7 +98,7 @@ private fun Photo(
     modifier: Modifier = Modifier
 ) {
     FakeContactIcon(
-        url = url,
+        uri = url,
         size = 48.dp,
         description = description,
         imageLoader = imageLoader,

@@ -3,26 +3,22 @@ package com.alenskaya.fakecalls.presentation.main.calls
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.ImageLoader
 import com.alenskaya.fakecalls.presentation.main.calls.model.CallsScreenCallModel
 import com.alenskaya.fakecalls.presentation.components.FullScreenLoadingMessage
 import com.alenskaya.fakecalls.presentation.components.MainTitle
-import com.alenskaya.fakecalls.presentation.components.PlaceInCenter
+import com.alenskaya.fakecalls.presentation.components.FullScreenMessage
 import com.alenskaya.fakecalls.presentation.main.calls.model.CallType
 import com.alenskaya.fakecalls.presentation.main.calls.model.CallsScreenListItem
 import com.alenskaya.fakecalls.presentation.main.calls.ui.CallTypeToHeaderTitleConverter
@@ -79,7 +75,7 @@ private fun CallsScreen(
             )
             when {
                 state.isLoading && state.areCallsEmpty() -> FullScreenLoadingMessage(callsStrings.loadingMessage())
-                state.message != null -> Message(text = state.message)
+                state.message != null -> FullScreenMessage(text = state.message)
                 else -> ListOfCalls(
                     scheduledCalls = state.scheduledCalls,
                     completedCalls = state.completedCalls,
@@ -94,20 +90,6 @@ private fun CallsScreen(
                 )
             }
         }
-    }
-}
-
-@Composable
-private fun Message(text: String) {
-    PlaceInCenter {
-        Text(
-            text = text,
-            textAlign = TextAlign.Center,
-            style = MaterialTheme.typography.h3.copy(color = MaterialTheme.colors.secondaryVariant),
-            modifier = Modifier
-                .width(120.dp)
-                .align(Alignment.Center)
-        )
     }
 }
 

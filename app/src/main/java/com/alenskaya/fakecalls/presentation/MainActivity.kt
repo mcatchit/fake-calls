@@ -3,6 +3,7 @@ package com.alenskaya.fakecalls.presentation
 import android.Manifest
 import android.annotation.SuppressLint
 import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.compose.setContent
@@ -23,6 +24,7 @@ import javax.inject.Inject
 
 /**
  * Root app activity.
+ * TODO fix permissions requests!!! Issue #77
  */
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
@@ -62,6 +64,32 @@ class MainActivity : AppCompatActivity() {
         supportFragmentManager.subscribeToDialogsRequests(lifecycleScope)
 
         subscribeToNotificationPermissionRequests(lifecycleScope)
+
+        requestReadPhonebookPermission()
+        requestReadExternalStoragePermission()
+    }
+
+    //FIXME
+    private fun requestReadPhonebookPermission(){
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_CONTACTS)
+            != PackageManager.PERMISSION_GRANTED
+        ){
+            activityResultLauncher.launch(Manifest.permission.READ_CONTACTS)
+        }
+    }
+
+    //FIXME
+    private fun requestReadExternalStoragePermission(){
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU && ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)
+            != PackageManager.PERMISSION_GRANTED
+        ){
+            activityResultLauncher.launch(Manifest.permission.READ_EXTERNAL_STORAGE)
+        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU && ContextCompat.checkSelfPermission(this, Manifest.permission.READ_MEDIA_IMAGES)
+            != PackageManager.PERMISSION_GRANTED
+        ){
+            activityResultLauncher.launch(Manifest.permission.READ_MEDIA_IMAGES)
+        }
     }
 
     private fun activateFirebaseRemoteConfig() {
@@ -85,7 +113,7 @@ class MainActivity : AppCompatActivity() {
     ) {
         lifecycleCoroutineScope.launchWhenResumed {
             dialogsDisplayer.dialogs.collect { dialog ->
-                dialog.show(this@subscribeToDialogsRequests, "Dialog")
+                dialog.show(this@subscribeToDialogsRequests, DIALOG_TAG)
             }
         }
     }
@@ -116,15 +144,16 @@ class MainActivity : AppCompatActivity() {
     private fun initActivityResultLauncher() {
         activityResultLauncher =
             registerForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->
-                if (granted) {
-                    notificationPermissionCallback.doWhenGranted()
-                } else {
-                    notificationPermissionCallback.doWhenNotGranted()
-                }
+//                if (granted) {
+//                    notificationPermissionCallback.doWhenGranted()
+//                } else {
+//                    notificationPermissionCallback.doWhenNotGranted()
+//                }
             }
     }
 
     companion object {
         private const val TAG = "Main activity"
+        private const val DIALOG_TAG = "Dialog"
     }
 }

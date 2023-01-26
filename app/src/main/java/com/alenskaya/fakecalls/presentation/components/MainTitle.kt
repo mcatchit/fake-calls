@@ -4,19 +4,21 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.TextStyle
 
 /**
- * Home screen title
+ * Home screen title.
  */
 @Composable
 fun MainTitle(
     text: String,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    style: TextStyle = MaterialTheme.typography.h1
 ) {
     Text(
         text = text,
         modifier = modifier,
-        style = MaterialTheme.typography.h1,
+        style = style,
         color = MaterialTheme.colors.onSecondary
     )
 }
