@@ -1,6 +1,6 @@
 package com.alenskaya.fakecalls.presentation.main.home
 
-import com.alenskaya.fakecalls.domain.contacts.model.SavedFakeContact
+import com.alenskaya.fakecalls.domain.contacts.model.SavedContact
 import com.alenskaya.fakecalls.presentation.mvi.UiEvent
 
 /**
@@ -17,7 +17,7 @@ sealed class HomeScreenEvent : UiEvent {
      * Contacts suggestions are loaded successfully.
      * @property contacts - contacts suggestions.
      */
-    class ContactsLoaded(val contacts: List<SavedFakeContact>) : HomeScreenEvent()
+    class ContactsLoaded(val contacts: List<SavedContact>) : HomeScreenEvent()
 
     /**
      * Contacts suggestions were not loaded.
@@ -43,4 +43,6 @@ sealed class HomeScreenEvent : UiEvent {
      * User clicked to create a custom call.
      */
     object CreateCustomCall : HomeScreenEvent()
+
+    object SelectFromPhonebook : HomeScreenEvent()
 }

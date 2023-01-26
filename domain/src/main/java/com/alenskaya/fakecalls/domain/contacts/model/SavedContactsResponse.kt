@@ -3,10 +3,10 @@ package com.alenskaya.fakecalls.domain.contacts.model
 /**
  * Wrapper for local response for get all saved contacts request.
  */
-data class SavedFakeContactsResponse(
+data class SavedContactsResponse(
 
     /**
      * List of all saved contacts.
      */
-    val contacts: List<SavedFakeContact>
+    val contacts: List<SavedContact>
 )

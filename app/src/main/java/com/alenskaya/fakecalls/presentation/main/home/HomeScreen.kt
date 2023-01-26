@@ -48,7 +48,9 @@ fun HomeScreen(
         onCreateCustomClick = {
             viewModel.sendEvent(HomeScreenEvent.CreateCustomCall)
         },
-        onMoreClick = {}
+        onMoreClick = {
+            viewModel.sendEvent(HomeScreenEvent.SelectFromPhonebook)
+        }
     )
 
     val context = LocalContext.current

@@ -2,7 +2,6 @@ package com.alenskaya.fakecalls.presentation.phonebook
 
 import android.annotation.SuppressLint
 import android.content.ContentResolver
-import android.content.Context
 import android.database.Cursor
 import android.provider.ContactsContract
 
@@ -11,7 +10,7 @@ import android.provider.ContactsContract
  * Before usage Manifest.permission.READ_CONTACTS should be granted.
  * @property contentResolver - application content resolver.
  */
-class PhonebookContactsRetriever(
+class PhonebookContactsProvider(
     private val contentResolver: ContentResolver
 ) {
 
@@ -60,7 +59,7 @@ class PhonebookContactsRetriever(
                 id = getColumnValue(ContactsContract.CommonDataKinds.Phone.NAME_RAW_CONTACT_ID),
                 name = getColumnValue(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME),
                 phone = getColumnValue(ContactsContract.CommonDataKinds.Phone.NUMBER),
-                photo = getPhotoUri()
+                photoUri = getPhotoUri()
             )
         } catch (e: Exception) {
             null

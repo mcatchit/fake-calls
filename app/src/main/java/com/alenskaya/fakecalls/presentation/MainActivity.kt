@@ -3,6 +3,7 @@ package com.alenskaya.fakecalls.presentation
 import android.Manifest
 import android.annotation.SuppressLint
 import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.compose.setContent
@@ -16,7 +17,6 @@ import androidx.lifecycle.lifecycleScope
 import com.alenskaya.fakecalls.R
 import com.alenskaya.fakecalls.presentation.execution.CallsScheduler
 import com.alenskaya.fakecalls.presentation.navigation.ApplicationRouter
-import com.alenskaya.fakecalls.presentation.phonebook.PhonebookContactsRetriever
 import com.alenskaya.fakecalls.presentation.theme.FakeCallsTheme
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import dagger.hilt.android.AndroidEntryPoint
@@ -66,9 +66,7 @@ class MainActivity : AppCompatActivity() {
         subscribeToNotificationPermissionRequests(lifecycleScope)
 
         requestReadPhonebookPermission()
-
-        val contacts = PhonebookContactsRetriever(contentResolver).getAllContacts()
-        println(contacts)
+        requestReadExternalStoragePermission()
     }
 
     //FIXME
@@ -77,6 +75,20 @@ class MainActivity : AppCompatActivity() {
             != PackageManager.PERMISSION_GRANTED
         ){
             activityResultLauncher.launch(Manifest.permission.READ_CONTACTS)
+        }
+    }
+
+    //FIXME
+    private fun requestReadExternalStoragePermission(){
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU && ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)
+            != PackageManager.PERMISSION_GRANTED
+        ){
+            activityResultLauncher.launch(Manifest.permission.READ_EXTERNAL_STORAGE)
+        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU && ContextCompat.checkSelfPermission(this, Manifest.permission.READ_MEDIA_IMAGES)
+            != PackageManager.PERMISSION_GRANTED
+        ){
+            activityResultLauncher.launch(Manifest.permission.READ_MEDIA_IMAGES)
         }
     }
 

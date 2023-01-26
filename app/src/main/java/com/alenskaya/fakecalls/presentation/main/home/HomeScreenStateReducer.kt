@@ -1,6 +1,6 @@
 package com.alenskaya.fakecalls.presentation.main.home
 
-import com.alenskaya.fakecalls.domain.contacts.model.SavedFakeContact
+import com.alenskaya.fakecalls.domain.contacts.model.SavedContact
 import com.alenskaya.fakecalls.presentation.mvi.Reducer
 import com.alenskaya.fakecalls.presentation.main.home.model.HomeScreenFakeContactModel
 import kotlinx.coroutines.CoroutineScope
@@ -11,7 +11,8 @@ import kotlinx.coroutines.CoroutineScope
 class HomeScreenStateReducer(
     viewModelScope: CoroutineScope,
     initialState: HomeScreenState,
-    private val navigateToCreateCallScreenAction: (Int?) -> Unit
+    private val navigateToCreateCallScreenAction: (Int?) -> Unit,
+    private val navigateToPhonebookAction: () -> Unit
 ) : Reducer<HomeScreenState, HomeScreenEvent, HomeScreenOneTimeUiEffect>(
     viewModelScope,
     initialState
@@ -35,10 +36,11 @@ class HomeScreenStateReducer(
 
             is HomeScreenEvent.CreateCallFromSuggested -> navigateToCreateCallScreenAction(event.fakeContactId)
             is HomeScreenEvent.CreateCustomCall -> navigateToCreateCallScreenAction(null)
+            is HomeScreenEvent.SelectFromPhonebook -> navigateToPhonebookAction()
         }
     }
 
-    private fun processContactsLoaded(oldState: HomeScreenState, contacts: List<SavedFakeContact>) {
+    private fun processContactsLoaded(oldState: HomeScreenState, contacts: List<SavedContact>) {
         setState(
             oldState.copy(
                 isLoading = false,
@@ -66,7 +68,7 @@ class HomeScreenStateReducer(
         )
     }
 
-    private fun List<SavedFakeContact>.toScreenModel() = map { fakeContact ->
+    private fun List<SavedContact>.toScreenModel() = map { fakeContact ->
         HomeScreenFakeContactModel(
             id = fakeContact.id,
             name = fakeContact.name,

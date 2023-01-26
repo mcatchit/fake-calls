@@ -1,10 +1,7 @@
 package com.alenskaya.fakecalls.presentation.main.calls.ui.row
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
@@ -15,8 +12,8 @@ import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import coil.ImageLoader
+import com.alenskaya.fakecalls.presentation.components.DashedDivider
 import com.alenskaya.fakecalls.presentation.main.calls.model.CallsScreenCallModel
-import com.alenskaya.fakecalls.presentation.components.DashedShape
 import com.alenskaya.fakecalls.presentation.components.FakeContactIcon
 
 /**
@@ -38,7 +35,7 @@ fun CallRow(
         val (icon, contactInfo, dateInfo, buttons, divider) = createRefs()
 
         FakeContactIcon(
-            url = call.photoUrl,
+            uri = call.photoUrl,
             size = 18.dp,
             description = call.name,
             imageLoader = imageLoader,
@@ -90,7 +87,7 @@ fun CallRow(
                 }
         )
 
-        CallDivider(
+        DashedDivider(
             modifier = Modifier
                 .constrainAs(divider) {
                     bottom.linkTo(parent.bottom)
@@ -117,19 +114,6 @@ private fun DateInfo(day: String, time: String, modifier: Modifier = Modifier) {
         Spacer(modifier = Modifier.height(6.dp))
         SmallText(text = time)
     }
-}
-
-@Composable
-private fun CallDivider(modifier: Modifier = Modifier) {
-    Box(
-        modifier = modifier
-            .fillMaxWidth()
-            .height(2.dp)
-            .background(
-                shape = DashedShape(12.dp),
-                color = MaterialTheme.colors.primaryVariant
-            )
-    )
 }
 
 @Composable

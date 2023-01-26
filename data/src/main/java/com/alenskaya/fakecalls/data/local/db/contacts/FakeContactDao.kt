@@ -27,9 +27,10 @@ internal interface FakeContactDao {
 
     /**
      * Adds a new [fakeContactEntity] to fake_contacts table
+     * @return id of inserted row
      */
     @Insert
-    suspend fun saveContact(fakeContactEntity: FakeContactEntity)
+    suspend fun saveContact(fakeContactEntity: FakeContactEntity): Long
 
     /**
      * Deletes all contacts records

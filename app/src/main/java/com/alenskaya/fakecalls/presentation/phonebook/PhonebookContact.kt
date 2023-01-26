@@ -7,5 +7,5 @@ data class PhonebookContact(
     val id: String,
     val name: String,
     val phone: String,
-    val photo: String?
+    val photoUri: String?
 )

@@ -3,9 +3,10 @@ package com.alenskaya.fakecalls.presentation.main.home
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import coil.ImageLoader
-import com.alenskaya.fakecalls.domain.contacts.GetFakeContactsListUseCase
+import com.alenskaya.fakecalls.domain.contacts.GetSuggestedContactsListUseCase
 import com.alenskaya.fakecalls.presentation.navigation.ApplicationRouter
 import com.alenskaya.fakecalls.presentation.navigation.NavigationDestination
+import com.alenskaya.fakecalls.presentation.navigation.PhonebookScreenNavigationDestination
 import com.alenskaya.fakecalls.presentation.navigation.create.CreateRoutes
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -24,14 +25,15 @@ import javax.inject.Inject
 class HomeScreenViewModel @Inject constructor(
     val imageLoader: ImageLoader,
     val homeStrings: HomeStrings,
-    private val getContactsUseCase: GetFakeContactsListUseCase,
+    private val getContactsUseCase: GetSuggestedContactsListUseCase,
     private val applicationRouter: ApplicationRouter
 ) : ViewModel() {
 
     private val reducer = HomeScreenStateReducer(
         viewModelScope,
         HomeScreenState.initial(),
-        ::navigateToCreateCallScreen
+        ::navigateToCreateCallScreen,
+        ::navigateToPhonebook
     )
 
     val screenState: StateFlow<HomeScreenState>
@@ -66,11 +68,15 @@ class HomeScreenViewModel @Inject constructor(
         applicationRouter.navigate(getCreateCallScreenDestination(contactId))
     }
 
+    private fun navigateToPhonebook() {
+        applicationRouter.navigate(PhonebookScreenNavigationDestination)
+    }
+
     private fun getCreateCallScreenDestination(contactId: Int? = null): NavigationDestination {
         return if (contactId == null) {
             CreateRoutes.CreateCallFromCustomContactRoute.createDestination()
         } else {
-            CreateRoutes.CreateCallFromFakeContactRoute.createDestination(contactId)
+            CreateRoutes.CreateCallFromContactRoute.createDestination(contactId)
         }
     }
 }
