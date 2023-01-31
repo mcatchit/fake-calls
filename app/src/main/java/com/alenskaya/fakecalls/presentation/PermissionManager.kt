@@ -1,6 +1,5 @@
 package com.alenskaya.fakecalls.presentation
 
-import android.os.Build
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.launch
@@ -9,31 +8,39 @@ import kotlinx.coroutines.launch
  * Provides notification permission requests to MainActivity.
  * Bad solution, because it is not expandable and won't work for others permission requests.
  */
-class NotificationPermissionManager(
+class PermissionManager(
     private val externalScope: CoroutineScope
 ) {
 
-    val notificationPermissionRequests = MutableSharedFlow<NotificationPermissionCallback>()
+    private val permissionsMapping = mutableMapOf<String, PermissionRequestCallback>()
+
+    val notificationPermissionRequests = MutableSharedFlow<String>()
 
     /**
      * Requests notification permission.
      * @param callback - accepts results.
      */
-    fun requestNotificationPermission(callback: NotificationPermissionCallback) {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
-            callback.doWhenGranted()
-        } else {
-            externalScope.launch {
-                notificationPermissionRequests.emit(callback)
-            }
+    fun requestPermission(permission: String, callback: PermissionRequestCallback) {
+        permissionsMapping[permission] = callback
+
+        externalScope.launch {
+            notificationPermissionRequests.emit(permission)
         }
+    }
+
+    fun permissionProcessed(permission: String, result: Boolean) {
+        callCallback(permission, result)
+        removeCallback(permission)
+    }
+
+    private fun callCallback(permission: String, result: Boolean) {
+        permissionsMapping[permission]?.invoke(result)
+    }
+
+    private fun removeCallback(permission: String) {
+        permissionsMapping.remove(permission)
     }
 }
 
-/**
- * Collects results of notification permission requests
- */
-class NotificationPermissionCallback(
-    val doWhenGranted: () -> Unit,
-    val doWhenNotGranted: () -> Unit,
-)
+typealias PermissionRequestCallback = (Boolean) -> Unit
+

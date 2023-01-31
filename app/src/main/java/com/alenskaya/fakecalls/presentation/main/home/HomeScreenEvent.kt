@@ -44,5 +44,14 @@ sealed class HomeScreenEvent : UiEvent {
      */
     object CreateCustomCall : HomeScreenEvent()
 
+    /**
+     * User clicked to show phonebook.
+     */
     object SelectFromPhonebook : HomeScreenEvent()
+
+    /**
+     * Requested permission is not granted.
+     * @property message - message to display.
+     */
+    class PermissionNotGranted(val message: String) : HomeScreenEvent()
 }

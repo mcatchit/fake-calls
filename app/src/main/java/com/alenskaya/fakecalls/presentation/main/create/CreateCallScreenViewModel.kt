@@ -1,12 +1,13 @@
 package com.alenskaya.fakecalls.presentation.main.create
 
+import android.Manifest
 import android.annotation.SuppressLint
+import android.os.Build
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import coil.ImageLoader
 import com.alenskaya.fakecalls.presentation.DialogsDisplayer
-import com.alenskaya.fakecalls.presentation.NotificationPermissionManager
-import com.alenskaya.fakecalls.presentation.NotificationPermissionCallback
+import com.alenskaya.fakecalls.presentation.PermissionManager
 import com.alenskaya.fakecalls.presentation.main.create.converter.CreateCallScreenModeToLabelsConverter
 import com.alenskaya.fakecalls.presentation.main.create.model.CreateCallScreenFormModel
 import com.alenskaya.fakecalls.presentation.execution.CallsScheduler
@@ -36,7 +37,7 @@ import kotlin.properties.Delegates
  * @property initialDataLoaderFactory - creates initial data loader for specified mode.
  * @property submitterFactory - creates submitter for specified mode.
  * @property callsScheduler - schedules calls.
- * @property notificationPermissionManager - provides information about notification permission.
+ * @property permissionManager - provides information about notification permission.
  * @property applicationRouter - global application router.
  */
 @HiltViewModel
@@ -48,7 +49,7 @@ class CreateCallScreenViewModel @Inject constructor(
     private val initialDataLoaderFactory: InitialDataLoaderFactory,
     private val submitterFactory: SubmitterFactory,
     private val callsScheduler: CallsScheduler,
-    private val notificationPermissionManager: NotificationPermissionManager,
+    private val permissionManager: PermissionManager,
     private val applicationRouter: ApplicationRouter
 ) : ViewModel() {
 
@@ -131,14 +132,19 @@ class CreateCallScreenViewModel @Inject constructor(
 
     @SuppressLint("InlinedApi")
     private fun checkNotificationPermissionAndDo(actionToDoIfPermissionGranted: () -> Unit) {
-        notificationPermissionManager.requestNotificationPermission(
-            NotificationPermissionCallback(
-                doWhenGranted = actionToDoIfPermissionGranted,
-                doWhenNotGranted = {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
+            actionToDoIfPermissionGranted()
+        } else {
+            permissionManager.requestPermission(
+                Manifest.permission.POST_NOTIFICATIONS
+            ) { granted ->
+                if (granted) {
+                    actionToDoIfPermissionGranted()
+                } else {
                     sendEvent(CreateCallScreenEvent.PermissionNotGranted(FakeCallPermission.SHOW_NOTIFICATION))
                 }
-            )
-        )
+            }
+        }
     }
 
     private fun checkAlarmManagerPermissionAndDo(actionToDoIfPermissionGranted: () -> Unit) {
