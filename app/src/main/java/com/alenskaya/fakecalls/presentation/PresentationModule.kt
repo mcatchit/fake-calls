@@ -139,9 +139,12 @@ internal abstract class PresentationModule {
                 .build()
         }
 
+        /**
+         * Provides application phonebook contacts provider.
+         */
         @Provides
         @Singleton
-        fun providePhonebookContactsRetriever(@ApplicationContext context: Context): PhonebookContactsProvider {
+        fun providePhonebookContactsProvider(@ApplicationContext context: Context): PhonebookContactsProvider {
             return PhonebookContactsProvider(context.contentResolver)
         }
 
@@ -176,6 +179,6 @@ internal abstract class PresentationModule {
         @Provides
         @Singleton
         fun provideNotificationsPermissionManager(coroutineScope: CoroutineScope) =
-            NotificationPermissionManager(coroutineScope)
+            PermissionManager(coroutineScope)
     }
 }

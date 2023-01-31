@@ -1,9 +1,6 @@
 package com.alenskaya.fakecalls.presentation
 
-import android.Manifest
-import android.annotation.SuppressLint
 import android.content.pm.PackageManager
-import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.compose.setContent
@@ -24,7 +21,6 @@ import javax.inject.Inject
 
 /**
  * Root app activity.
- * TODO fix permissions requests!!! Issue #77
  */
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
@@ -39,13 +35,12 @@ class MainActivity : AppCompatActivity() {
     lateinit var dialogsDisplayer: DialogsDisplayer
 
     @Inject
-    lateinit var notificationPermissionManager: NotificationPermissionManager
+    lateinit var permissionManager: PermissionManager
 
     @Inject
     lateinit var firebaseRemoteConfig: FirebaseRemoteConfig
 
-    private lateinit var activityResultLauncher: ActivityResultLauncher<String>
-    private lateinit var notificationPermissionCallback: NotificationPermissionCallback
+    private lateinit var activityResultLauncher: ActivityResultLauncher<Array<String>>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -64,32 +59,6 @@ class MainActivity : AppCompatActivity() {
         supportFragmentManager.subscribeToDialogsRequests(lifecycleScope)
 
         subscribeToNotificationPermissionRequests(lifecycleScope)
-
-        requestReadPhonebookPermission()
-        requestReadExternalStoragePermission()
-    }
-
-    //FIXME
-    private fun requestReadPhonebookPermission(){
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_CONTACTS)
-            != PackageManager.PERMISSION_GRANTED
-        ){
-            activityResultLauncher.launch(Manifest.permission.READ_CONTACTS)
-        }
-    }
-
-    //FIXME
-    private fun requestReadExternalStoragePermission(){
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU && ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)
-            != PackageManager.PERMISSION_GRANTED
-        ){
-            activityResultLauncher.launch(Manifest.permission.READ_EXTERNAL_STORAGE)
-        }
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU && ContextCompat.checkSelfPermission(this, Manifest.permission.READ_MEDIA_IMAGES)
-            != PackageManager.PERMISSION_GRANTED
-        ){
-            activityResultLauncher.launch(Manifest.permission.READ_MEDIA_IMAGES)
-        }
     }
 
     private fun activateFirebaseRemoteConfig() {
@@ -122,33 +91,30 @@ class MainActivity : AppCompatActivity() {
         lifecycleCoroutineScope: LifecycleCoroutineScope
     ) {
         lifecycleCoroutineScope.launchWhenResumed {
-            notificationPermissionManager.notificationPermissionRequests.collect { request ->
-                requestNotificationsPermission(request)
+            permissionManager.notificationPermissionRequests.collect { request ->
+                requestPermission(request)
             }
         }
     }
 
-    @SuppressLint("InlinedApi")
-    private fun requestNotificationsPermission(request: NotificationPermissionCallback) {
-        notificationPermissionCallback = request
-
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS)
+    private fun requestPermission(permission: String) {
+        if (ContextCompat.checkSelfPermission(this, permission)
             == PackageManager.PERMISSION_GRANTED
         ) {
-            notificationPermissionCallback.doWhenGranted()
+            permissionManager.permissionProcessed(permission, true)
         } else {
-            activityResultLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+            activityResultLauncher.launch(arrayOf(permission))
         }
     }
 
     private fun initActivityResultLauncher() {
         activityResultLauncher =
-            registerForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->
-//                if (granted) {
-//                    notificationPermissionCallback.doWhenGranted()
-//                } else {
-//                    notificationPermissionCallback.doWhenNotGranted()
-//                }
+            registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { results ->
+                results.keys.forEach { permission->
+                    val isGranted = results[permission] ?: error("Illegal state")
+
+                    permissionManager.permissionProcessed(permission, isGranted)
+                }
             }
     }
 

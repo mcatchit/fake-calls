@@ -14,6 +14,7 @@ interface HomeStrings {
     fun loadingSuggestions(): String
     fun noInternetConnectionMessage(): String
     fun failedToLoadContactsMessage(): String
+    fun permissionReadContactsNotGranted(): String
 }
 
 class HomeStringsImpl @Inject constructor(
@@ -42,5 +43,9 @@ class HomeStringsImpl @Inject constructor(
 
     override fun failedToLoadContactsMessage(): String {
         return appStrings.getString(R.string.home_screen_failed_to_load_suggestions_message)
+    }
+
+    override fun permissionReadContactsNotGranted(): String {
+        return appStrings.getString(R.string.home_screen_read_contacts_permission_not_granted)
     }
 }

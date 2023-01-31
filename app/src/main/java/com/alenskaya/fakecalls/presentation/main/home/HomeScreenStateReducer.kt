@@ -37,6 +37,7 @@ class HomeScreenStateReducer(
             is HomeScreenEvent.CreateCallFromSuggested -> navigateToCreateCallScreenAction(event.fakeContactId)
             is HomeScreenEvent.CreateCustomCall -> navigateToCreateCallScreenAction(null)
             is HomeScreenEvent.SelectFromPhonebook -> navigateToPhonebookAction()
+            is HomeScreenEvent.PermissionNotGranted -> showToast(event.message)
         }
     }
 
@@ -51,7 +52,7 @@ class HomeScreenStateReducer(
 
     private fun processContactsNotLoaded(oldState: HomeScreenState, message: String) {
         setState(oldState.copy(isLoading = false))
-        sendOneTimeEffect(HomeScreenOneTimeUiEffect(message))
+        showToast(message)
     }
 
     private fun processHintVisibilityChanged(
@@ -66,6 +67,10 @@ class HomeScreenStateReducer(
                 )
             )
         )
+    }
+
+    private fun showToast(message: String){
+        sendOneTimeEffect(HomeScreenOneTimeUiEffect(message))
     }
 
     private fun List<SavedContact>.toScreenModel() = map { fakeContact ->

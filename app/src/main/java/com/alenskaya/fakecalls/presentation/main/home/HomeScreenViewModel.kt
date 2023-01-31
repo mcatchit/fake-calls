@@ -1,9 +1,11 @@
 package com.alenskaya.fakecalls.presentation.main.home
 
+import android.Manifest
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import coil.ImageLoader
 import com.alenskaya.fakecalls.domain.contacts.GetSuggestedContactsListUseCase
+import com.alenskaya.fakecalls.presentation.PermissionManager
 import com.alenskaya.fakecalls.presentation.navigation.ApplicationRouter
 import com.alenskaya.fakecalls.presentation.navigation.NavigationDestination
 import com.alenskaya.fakecalls.presentation.navigation.PhonebookScreenNavigationDestination
@@ -26,7 +28,8 @@ class HomeScreenViewModel @Inject constructor(
     val imageLoader: ImageLoader,
     val homeStrings: HomeStrings,
     private val getContactsUseCase: GetSuggestedContactsListUseCase,
-    private val applicationRouter: ApplicationRouter
+    private val applicationRouter: ApplicationRouter,
+    private val permissionManager: PermissionManager
 ) : ViewModel() {
 
     private val reducer = HomeScreenStateReducer(
@@ -69,8 +72,19 @@ class HomeScreenViewModel @Inject constructor(
     }
 
     private fun navigateToPhonebook() {
-        applicationRouter.navigate(PhonebookScreenNavigationDestination)
+        permissionManager.requestPermission(
+            Manifest.permission.READ_CONTACTS,
+        ) { granted ->
+            processReadPhonebookResult(granted)
+        }
     }
+
+    private fun processReadPhonebookResult(isPermissionGranted: Boolean) =
+        if (isPermissionGranted) {
+            applicationRouter.navigate(PhonebookScreenNavigationDestination)
+        } else {
+            sendEvent(HomeScreenEvent.PermissionNotGranted(homeStrings.permissionReadContactsNotGranted()))
+        }
 
     private fun getCreateCallScreenDestination(contactId: Int? = null): NavigationDestination {
         return if (contactId == null) {
