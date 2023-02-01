@@ -28,6 +28,7 @@ class CallsScreenStateReducer(
                     isLoading = false,
                     scheduledCalls = event.scheduledCalls,
                     completedCalls = event.completedCalls,
+                    message = null
                 )
             )
             CallsScreenEvent.CallsLoadedEmpty -> setState(
