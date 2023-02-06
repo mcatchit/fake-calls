@@ -42,6 +42,7 @@ object IncomingCallNotificationBuilder {
                     )
             )
             .setDefaults(NotificationCompat.DEFAULT_ALL)
+            .setTimeoutAfter(CALL_NOTIFICATION_TIMEOUT)
             .setContentIntent(fullScreenIntent)
             .setFullScreenIntent(fullScreenIntent, true)
             .setPriority(NotificationCompat.PRIORITY_MAX)
