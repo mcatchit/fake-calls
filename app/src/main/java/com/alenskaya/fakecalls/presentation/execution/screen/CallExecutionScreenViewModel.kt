@@ -3,6 +3,7 @@ package com.alenskaya.fakecalls.presentation.execution.screen
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import coil.ImageLoader
+import com.alenskaya.fakecalls.presentation.execution.CALL_NOTIFICATION_TIMEOUT
 import com.alenskaya.fakecalls.presentation.execution.ExecutionStrings
 import com.alenskaya.fakecalls.presentation.execution.model.CallExecutionParams
 import com.alenskaya.fakecalls.presentation.execution.screen.ongoing.OngoingCallSecondsTimer
@@ -50,6 +51,7 @@ class CallExecutionScreenViewModel @Inject constructor(
     fun init(endCallAction: CancelCallAction, callExecutionParams: CallExecutionParams) {
         this.endCallAction = endCallAction
         sendEvent(CallingScreenEvent.CallParametersLoaded(callExecutionParams))
+        setTimeout()
     }
 
     /**
@@ -57,6 +59,13 @@ class CallExecutionScreenViewModel @Inject constructor(
      */
     fun sendEvent(event: CallExecutionScreenEvent) {
         reducer.sendEvent(event)
+    }
+
+    private fun setTimeout(){
+        viewModelScope.launch {
+            delay(CALL_NOTIFICATION_TIMEOUT)
+            sendEvent(CallingScreenEvent.TimeOut)
+        }
     }
 
     private fun updateTime(seconds: Int) {

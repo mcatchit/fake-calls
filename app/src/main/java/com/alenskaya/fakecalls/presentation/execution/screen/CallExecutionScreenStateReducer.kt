@@ -39,6 +39,7 @@ class CallExecutionScreenStateReducer(
 
             CallingScreenEvent.AcceptCall -> processAcceptCall(oldState)
             CallingScreenEvent.DeclineCall -> processDeclineCall(oldState)
+            CallingScreenEvent.TimeOut -> processDeclineCall(oldState)
         }
     }
 

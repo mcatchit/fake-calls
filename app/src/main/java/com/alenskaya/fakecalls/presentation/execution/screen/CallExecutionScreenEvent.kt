@@ -15,6 +15,7 @@ sealed interface CallingScreenEvent : CallExecutionScreenEvent {
     class CallParametersLoaded(val callExecutionParams: CallExecutionParams) : CallingScreenEvent
     object DeclineCall : CallingScreenEvent
     object AcceptCall : CallingScreenEvent
+    object TimeOut: CallingScreenEvent
 }
 
 /**
