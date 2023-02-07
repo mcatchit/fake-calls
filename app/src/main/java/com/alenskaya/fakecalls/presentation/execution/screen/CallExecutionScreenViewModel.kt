@@ -4,6 +4,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import coil.ImageLoader
 import com.alenskaya.fakecalls.presentation.execution.CALL_NOTIFICATION_TIMEOUT
+import com.alenskaya.fakecalls.presentation.execution.CallRingtonePlayer
+import com.alenskaya.fakecalls.presentation.execution.CallsNotificationManager
 import com.alenskaya.fakecalls.presentation.execution.ExecutionStrings
 import com.alenskaya.fakecalls.presentation.execution.model.CallExecutionParams
 import com.alenskaya.fakecalls.presentation.execution.screen.ongoing.OngoingCallSecondsTimer
@@ -27,7 +29,9 @@ typealias CancelCallAction = () -> Unit
 @HiltViewModel
 class CallExecutionScreenViewModel @Inject constructor(
     val imageLoader: ImageLoader,
-    val executionStrings: ExecutionStrings
+    val executionStrings: ExecutionStrings,
+    private val callRingtonePlayer: CallRingtonePlayer,
+    private val callsNotificationManager: CallsNotificationManager
 ) : ViewModel() {
 
     private var endCallAction by Delegates.notNull<CancelCallAction>()
@@ -38,6 +42,8 @@ class CallExecutionScreenViewModel @Inject constructor(
         viewModelScope,
         CallExecutionScreenState.Default,
         ::cancelCall,
+        ::stopCallSound,
+        ::hideNotification,
         ::startTimer,
         ::stopTimer
     )
@@ -52,6 +58,7 @@ class CallExecutionScreenViewModel @Inject constructor(
         this.endCallAction = endCallAction
         sendEvent(CallingScreenEvent.CallParametersLoaded(callExecutionParams))
         setTimeout()
+        callRingtonePlayer.start()
     }
 
     /**
@@ -61,7 +68,7 @@ class CallExecutionScreenViewModel @Inject constructor(
         reducer.sendEvent(event)
     }
 
-    private fun setTimeout(){
+    private fun setTimeout() {
         viewModelScope.launch {
             delay(CALL_NOTIFICATION_TIMEOUT)
             sendEvent(CallingScreenEvent.TimeOut)
@@ -85,6 +92,14 @@ class CallExecutionScreenViewModel @Inject constructor(
             delay(CANCEL_CALL_DELAY)
             endCallAction()
         }
+    }
+
+    private fun hideNotification() {
+        callsNotificationManager.hideNotification()
+    }
+
+    private fun stopCallSound() {
+        callRingtonePlayer.stop()
     }
 
     private fun startTimer() {

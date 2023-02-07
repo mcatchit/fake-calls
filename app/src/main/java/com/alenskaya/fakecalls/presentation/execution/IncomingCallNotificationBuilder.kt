@@ -25,7 +25,7 @@ object IncomingCallNotificationBuilder {
         val fullScreenIntent = createIntent(context, callExecutionParams)
         val person = Person.Builder().setName(callExecutionParams.name).build()
 
-        return NotificationCompat.Builder(context, CallsNotificationManagerBuilder.CHANNEL_ID)
+        return NotificationCompat.Builder(context, CHANNEL_ID)
             .setSmallIcon(R.drawable.incoming_call_icon)
             .setContentTitle(context.getString(R.string.incoming_call_notification_title))
             .setAutoCancel(true)
@@ -47,7 +47,7 @@ object IncomingCallNotificationBuilder {
             .setFullScreenIntent(fullScreenIntent, true)
             .setPriority(NotificationCompat.PRIORITY_MAX)
             .setCategory(NotificationCompat.CATEGORY_CALL)
-            .setVibrate(LongArray(0))
+            .setSound(CALL_SOUND)
             .build()
     }
 
