@@ -2,12 +2,12 @@ package com.alenskaya.fakecalls.presentation
 
 import android.app.AlarmManager
 import android.content.Context
-import androidx.core.app.NotificationManagerCompat
 import coil.ImageLoader
 import coil.disk.DiskCache
 import coil.memory.MemoryCache
+import com.alenskaya.fakecalls.presentation.execution.CallRingtonePlayer
+import com.alenskaya.fakecalls.presentation.execution.CallsNotificationManager
 import com.alenskaya.fakecalls.presentation.execution.CallsScheduler
-import com.alenskaya.fakecalls.presentation.execution.CallsNotificationManagerBuilder
 import com.alenskaya.fakecalls.presentation.execution.ExecutionStrings
 import com.alenskaya.fakecalls.presentation.execution.ExecutionStringsImpl
 import com.alenskaya.fakecalls.presentation.main.calls.CallsStrings
@@ -93,8 +93,8 @@ internal abstract class PresentationModule {
          */
         @Provides
         @Singleton
-        fun provideNotificationManager(@ApplicationContext context: Context): NotificationManagerCompat {
-            return CallsNotificationManagerBuilder.build(context)
+        fun provideNotificationManager(@ApplicationContext context: Context): CallsNotificationManager {
+            return CallsNotificationManager(context)
         }
 
         /**
@@ -116,6 +116,17 @@ internal abstract class PresentationModule {
             alarmManager: AlarmManager
         ): CallsScheduler {
             return CallsScheduler(context, alarmManager)
+        }
+
+        /**
+         * Provides call sound player.
+         */
+        @Provides
+        @Singleton
+        fun provideCallRingtonePlayer(
+            @ApplicationContext context: Context
+        ): CallRingtonePlayer {
+            return CallRingtonePlayer(context)
         }
 
         /**

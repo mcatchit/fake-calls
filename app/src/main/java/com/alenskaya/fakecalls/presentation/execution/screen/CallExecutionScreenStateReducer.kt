@@ -14,6 +14,8 @@ class CallExecutionScreenStateReducer(
     viewModelScope: CoroutineScope,
     initialState: CallExecutionScreenState,
     private val endCallAction: CancelCallAction,
+    private val stopCallSound: () -> Unit,
+    private val hideNotification: ()-> Unit,
     private val startTimer: () -> Unit,
     private val stopTimer: () -> Unit,
 ) : Reducer<CallExecutionScreenState, CallExecutionScreenEvent, OneTimeUiEffect>(
@@ -57,6 +59,8 @@ class CallExecutionScreenStateReducer(
         oldState as? CallExecutionScreenState.Calling
             ?: error("Call can be accepted only during calling state")
 
+        stopCallSound()
+        hideNotification()
         setState(CallExecutionScreenState.OngoingCall.initial(oldState.callExecutionParams))
         startTimer()
     }
@@ -65,6 +69,8 @@ class CallExecutionScreenStateReducer(
         oldState as? CallExecutionScreenState.Calling
             ?: error("Call can be declined only during calling state")
 
+        stopCallSound()
+        hideNotification()
         setState(oldState.copy(isDeclined = true))
         endCallAction()
     }
