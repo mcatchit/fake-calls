@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -55,7 +56,7 @@ fun CallRow(
                     top.linkTo(parent.top, margin = 16.dp)
                     linkTo(icon.end, dateInfo.start, startMargin = 10.dp, bias = 0f)
                     width = Dimension.fillToConstraints
-                    horizontalChainWeight = 0.7f
+                    horizontalChainWeight = 0.65f
                 }
         )
 
@@ -68,12 +69,12 @@ fun CallRow(
                     linkTo(
                         contactInfo.end,
                         buttons.start,
-                        startMargin = 10.dp,
-                        endMargin = 6.dp,
+                        startMargin = 6.dp,
+                        endMargin = 12.dp,
                         bias = 0f
                     )
                     width = Dimension.fillToConstraints
-                    horizontalChainWeight = 0.3f
+                    horizontalChainWeight = 0.35f
                 }
         )
 
@@ -109,7 +110,10 @@ private fun ContactInfo(name: String, phone: String, modifier: Modifier = Modifi
 
 @Composable
 private fun DateInfo(day: String, time: String, modifier: Modifier = Modifier) {
-    Column(modifier = modifier) {
+    Column(
+        modifier = modifier,
+        horizontalAlignment = Alignment.End
+    ) {
         SmallText(text = day)
         Spacer(modifier = Modifier.height(6.dp))
         SmallText(text = time)
