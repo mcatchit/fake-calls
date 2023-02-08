@@ -14,10 +14,10 @@ fun Date.extractYear(): Int {
 
 /**
  * Extracts day from date
- * TODO add extraction formats rules
  */
 fun Date.extractDayWithMonth(): String {
-    return SimpleDateFormat("dd.MM", Locale.UK).format(this)
+    val scheme = if (isCurrentYear()) "dd.MM" else "dd.MM.yyyy"
+    return SimpleDateFormat(scheme, Locale.UK).format(this)
 }
 
 /**
@@ -87,6 +87,8 @@ fun Date.convertToString(): String {
 private fun Date.getCalendar(): Calendar = Calendar.getInstance().apply {
     time = this@getCalendar
 }
+
+private fun Date.isCurrentYear() = this.extractYear() == getCurrentYear()
 
 private fun getCurrentYear(): Int {
     return Date().extractYear()

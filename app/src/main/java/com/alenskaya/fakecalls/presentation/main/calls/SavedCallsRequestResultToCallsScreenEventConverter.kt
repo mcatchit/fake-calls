@@ -22,8 +22,10 @@ object SavedCallsRequestResultToCallsScreenEventConverter :
     private fun List<SavedCall>.toHomeScreenEvent(): CallsScreenEvent {
         return if (isNotEmpty()) {
             CallsScreenEvent.CallsLoaded(
-                scheduledCalls = takeWithStatus(CallStatus.SCHEDULED).convertToModel(),
-                completedCalls = takeWithStatus(CallStatus.COMPLETED).convertToModel()
+                scheduledCalls = takeWithStatus(CallStatus.SCHEDULED).sortByDate(true)
+                    .convertToModel(),
+                completedCalls = takeWithStatus(CallStatus.COMPLETED).sortByDate(false)
+                    .convertToModel()
             )
         } else {
             CallsScreenEvent.CallsLoadedEmpty
@@ -32,6 +34,12 @@ object SavedCallsRequestResultToCallsScreenEventConverter :
 
     private fun List<SavedCall>.takeWithStatus(status: CallStatus) = filter { call ->
         call.callStatus == status
+    }
+
+    private fun List<SavedCall>.sortByDate(ascending: Boolean) = if (ascending) sortedBy {
+        it.date
+    } else sortedByDescending {
+        it.date
     }
 
     private fun List<SavedCall>.convertToModel() = map { savedCall ->
