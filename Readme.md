@@ -25,7 +25,7 @@ Stack:
 - Navigation component
 
 ## Scheduling a call
-![Scheduling fake call](1.gif)
+<img src="1.gif" width="250" height="500"/>
 
 ## Receiving a call
-![Receiving fake call](2.gif)
+<img src="2.gif" width="250" height="500"/>
