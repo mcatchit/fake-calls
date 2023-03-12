@@ -13,6 +13,9 @@ Allows to schedule a fake call at specified time.
 3. For a completed call:
 - Delete call
 - Repeat call
+4. For incoming call
+- Accept
+- Decline
 
 Stack:
 - MVVM + MVI
